@@ -108,20 +108,9 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 | `size`      | card width; a card can span over 2 columns or entire row on a css grid `wide\|super-wide`                                                                                                             |               |          | mas.js   |
 | `daa-lh`    | Analytics identifier of a card. Value is coming from the 'PRODUCT_CODE' tag set on the card (for now manual authoring required, later will be tagged automatically). Sample values: 'ccsn' or 'phlt'. |               |          | mas.js   |
 
-#### Active variants:
+#### Active variants
 
-- `catalog`
-- `image`
-- `inline-heading`
-- `mini-compare-chart`
-- `plans`
-- `product`
-- `segment`
-- `special-offers`
-- `ccd-slice`
-- `ccd-suggested`
-- `ah-try-buy-widget`
-- `mini` (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)
+See the **Registered variants** table in [What it does](#what-it-does) for the full list maintained in `variants.js` and `mas.js`.
 
 ### Properties
 

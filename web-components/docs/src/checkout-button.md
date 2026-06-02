@@ -1,19 +1,65 @@
-# checkout-button {#checkout-button}
+# checkout-button
 
-## Introduction {#introduction}
+## What it does
 
-This custom element renders a checkout button supporting most of the features documented at https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide.<br>
+`checkout-button` is a customized built-in element (`<button is="checkout-button">`) that resolves one or more WCS offer selector IDs (OSIs), builds a UCv3 checkout URL (via `buildCheckoutUrl` / commerce-core), and sets navigation on click.
 
-Behind the scene, it uses https://git.corp.adobe.com/PandoraUI/commerce-core to generate the checkout url.
+When resolution succeeds, the button gets a checkout URL on `data-href` (exposed as the `href` getter). On click, if no custom handler is registered, the browser navigates to that URL. Modal flows may set `href` to `#` and use an internal `checkoutActionHandler` instead.
 
-It requires an Offer Selector ID to retrieve the offer details from WCS.
+Requires `<mas-commerce-service>` on the page. See [MAS](mas.html#terminology) for OSI terminology.
 
-See [MAS](mas.html#terminology) to learn more.
+## Attributes / Props
 
-ℹ️ Unlike `checkout-link`, in order to prevent the default click event from redirecting to checkout url, register the click event using `{capture: true}`.
-<br>See the demo at the [end](#example-2)
+Observed attributes (from `checkout-mixin.js` `observedAttributes`; changes trigger re-render):
 
-### Example
+| Attribute | Maps to options | Description |
+| --------- | ---------------- | ----------- |
+| `data-wcs-osi` | `wcsOsi` | Offer selector ID(s). Comma-separated for multiple offers. **Required** for resolution. |
+| `data-checkout-workflow-step` | `checkoutWorkflowStep` | UCv3 workflow step (e.g. `email`, `recommendation`). Default from service: `email`. |
+| `data-extra-options` | `extraOptions` | JSON string of extra checkout query parameters. |
+| `data-ims-country` | (dataset) | Overrides locale country in checkout URL when set. May be set automatically from IMS when signed in. |
+| `data-perpetual` | `perpetual` | `true` / `false` — perpetual offer flag. |
+| `data-promotion-code` | `promotionCode` | Flex promotion code; removed if promotion is not active. |
+| `data-quantity` | `quantity` | Quantity per OSI; comma-separated when multiple OSIs (default `1`). |
+| `data-entitlement` | `entitlement` | Boolean flag for client-side interpretation. |
+| `data-upgrade` | `upgrade` | Boolean; adds `upgrade` class when checkout action supplies it. |
+| `data-modal` | `modal` | Modal type string; `twp`, `d2p`, and `crm` enable 3-in-1 modal flow when meta flag allows. |
+
+Also commonly set by authoring/hydration (not in `observedAttributes`):
+
+| Attribute | Description |
+| --------- | ----------- |
+| `data-analytics-id` | Human-readable CTA id for analytics (Studio). |
+| `daa-ll` | Martech id: `{data-analytics-id}-{position}` within the card. |
+
+**Properties and methods:**
+
+| Name | Description |
+| ---- | ----------- |
+| `isCheckoutButton` | Always `true`. |
+| `href` | Checkout URL from `data-href` after resolution. |
+| `value` | Resolved offer(s) from WCS. |
+| `options` | Options object used for the last render. |
+| `onceSettled()` | Promise resolving to the element when resolved, or rejecting on failure. |
+| `requestUpdate(force?)` | Re-runs offer resolution (`force` default `false`). |
+| `marketSegment` / `customerSegment` | Derived from options or first offer. |
+| `is3in1Modal` / `isOpen3in1Modal` | Whether `data-modal` is a 3-in-1 type and meta `mas-ff-3in1` is not `off`. |
+| `checkoutActionHandler` | Optional function set when checkout action provides a custom handler (click does not navigate). |
+
+Static helper: `CheckoutButton.createCheckoutButton(options, innerHTML)` creates a button when the commerce service exists.
+
+## Events
+
+| Event | Description |
+| ----- | ----------- |
+| `mas:resolved` | Dispatched when offers resolve and the checkout URL/action is applied. Bubbles. |
+| `mas:failed` | Dispatched when offers cannot be resolved. `detail` may include error context. Bubbles. |
+
+**CSS classes** toggled with state (`mas-element.js`): `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
+
+**Note:** Older docs refer to `mas:pending`; the current `MasElement` implementation does **not** dispatch a `mas:pending` event—only the pending CSS class is applied during load.
+
+## Usage example
 
 ```html {.demo}
 <button
@@ -24,192 +70,39 @@ See [MAS](mas.html#terminology) to learn more.
 </button>
 ```
 
-## Attributes {#attributes}
-
-| Attribute                     | Description                                                                                                                                                                                                                                      | Default Value | Required | Provider                |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | -------- | ----------------------- |
-| `data-wcs-osi`                | Offer Selector ID, can be multiple, separeted by comma                                                                                                                                                                                           |               | `true`   | mas.js or consumer code |
-| `data-checkout-workflow`      | Target checkout workflow for the generation of checkout urls                                                                                                                                                                                     | UCv3          | `false`  | mas.js                  |
-| `data-checkout-workflow-step` | [workflow step](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-RegularWorkflow) to land on the unified checkout page                                       | email         | `false`  | mas.js                  |
-| `data-extra-options`          | additional query params to append to the url, see: [Table of public query params](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-Tableofpublicqueryparams) | {}            | `false`  | mas.js                  |
-| `data-ims-country`            | the ims country to code of the user if signed in, overrides the locale country in the generated checkout url                                                                                                                                     |               | `false`  | mas.js or consumer code |
-| `data-perpetual`              | whether this is a perpetual offer `true\|false`                                                                                                                                                                                                  |               | `false`  | mas.js                  |
-| `data-promotion-code`         | Flex promotion code, if applicable                                                                                                                                                                                                               |               | `false`  | mas.js                  |
-| `data-quantity`               | Quantity of the offer to purchase                                                                                                                                                                                                                | 1             | `false`  | mas.js or consumer code |
-| `data-entitlement`            | `entitlement` flag for client side interpretation                                                                                                                                                                                                | `false`       | `false`  | mas.js                  |
-| `data-upgrade`                | `upgrade` flag for client side interpretation                                                                                                                                                                                                    | `false`       | `false`  | mas.js                  |
-| `data-modal`                  | `modal` flag for client side interpretation                                                                                                                                                                                                      | `false`       | `false`  | mas.js                  |
-| `data-analytics-id`           | human-readable, non-translatable button id for analytics. Authored in Studio in button Editor.                                                                                                                                                   | `false`       | `false`  | mas.js                  |
-| `daa-ll`                      | martech-compatible button id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the button within a card. E.g. : see-terms-1, buy-now-2                                                                              | `false`       | `false`  | mas.js                  |
-
-### Examples {#examples}
-
-#### Custom Workflow Step
+To intercept the default navigation, listen in the **capture** phase (the button navigates on click when `href` is set):
 
 ```html {.demo}
 <button
     is="checkout-button"
     data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-checkout-workflow-step="recommendation"
->
-    Buy now
-</button>
+>Buy now</button>
+<script type="module">
+    document.querySelector('button[is="checkout-button"]').addEventListener(
+        'click',
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Checkout URL', e.target.href);
+        },
+        { capture: true },
+    );
+</script>
 ```
 
-#### Multiple Quantities
-
-Two photoshop and three acrobat pro single apps (TEAMS):
+Multiple quantities (team bundle example):
 
 ```html {.demo}
 <button
     is="checkout-button"
     data-wcs-osi="yHKQJK2VOMSY5bINgg7oa2ov9RnmnU1oJe4NOg4QTYI,vV01ci-KLH6hYdRfUKMBFx009hdpxZcIRG1-BY_PutE"
     data-quantity="2,3"
->
-    Buy now
-</button>
+>Buy now</button>
 ```
 
-#### Custom query params
+## Notes
 
-```html {.demo}
-<button
-    is="checkout-button"
-    data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-extra-options='{"promoid":"promo12345","mv":1,"mv2":2}'
->
-    Buy now
-</button>
-```
-
-#### IMS Country
-
-```html {.demo}
-<button
-    is="checkout-button"
-    data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-ims-country="JP"
->
-    Buy now
-</button>
-```
-
-## Properties {#properties}
-
-| Property           | Description                                                                                                                                                       |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isCheckoutButton` | on checkout button elements, it will return `true`                                                                                                                |
-| `onceSettled`      | promise that resolves when the custom-element either resolves or fails to resolve the offer                                                                       |
-| `options`          | JSON object with the complete set of properties used to resolve the offer                                                                                         |
-| `value`            | The actual offer that is used to render the checkout button. In some cases WCS can return multiple offers but only one will be picked to render for a single app. |
-
-### Example
-
-```html {.demo}
-<button
-    id="co1"
-    is="checkout-button"
-    data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-ims-country="CA"
->
-    Buy now
-</button>
-<script type="module">
-    onceEvent(document.getElementById('co1'), 'mas:resolved', ({ target }) => {
-        document.getElementById('coValue').innerHTML = JSON.stringify(
-            target.value,
-            null,
-            '\t',
-        );
-        document.getElementById('coOptions').innerHTML = JSON.stringify(
-            target.options,
-            null,
-            '\t',
-        );
-    });
-</script>
-```
-
-#### value property
-
-```json {#coValue}
-
-```
-
-#### options property
-
-```json {#coOptions}
-
-```
-
-## Methods {#methods}
-
-| Property                       | Description                                                                                                    |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
-
-## Events {#events}
-
-| Event          | Description                                        |
-| -------------- | -------------------------------------------------- |
-| `mas:pending`  | fires when checkout button starts loading          |
-| `mas:resolved` | fires when the offer is successfully resolved      |
-| `mas:failed`   | fires when the offer could not be found or fetched |
-
-<br>
-
-For each event, the following css classes are toggled on the element: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
-
-### Example
-
-```html {.demo}
-<div id="eventsDemo">
-    <button
-        is="checkout-button"
-        data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-        >Buy now (click me)</a
-    >
-    <br />
-    <button
-        is="checkout-button"
-        data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-        ><span style="pointer-events: none;">Span + <strong>Strong + Buy now</strong></span></a
-    >
-</div>
-<button id="btnRefresh">Refresh</button>
-<script type="module">
-    const log = document.getElementById('log');
-    const logger = (...messages) =>
-        (log.innerHTML = `${messages.join(' ')}<br>${log.innerHTML}`);
-    const eventsDemo = document.getElementById('eventsDemo');
-    eventsDemo.addEventListener('mas:pending', () =>
-        logger('checkout-button pending'),
-    );
-    eventsDemo.addEventListener('mas:resolved', (e) =>
-        logger('checkout-button resolved'),
-    );
-    eventsDemo.addEventListener('mas:failed', () =>
-        logger('checkout-button failed'),
-    );
-    eventsDemo.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.target.isCheckoutButton) {
-            logger('checkout button is clicked: ', e.target.href);
-        } else {
-            logger('element clicked: ', e.target);
-        }
-    }, {capture: true});
-    document.getElementById('btnRefresh').addEventListener('click', () => {
-        [...eventsDemo.querySelectorAll('a')].forEach((a) =>
-            a.requestUpdate(true),
-        );
-    });
-</script>
-```
-
-#### Logs
-
-```html {#log}
-
-```
+- Implementation: `web-components/src/checkout-button.js`, shared logic in `checkout-mixin.js`.
+- `data-checkout-workflow` appears in `observedAttributes` but workflow step is driven by `data-checkout-workflow-step` and service defaults; UCv3 workflow id is fixed as `UCv3` in `constants.js` (`CheckoutWorkflow`).
+- Download and upgrade CTAs may add classes `download` or `upgrade` from the checkout action (`CLASS_NAME_DOWNLOAD`, `CLASS_NAME_UPGRADE`).
+- Service must be active; without `mas-commerce-service`, `createCheckoutButton` returns `null`.
