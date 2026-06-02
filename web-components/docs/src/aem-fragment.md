@@ -1,55 +1,60 @@
-# aem-fragment custom element
+# aem-fragment
 
-The `aem-fragment` custom element is used to load a content fragment from MAS/Odin.
-It features a caching mechanism, supports retrying on fetch errors, and can serve stale content if fetching new content fails, ensuring robustness.
+## aem-fragment
 
-## Example
+### What it does
 
-The `aem-fragment` element is headless and does not render any content on its own. You should use its events to handle the loaded data.
+`aem-fragment` is a headless `<aem-fragment>` custom element that fetches a MAS/Odin content fragment by ID, transforms it into a consumable data object, and exposes it through properties and events.
 
-## Attributes
+It does not render visible UI. Consumers (typically `merch-card`) listen for `aem:load` and hydrate markup from `element.data`.
 
-| Name       | Description                                                                                                                                                   | Default Value | Required |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------- |
-| `fragment` | The ID of the fragment to load.                                                                                                                               |               | `true`   |
-| `loading`  | If a fragment is known to be in a collection, set to `cache`, so that it can be initialized from the collection cache, falls back to `eager` after a timeout. | `eager`       | `false`  |
-| `timeout`  | The timeout in milliseconds for `loading=cache`.                                                                                                              | `5000`        | `false`  |
-| `author`   | Enables author mode, which affects data transformation.                                                                                                       | `false`       | `false`  |
-| `preview`  | Enables preview mode, fetching data from the preview service.                                                                                                 | `false`       | `false`  |
-| `title`    | An informative title for the fragment.                                                                                                                        |               | `false`  |
+Features:
 
-## Properties
+- Shared in-memory cache across instances (`AemFragment.cache`)
+- Retry-capable fetch via `masFetch`
+- Stale-data fallback when a refresh fails but prior data exists
+- `loading="cache"` mode to wait for collection-level cache population
+- Author vs publish data transforms
+- Preview mode via `fragment-client.js`
 
-| Name             | Description                                                                              | Type      |
-| ---------------- | ---------------------------------------------------------------------------------------- | --------- |
-| `data`           | The transformed fragment data.                                                           | `Object`  |
-| `updateComplete` | A promise that resolves when the fragment is loaded, or rejects on error.                | `Promise` |
-| `fetchInfo`      | An object containing information about the fetch operation (URL, status, retries, etc.). | `Object`  |
+Requires `mas-commerce-service` on the page.
 
-## Methods
+### Attributes / Props
 
-| Name                         | Description                                                                          |
-| ---------------------------- | ------------------------------------------------------------------------------------ |
-| `refresh(flushCache = true)` | Refreshes the fragment content. If `flushCache` is `true`, it will bypass the cache. |
+| Attribute / property | Description | Default | Required |
+| --- | --- | --- | --- |
+| `fragment` | Fragment UUID to load. | — | yes |
+| `title` | Informative title (not sent to API). | — | no |
+| `loading` | `eager` (fetch immediately) or `cache` (wait for cache, then fall back to eager after timeout). | `eager` | no |
+| `timeout` | Milliseconds to wait when `loading="cache"`. | `5000` | no |
+| `author` | When present/`true`, transforms author JSON shape instead of publish shape. | `false` | no |
+| `preview` | Enable preview fetch path. Also inherits from service `preview` setting. | service setting | no |
+| `data` (property) | Transformed fragment fields, tags, settings, literals, placeholders. | — | — |
+| `rawData` (property) | Untransformed fragment payload from the API. | — | — |
+| `fetchInfo` (property) | Fetch metadata prefixed with `aem-fragment:` (url, status, retries, stale, measure, etc.). | — | — |
+| `updateComplete` (property) | Promise resolving when load completes; rejects if load never started or failed irrecoverably. | — | — |
+| `cache` (static property) | Shared `FragmentCache` instance across all elements. | — | — |
 
-## Events
+**Methods**
 
-| Name        | Description                                                                                             |
-| ----------- | ------------------------------------------------------------------------------------------------------- |
-| `aem:load`  | Fires when the fragment is successfully loaded. The event `detail` property contains the fragment data. |
-| `aem:error` | Fires when the fragment fails to load. The event `detail` property contains error information.          |
+| Method | Description |
+| --- | --- |
+| `refresh(flushCache = true)` | Reload fragment. When `flushCache` is `true`, removes cached entry first. Returns fetch promise or `false` on failure. |
+| `getFragmentClientUrl()` | Resolves preview `fragment-client.js` URL from `maslibs` query param or default MAS studio URL. |
+| `generatePreview()` | Dynamically imports fragment client and generates preview payload. |
 
-## Error Handling
+### Events
 
-The `aem-fragment` component can encounter several types of errors during its lifecycle, such as a missing fragment ID, network issues, or server errors. When an error occurs, it dispatches an `aem:error` event. The `detail` property of this event contains information about the error.
+| Event | Description |
+| --- | --- |
+| `aem:load` | Fires on successful load. `detail` includes transformed `data` fields plus `references`, `referencesTree`, `placeholders`, and fetch metadata. Bubbles and is composed. |
+| `aem:error` | Fires on failure (missing id, network error, bad response). `detail` includes fetch info and service duration metadata. Bubbles and is composed. |
 
-You can handle these errors by adding an event listener to the `aem-fragment` element.
+On error the element adds CSS class `error`.
 
-<style>
-  #log1 {
-    max-height: 400px;
-  }
-</style>
+### Usage example
+
+Listen on a container (recommended — fragments resolve quickly):
 
 ```html {.demo .light}
 <div id="fragment-container"></div>
@@ -81,3 +86,33 @@ You can handle these errors by adding an event listener to the `aem-fragment` el
 ```html {#log1}
 
 ```
+
+Use with `merch-card`:
+
+```html {.demo .light}
+<merch-card>
+    <aem-fragment
+        fragment="830f76be-0e83-4faf-9051-3dbb1a1dff04"
+        title="Example card fragment"
+    ></aem-fragment>
+</merch-card>
+```
+
+Cache-first loading inside a collection:
+
+```html
+<aem-fragment
+    fragment="8487f19d-b038-44fa-9db6-0dc55a85b326"
+    loading="cache"
+    timeout="5000"
+></aem-fragment>
+```
+
+### Notes
+
+- Missing or `#` fragment id immediately fails with `"Missing fragment id"`.
+- Successful responses may include a `wcs` block; unless `mas.disableWcsCache` is set, the service pre-fills WCS cache from fragment payload.
+- Referenced nested fragments are added to the shared cache recursively.
+- `instance.cache` is deprecated; use `AemFragment.cache` (static).
+- Refresh all fragments on a page via `mas-commerce-service.refreshFragments()`.
+- Error messages include `"Failed to fetch fragment"`, `"Unexpected fragment response"`, and preview failures from `generatePreview()`.

@@ -25,237 +25,146 @@
 <main>
 <sp-theme color="light" scale="medium">
 <h1 id="checkout-button" tabindex="-1">checkout-button <a class="header-anchor" href="#checkout-button" href="#checkout-button" title="Permalink to this heading">#</a></h1>
-<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
-<p>This custom element renders a checkout button supporting most of the features documented at <a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide.">https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide.</a><br></p>
-<p>Behind the scene, it uses <a href="https://git.corp.adobe.com/PandoraUI/commerce-core">https://git.corp.adobe.com/PandoraUI/commerce-core</a> to generate the checkout url.</p>
-<p>It requires an Offer Selector ID to retrieve the offer details from WCS.</p>
-<p>See <a href="mas.html#terminology">MAS</a> to learn more.</p>
-<p>ℹ️ Unlike <code>checkout-link</code>, in order to prevent the default click event from redirecting to checkout url, register the click event using <code>{capture: true}</code>.
-<br>See the demo at the <a href="#example-2">end</a></p>
-<h3 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h3>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre>
-<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<h2 id="checkout-button-1" tabindex="-1">checkout-button <a class="header-anchor" href="#checkout-button-1" href="#checkout-button-1" title="Permalink to this heading">#</a></h2>
+<h3 id="what-it-does" tabindex="-1">What it does <a class="header-anchor" href="#what-it-does" href="#what-it-does" title="Permalink to this heading">#</a></h3>
+<p><code>checkout-button</code> is a customized built-in element (<code>&lt;button is=&quot;checkout-button&quot;&gt;</code>) that resolves one or more WCS Offer Selector IDs (OSIs), builds a UCv3 checkout URL via commerce-core, and navigates to it on click.</p>
+<p>It extends <code>HTMLButtonElement</code> through <code>CheckoutMixin</code> and shares the same offer-resolution pipeline as <code>checkout-link</code>. The resolved URL is stored on the element as the <code>data-href</code> attribute and exposed through the <code>href</code> getter.</p>
+<p>Unlike <code>checkout-link</code>, the default click handler calls <code>window.location.href</code>. To intercept clicks, register a listener with <code>{ capture: true }</code> before the element’s own handler runs.</p>
+<p>Requires <code>mas-commerce-service</code> on the page. See <a href="mas.html#terminology">MAS</a> for terminology.</p>
+<h3 id="attributes-%2F-props" tabindex="-1">Attributes / Props <a class="header-anchor" href="#attributes-%2F-props" href="#attributes-%2F-props" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>
 <tr>
-<th>Attribute</th>
+<th>Attribute / property</th>
 <th>Description</th>
-<th>Default Value</th>
+<th>Default</th>
 <th>Required</th>
-<th>Provider</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>data-wcs-osi</code></td>
-<td>Offer Selector ID, can be multiple, separeted by comma</td>
-<td></td>
-<td><code>true</code></td>
-<td>mas.js or consumer code</td>
+<td>Offer Selector ID. Comma-separated for multi-offer checkout.</td>
+<td>—</td>
+<td>yes</td>
 </tr>
 <tr>
 <td><code>data-checkout-workflow</code></td>
-<td>Target checkout workflow for the generation of checkout urls</td>
-<td>UCv3</td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Target checkout workflow.</td>
+<td><code>UCv3</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-checkout-workflow-step</code></td>
-<td><a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-RegularWorkflow">workflow step</a> to land on the unified checkout page</td>
-<td>email</td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>UCv3 workflow step (for example <code>email</code>, <code>recommendation</code>).</td>
+<td><code>email</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-extra-options</code></td>
-<td>additional query params to append to the url, see: <a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-Tableofpublicqueryparams">Table of public query params</a></td>
-<td>{}</td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>JSON object of extra query params appended to the checkout URL.</td>
+<td><code>{}</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-ims-country</code></td>
-<td>the ims country to code of the user if signed in, overrides the locale country in the generated checkout url</td>
-<td></td>
-<td><code>false</code></td>
-<td>mas.js or consumer code</td>
+<td>Signed-in user’s IMS country code. Overrides locale country in the checkout URL.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-perpetual</code></td>
-<td>whether this is a perpetual offer <code>true|false</code></td>
-<td></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Whether the offer is perpetual (<code>true</code> / <code>false</code>).</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-promotion-code</code></td>
-<td>Flex promotion code, if applicable</td>
-<td></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Flex promotion code, if applicable.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-quantity</code></td>
-<td>Quantity of the offer to purchase</td>
-<td>1</td>
-<td><code>false</code></td>
-<td>mas.js or consumer code</td>
+<td>Purchase quantity. Comma-separated when multiple OSIs are set.</td>
+<td><code>1</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-entitlement</code></td>
-<td><code>entitlement</code> flag for client side interpretation</td>
+<td>Client-side entitlement flag (<code>true</code> / <code>false</code>).</td>
 <td><code>false</code></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-upgrade</code></td>
-<td><code>upgrade</code> flag for client side interpretation</td>
+<td>Client-side upgrade flag (<code>true</code> / <code>false</code>).</td>
 <td><code>false</code></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-modal</code></td>
-<td><code>modal</code> flag for client side interpretation</td>
-<td><code>false</code></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Modal type for 3-in-1 checkout. Recognized values: <code>twp</code>, <code>d2p</code>, <code>crm</code>. When set and <code>mas-ff-3in1</code> is not <code>off</code>, checkout opens in the unified modal flow and the href becomes <code>#</code>.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-analytics-id</code></td>
-<td>human-readable, non-translatable button id for analytics. Authored in Studio in button Editor.</td>
-<td><code>false</code></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Human-readable analytics id authored in Studio.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>daa-ll</code></td>
-<td>martech-compatible button id for analytics. Format: ‘${data-analytics-id}-${#}’, where # is the position of the button within a card. E.g. : see-terms-1, buy-now-2</td>
-<td><code>false</code></td>
-<td><code>false</code></td>
-<td>mas.js</td>
+<td>Martech analytics id. Format: <code>${data-analytics-id}-${position}</code>.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>isCheckoutButton</code> (property)</td>
+<td>Returns <code>true</code> on checkout-button elements.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>href</code> (property)</td>
+<td>Resolved checkout URL from <code>data-href</code>. Empty until the offer resolves.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>value</code> (property)</td>
+<td>Resolved offer object(s) from WCS.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>options</code> (property)</td>
+<td>Full option set used to resolve the offer.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>onceSettled()</code> (method)</td>
+<td>Promise resolving when the element settles to resolved or failed.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>requestUpdate(force?)</code> (method)</td>
+<td>Re-renders from current attributes. Skips when unchanged unless <code>force</code> is <code>true</code>.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>CheckoutButton.createCheckoutButton(options, innerHTML)</code> (static)</td>
+<td>Programmatically creates a checkout button. Returns <code>null</code> if <code>mas-commerce-service</code> is missing.</td>
+<td>—</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<h3 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" href="#examples" title="Permalink to this heading">#</a></h3>
-<h4 id="custom-workflow-step" tabindex="-1">Custom Workflow Step <a class="header-anchor" href="#custom-workflow-step" href="#custom-workflow-step" title="Permalink to this heading">#</a></h4>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-    <span class="hljs-attr">data-checkout-workflow-step</span>=<span class="hljs-string">&quot;recommendation&quot;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre>
-<h4 id="multiple-quantities" tabindex="-1">Multiple Quantities <a class="header-anchor" href="#multiple-quantities" href="#multiple-quantities" title="Permalink to this heading">#</a></h4>
-<p>Two photoshop and three acrobat pro single apps (TEAMS):</p>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;yHKQJK2VOMSY5bINgg7oa2ov9RnmnU1oJe4NOg4QTYI,vV01ci-KLH6hYdRfUKMBFx009hdpxZcIRG1-BY_PutE&quot;</span>
-    <span class="hljs-attr">data-quantity</span>=<span class="hljs-string">&quot;2,3&quot;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre>
-<h4 id="custom-query-params" tabindex="-1">Custom query params <a class="header-anchor" href="#custom-query-params" href="#custom-query-params" title="Permalink to this heading">#</a></h4>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-    <span class="hljs-attr">data-extra-options</span>=<span class="hljs-string">&#x27;{&quot;promoid&quot;:&quot;promo12345&quot;,&quot;mv&quot;:1,&quot;mv2&quot;:2}&#x27;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre>
-<h4 id="ims-country" tabindex="-1">IMS Country <a class="header-anchor" href="#ims-country" href="#ims-country" title="Permalink to this heading">#</a></h4>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-    <span class="hljs-attr">data-ims-country</span>=<span class="hljs-string">&quot;JP&quot;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre>
-<h2 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>isCheckoutButton</code></td>
-<td>on checkout button elements, it will return <code>true</code></td>
-</tr>
-<tr>
-<td><code>onceSettled</code></td>
-<td>promise that resolves when the custom-element either resolves or fails to resolve the offer</td>
-</tr>
-<tr>
-<td><code>options</code></td>
-<td>JSON object with the complete set of properties used to resolve the offer</td>
-</tr>
-<tr>
-<td><code>value</code></td>
-<td>The actual offer that is used to render the checkout button. In some cases WCS can return multiple offers but only one will be picked to render for a single app.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="example-1" tabindex="-1">Example <a class="header-anchor" href="#example-1" href="#example-1" title="Permalink to this heading">#</a></h3>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-    <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;co1&quot;</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-    <span class="hljs-attr">data-ims-country</span>=<span class="hljs-string">&quot;CA&quot;</span>
-&gt;</span>
-    Buy now
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-    <span class="hljs-title function_">onceEvent</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;co1&#x27;</span>), <span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ target }</span>) =&gt;</span> {
-        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;coValue&#x27;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(
-            target.<span class="hljs-property">value</span>,
-            <span class="hljs-literal">null</span>,
-            <span class="hljs-string">&#x27;\t&#x27;</span>,
-        );
-        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;coOptions&#x27;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(
-            target.<span class="hljs-property">options</span>,
-            <span class="hljs-literal">null</span>,
-            <span class="hljs-string">&#x27;\t&#x27;</span>,
-        );
-    });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-<h4 id="value-property" tabindex="-1">value property <a class="header-anchor" href="#value-property" href="#value-property" title="Permalink to this heading">#</a></h4>
-<pre><code id="coValue" class="language-json">
-</code></pre>
-<h4 id="options-property" tabindex="-1">options property <a class="header-anchor" href="#options-property" href="#options-property" title="Permalink to this heading">#</a></h4>
-<pre><code id="coOptions" class="language-json">
-</code></pre>
-<h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>requestUpdate(true | false)</code></td>
-<td>Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip</td>
-</tr>
-</tbody>
-</table>
-<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<h3 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>
 <tr>
@@ -265,45 +174,46 @@
 </thead>
 <tbody>
 <tr>
-<td><code>mas:pending</code></td>
-<td>fires when checkout button starts loading</td>
-</tr>
-<tr>
 <td><code>mas:resolved</code></td>
-<td>fires when the offer is successfully resolved</td>
+<td>Fires when the offer resolves and the checkout URL is set. <code>detail</code> contains error context on failure paths handled by <code>MasElement</code>.</td>
 </tr>
 <tr>
 <td><code>mas:failed</code></td>
-<td>fires when the offer could not be found or fetched</td>
+<td>Fires when the offer cannot be fetched or selected.</td>
 </tr>
 </tbody>
 </table>
-<br>
-<p>For each event, the following css classes are toggled on the element: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
-<h3 id="example-2" tabindex="-1">Example <a class="header-anchor" href="#example-2" href="#example-2" title="Permalink to this heading">#</a></h3>
+<p>While resolving, the element toggles CSS classes <code>placeholder-pending</code>, <code>placeholder-resolved</code>, and <code>placeholder-failed</code>. <strong><code>mas:pending</code> is documented historically but is not dispatched by the current implementation</strong> — use the pending CSS class or <code>onceSettled()</code> instead.</p>
+<h3 id="usage-example" tabindex="-1">Usage example <a class="header-anchor" href="#usage-example" href="#usage-example" title="Permalink to this heading">#</a></h3>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
+    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+&gt;</span>
+    Buy now
+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+</code></pre>
+<p>Multiple quantities across two OSIs:</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
+    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
+    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;yHKQJK2VOMSY5bINgg7oa2ov9RnmnU1oJe4NOg4QTYI,vV01ci-KLH6hYdRfUKMBFx009hdpxZcIRG1-BY_PutE&quot;</span>
+    <span class="hljs-attr">data-quantity</span>=<span class="hljs-string">&quot;2,3&quot;</span>
+&gt;</span>
+    Buy now
+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+</code></pre>
+<p>Intercepting clicks (capture required):</p>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;eventsDemo&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
         <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
         <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-        &gt;</span>Buy now (click me)&lt;/a
-    &gt;
-    <span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
-        <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
-        <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-        &gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;pointer-events: none;&quot;</span>&gt;</span>Span + <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Strong + Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>&lt;/a
-    &gt;
+    &gt;</span>Buy now (click me)<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btnRefresh&quot;</span>&gt;</span>Refresh<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
     <span class="hljs-keyword">const</span> log = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;log&#x27;</span>);
     <span class="hljs-keyword">const</span> <span class="hljs-title function_">logger</span> = (<span class="hljs-params">...messages</span>) =&gt;
         (log.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`<span class="hljs-subst">${messages.join(<span class="hljs-string">&#x27; &#x27;</span>)}</span>&lt;br&gt;<span class="hljs-subst">${log.innerHTML}</span>`</span>);
     <span class="hljs-keyword">const</span> eventsDemo = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;eventsDemo&#x27;</span>);
-    eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:pending&#x27;</span>, <span class="hljs-function">() =&gt;</span>
-        <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button pending&#x27;</span>),
-    );
-    eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span>
+    eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">() =&gt;</span>
         <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button resolved&#x27;</span>),
     );
     eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:failed&#x27;</span>, <span class="hljs-function">() =&gt;</span>
@@ -313,21 +223,21 @@
         e.<span class="hljs-title function_">preventDefault</span>();
         e.<span class="hljs-title function_">stopPropagation</span>();
         <span class="hljs-keyword">if</span> (e.<span class="hljs-property">target</span>.<span class="hljs-property">isCheckoutButton</span>) {
-            <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout button is clicked: &#x27;</span>, e.<span class="hljs-property">target</span>.<span class="hljs-property">href</span>);
-        } <span class="hljs-keyword">else</span> {
-            <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;element clicked: &#x27;</span>, e.<span class="hljs-property">target</span>);
+            <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout button clicked:&#x27;</span>, e.<span class="hljs-property">target</span>.<span class="hljs-property">href</span>);
         }
-    }, {<span class="hljs-attr">capture</span>: <span class="hljs-literal">true</span>});
-    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;btnRefresh&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-        [...eventsDemo.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;a&#x27;</span>)].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">a</span>) =&gt;</span>
-            a.<span class="hljs-title function_">requestUpdate</span>(<span class="hljs-literal">true</span>),
-        );
-    });
+    }, { <span class="hljs-attr">capture</span>: <span class="hljs-literal">true</span> });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
 <h4 id="logs" tabindex="-1">Logs <a class="header-anchor" href="#logs" href="#logs" title="Permalink to this heading">#</a></h4>
 <pre><code id="log" class="language-html">
 </code></pre>
+<h3 id="notes" tabindex="-1">Notes <a class="header-anchor" href="#notes" href="#notes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li>Checkout URL generation uses <a href="https://git.corp.adobe.com/PandoraUI/commerce-core">commerce-core</a>. See the <a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide">UCv3 button creation guide</a> for supported query params.</li>
+<li>When <code>registerCheckoutAction()</code> on <code>mas-commerce-service</code> returns a custom handler, navigation is delegated to that handler instead of the default redirect.</li>
+<li><code>data-modal</code> values <code>twp</code>, <code>d2p</code>, and <code>crm</code> participate in the 3-in-1 modal flow when the page meta tag <code>&lt;meta name=&quot;mas-ff-3in1&quot; content=&quot;off&quot;&gt;</code> is <strong>not</strong> present.</li>
+<li>Safari requires the customized built-in elements polyfill before <code>mas.js</code>. See <a href="mas.js.html">mas.js</a>.</li>
+</ul>
 
 </sp-theme>
 </main>
