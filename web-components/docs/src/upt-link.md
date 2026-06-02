@@ -49,5 +49,11 @@ See [MAS](mas.html#terminology) to learn more.
 
 ## Events {#events}
 
-This element dispatches `mas:pending`, `mas:resolved`, and `mas:failed` events.
-It will log an error to the console if `data-wcs-osi` is missing or if the offer cannot be resolved.
+| Event | Description |
+| ----- | ----------- |
+| `mas:resolved` | Promo terms URL set on `href`. Bubbles. |
+| `mas:failed` | Missing OSI or offer resolution failed. Bubbles. |
+
+CSS classes: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`. (`mas:pending` is not dispatched by `MasElement`.)
+
+Logs an error if `data-wcs-osi` is missing or the offer cannot be resolved.

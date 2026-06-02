@@ -5,6 +5,7 @@ node ./docs/src/build-docs.mjs checkout-link.md ./docs/checkout-link.html
 node ./docs/src/build-docs.mjs checkout-button.md ./docs/checkout-button.html
 node ./docs/src/build-docs.mjs upt-link.md ./docs/upt-link.html
 node ./docs/src/build-docs.mjs mas.md ./docs/mas.html
+node ./docs/src/build-docs.mjs mas-commerce-service.md ./docs/mas-commerce-service.html
 node ./docs/src/build-docs.mjs step-by-step.md ./docs/step-by-step.html
 node ./docs/src/build-docs.mjs mas.js.md ./docs/mas.js.html
 node ./docs/src/build-docs.mjs feature-flags.md ./docs/feature-flags.html

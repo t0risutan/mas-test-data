@@ -99,8 +99,26 @@ It extends <code>HTMLAnchorElement</code> and will automatically generate the co
 &gt;
 </code></pre>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
-<p>This element dispatches <code>mas:pending</code>, <code>mas:resolved</code>, and <code>mas:failed</code> events.
-It will log an error to the console if <code>data-wcs-osi</code> is missing or if the offer cannot be resolved.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mas:resolved</code></td>
+<td>Promo terms URL set on <code>href</code>. Bubbles.</td>
+</tr>
+<tr>
+<td><code>mas:failed</code></td>
+<td>Missing OSI or offer resolution failed. Bubbles.</td>
+</tr>
+</tbody>
+</table>
+<p>CSS classes: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>. (<code>mas:pending</code> is not dispatched by <code>MasElement</code>.)</p>
+<p>Logs an error if <code>data-wcs-osi</code> is missing or the offer cannot be resolved.</p>
 
 </sp-theme>
 </main>

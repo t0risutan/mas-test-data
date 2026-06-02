@@ -5,6 +5,7 @@ class MasSidenav extends HTMLElement {
 
         this.innerHTML = `
       <a href="/web-components/docs/mas.html">Home</a>
+      <a href="/web-components/docs/mas-commerce-service.html">Commerce Service</a>
       <a href="/web-components/docs/mas.js.html">mas.js</a>
       <a href="/web-components/docs/step-by-step.html">Step By Step - Enable M@S</a>
       <a href="/web-components/docs/checkout-link.html">Checkout Link</a>
