@@ -17,6 +17,8 @@ It will also fallback to last successfully loaded offers for the same OSI if ava
 
 ## Enablement `mas-commerce-service`
 
+See the dedicated [mas-commerce-service](mas-commerce-service.html) page for attributes, methods, events, and service API details.
+
 ⚠️ Safari does not support customized built-in elements. Therefore, you need to load the following polyfill before `mas.js` for browser compatibility (not required for in-app usage).
 
 ```html

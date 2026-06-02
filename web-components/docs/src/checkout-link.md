@@ -1,18 +1,49 @@
-# checkout-link {#checkout-link}
+# checkout-link
 
-## Introduction {#introduction}
+## checkout-link
 
-This custom element renders a checkout link supporting most of the features documented at https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide.<br>
-Sometimes a checkout-link can be also referred as placeholder, as it can be used as an inline link resolving at runtime.<br>
-The term placeholder will be deprecated and it is recommended to refer as **checkout-link custom element** going forward.
+### What it does
 
-Behind the scene, it uses https://git.corp.adobe.com/PandoraUI/commerce-core to generate the checkout url.
+`checkout-link` is a customized built-in element (`<a is="checkout-link">`) that resolves WCS Offer Selector IDs and sets the anchor `href` to a generated UCv3 checkout URL.
 
-It requires an Offer Selector ID to retrieve the offer details from WCS.
+It extends `HTMLAnchorElement` through `CheckoutMixin`. The element is sometimes called a "placeholder" in legacy content; prefer **checkout-link** in new documentation.
 
-See [MAS](mas.html#terminology) to learn more.
+Requires `mas-commerce-service` on the page. See [MAS](mas.html#terminology) for terminology.
 
-### Example
+### Attributes / Props
+
+| Attribute / property | Description | Default | Required |
+| --- | --- | --- | --- |
+| `data-wcs-osi` | Offer Selector ID. Comma-separated for multi-offer checkout. | — | yes |
+| `data-checkout-workflow` | Target checkout workflow. | `UCv3` | no |
+| `data-checkout-workflow-step` | UCv3 workflow step (for example `email`, `recommendation`). | `email` | no |
+| `data-extra-options` | JSON object of extra query params appended to the checkout URL. | `{}` | no |
+| `data-ims-country` | Signed-in user's IMS country code. Overrides locale country in the checkout URL. | — | no |
+| `data-perpetual` | Whether the offer is perpetual (`true` / `false`). | — | no |
+| `data-promotion-code` | Flex promotion code, if applicable. | — | no |
+| `data-quantity` | Purchase quantity. Comma-separated when multiple OSIs are set. | `1` | no |
+| `data-entitlement` | Client-side entitlement flag (`true` / `false`). | `false` | no |
+| `data-upgrade` | Client-side upgrade flag (`true` / `false`). | `false` | no |
+| `data-modal` | Modal type for 3-in-1 checkout. Recognized values: `twp`, `d2p`, `crm`. When active, href is set to `#` and modal checkout is used. | — | no |
+| `data-analytics-id` | Human-readable analytics id authored in Studio. | — | no |
+| `daa-ll` | Martech analytics id. Format: `${data-analytics-id}-${position}`. | — | no |
+| `isCheckoutLink` (property) | Returns `true` on checkout-link elements. | — | — |
+| `value` (property) | Resolved offer object(s) from WCS. | — | — |
+| `options` (property) | Full option set used to resolve the offer. | — | — |
+| `onceSettled()` (method) | Promise resolving when the element settles to resolved or failed. | — | — |
+| `requestUpdate(force?)` (method) | Re-renders from current attributes. Skips when unchanged unless `force` is `true`. | — | — |
+| `CheckoutLink.createCheckoutLink(options, innerHTML)` (static) | Programmatically creates a checkout link. Returns `null` if `mas-commerce-service` is missing. | — | — |
+
+### Events
+
+| Event | Description |
+| --- | --- |
+| `mas:resolved` | Fires when the offer resolves and `href` is set. |
+| `mas:failed` | Fires when the offer cannot be fetched or selected. |
+
+CSS classes `placeholder-pending`, `placeholder-resolved`, and `placeholder-failed` reflect state. **`mas:pending` is not dispatched by the current implementation.**
+
+### Usage example
 
 ```html {.demo}
 <a
@@ -23,27 +54,7 @@ See [MAS](mas.html#terminology) to learn more.
 >
 ```
 
-## Attributes {#attributes}
-
-| Attribute                     | Description                                                                                                                                                                                                                                  | Default Value | Required | Provider                |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------- | ----------------------- |
-| `data-wcs-osi`                | Offer Selector ID, can be multiple, separeted by comma                                                                                                                                                                                       |               | `true`   | mas.js or consumer code |
-| `data-checkout-workflow`      | Target checkout workflow for the generation of checkout urls                                                                                                                                                                                 | UCv3          | `false`  | mas.js                  |
-| `data-checkout-workflow-step` | [workflow step](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-RegularWorkflow) to land on the unified checkout page                                       | email         | `false`  | mas.js                  |
-| `data-extra-options`          | additional query params to append to the url, see: [Table of public query params](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-Tableofpublicqueryparams) | {}            | `false`  | mas.js                  |
-| `data-ims-country`            | the ims country to code of the user if signed in, overrides the locale country in the generated checkout url                                                                                                                                 |               | `false`  | mas.js or consumer code |
-| `data-perpetual`              | whether this is a perpetual offer `true\|false`                                                                                                                                                                                              |               | `false`  | mas.js                  |
-| `data-promotion-code`         | Flex promotion code, if applicable                                                                                                                                                                                                           |               | `false`  | mas.js                  |
-| `data-quantity`               | Quantity of the offer to purchase                                                                                                                                                                                                            | 1             | `false`  | mas.js or consumer code |
-| `data-entitlement`            | `entitlement` flag for client side interpretation                                                                                                                                                                                            | `false`       | `false`  | mas.js                  |
-| `data-upgrade`                | `upgrade` flag for client side interpretation                                                                                                                                                                                                | `false`       | `false`  | mas.js                  |
-| `data-modal`                  | `modal` flag for client side interpretation                                                                                                                                                                                                  | `false`       | `false`  | mas.js                  |
-| `data-analytics-id`           | human-readable, non-translatable link id for analytics. Authored in Studio in Link Editor.                                                                                                                                                   | `false`       | `false`  | mas.js                  |
-| `daa-ll`                      | martech-compatible link id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the link within a card. E.g. : see-terms-1, buy-now-2                                                                              | `false`       | `false`  | mas.js                  |
-
-### Examples {#examples}
-
-#### Custom Workflow Step
+Custom workflow step:
 
 ```html {.demo}
 <a
@@ -55,54 +66,7 @@ See [MAS](mas.html#terminology) to learn more.
 >
 ```
 
-#### Multiple Quantities
-
-Two photoshop and three acrobat pro single apps (TEAMS):
-
-```html {.demo}
-<a
-    href="#"
-    is="checkout-link"
-    data-wcs-osi="yHKQJK2VOMSY5bINgg7oa2ov9RnmnU1oJe4NOg4QTYI,vV01ci-KLH6hYdRfUKMBFx009hdpxZcIRG1-BY_PutE"
-    data-quantity="2,3"
-    >Buy now</a
->
-```
-
-#### Custom query params
-
-```html {.demo}
-<a
-    href="#"
-    is="checkout-link"
-    data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-extra-options='{"promoid":"promo12345","mv":1,"mv2":2}'
-    >Buy now</a
->
-```
-
-#### IMS Country
-
-```html {.demo}
-<a
-    href="#"
-    is="checkout-link"
-    data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-    data-ims-country="JP"
-    >Buy now</a
->
-```
-
-## Properties {#properties}
-
-| Property         | Description                                                                                                                                                     |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isCheckoutLink` | on checkout link elements, it will return `true`                                                                                                                |
-| `onceSettled`    | promise that resolves when the custom-element either resolves or fails to resolve the offer                                                                     |
-| `options`        | JSON object with the complete set of properties used to resolve the offer                                                                                       |
-| `value`          | The actual offer that is used to render the checkout link. In some cases WCS can return multiple offers but only one will be picked to render for a single app. |
-
-### Example
+Listening for resolution:
 
 ```html {.demo}
 <a
@@ -120,11 +84,6 @@ Two photoshop and three acrobat pro single apps (TEAMS):
             null,
             '\t',
         );
-        document.getElementById('coOptions').innerHTML = JSON.stringify(
-            target.options,
-            null,
-            '\t',
-        );
     });
 </script>
 ```
@@ -135,82 +94,9 @@ Two photoshop and three acrobat pro single apps (TEAMS):
 
 ```
 
-#### options property
+### Notes
 
-```json {#coOptions}
-
-```
-
-## Methods {#methods}
-
-| Property                       | Description                                                                                                    |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
-
-## Events {#events}
-
-| Event          | Description                                        |
-| -------------- | -------------------------------------------------- |
-| `mas:pending`  | fires when checkout link starts loading            |
-| `mas:resolved` | fires when the offer is successfully resolved      |
-| `mas:failed`   | fires when the offer could not be found or fetched |
-
-<br>
-
-For each event, the following css classes are toggled on the element: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
-
-### Example
-
-```html {.demo}
-<div id="eventsDemo">
-    <a
-        is="checkout-link"
-        data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-        >Buy now (click me)</a
-    >
-    <br />
-    <a
-        is="checkout-link"
-        data-wcs-osi="A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M"
-        ><span style="pointer-events: none;"
-            >Span + <strong>Strong + Buy now</strong></span
-        ></a
-    >
-</div>
-<button id="btnRefresh">Refresh</button>
-<script type="module">
-    const log = document.getElementById('log');
-    const logger = (...messages) =>
-        (log.innerHTML = `${messages.join(' ')}<br>${log.innerHTML}`);
-    const eventsDemo = document.getElementById('eventsDemo');
-    eventsDemo.addEventListener('mas:pending', () =>
-        logger('checkout-link pending'),
-    );
-    eventsDemo.addEventListener('mas:resolved', (e) =>
-        logger('checkout-link resolved'),
-    );
-    eventsDemo.addEventListener('mas:failed', () =>
-        logger('checkout-link failed'),
-    );
-    eventsDemo.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (e.target.isCheckoutLink) {
-            logger('checkout link is clicked: ', e.target.href);
-        } else {
-            logger('element clicked: ', e.target);
-        }
-    });
-    document.getElementById('btnRefresh').addEventListener('click', () => {
-        [...eventsDemo.querySelectorAll('a')].forEach((a) =>
-            a.requestUpdate(true),
-        );
-    });
-</script>
-```
-
-#### Logs
-
-```html {#log}
-
-```
+- Unlike `checkout-button`, the default click handler does not force navigation; the browser follows the resolved `href` unless a custom `checkoutActionHandler` is registered via `mas-commerce-service.registerCheckoutAction()`.
+- `data-modal` values `twp`, `d2p`, and `crm` use the 3-in-1 modal when `<meta name="mas-ff-3in1" content="off">` is not set.
+- Checkout URL generation uses [commerce-core](https://git.corp.adobe.com/PandoraUI/commerce-core). See the [UCv3 link creation guide](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide).
+- Inactive promotion codes are stripped automatically before URL generation.

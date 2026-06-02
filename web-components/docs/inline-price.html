@@ -25,139 +25,212 @@
 <main>
 <sp-theme color="light" scale="medium">
 <h1 id="inline-price" tabindex="-1">inline-price <a class="header-anchor" href="#inline-price" href="#inline-price" title="Permalink to this heading">#</a></h1>
-<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
-<p>This custom element renders an inline price supporting various display options and configurations. It retrieves pricing information from WCS based on the provided Offer Selector ID.</p>
-<p>See <a href="mas.html#terminology">MAS</a> to learn more.</p>
-<h3 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h3>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-</code></pre>
-<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<h2 id="inline-price-1" tabindex="-1">inline-price <a class="header-anchor" href="#inline-price-1" href="#inline-price-1" title="Permalink to this heading">#</a></h2>
+<h3 id="what-it-does" tabindex="-1">What it does <a class="header-anchor" href="#what-it-does" href="#what-it-does" title="Permalink to this heading">#</a></h3>
+<p><code>inline-price</code> is a customized built-in element (<code>&lt;span is=&quot;inline-price&quot;&gt;</code>) that resolves WCS pricing for one or more Offer Selector IDs and renders formatted price HTML.</p>
+<p>For comma-separated OSIs (soft bundles), prices are resolved independently, the best offer is selected per OSI, and the results are summed. If any OSI fails, the entire element fails.</p>
+<p>Requires <code>mas-commerce-service</code> on the page. See <a href="mas.html#terminology">MAS</a> for terminology.</p>
+<h3 id="attributes-%2F-props" tabindex="-1">Attributes / Props <a class="header-anchor" href="#attributes-%2F-props" href="#attributes-%2F-props" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>
 <tr>
-<th>Attribute</th>
+<th>Attribute / property</th>
 <th>Description</th>
-<th>Default Value</th>
+<th>Default</th>
 <th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>data-wcs-osi</code></td>
-<td>Offer Selector ID. Supports multiple comma-separated OSIs for soft bundles (prices will be summed).</td>
-<td></td>
-<td><code>true</code></td>
+<td>Offer Selector ID. Comma-separated for soft bundles (prices summed).</td>
+<td>—</td>
+<td>yes</td>
 </tr>
 <tr>
 <td><code>data-display-old-price</code></td>
-<td>Whether to display the old price (in case of flex or legacy promo offer)</td>
+<td>Show old/strikethrough price for promo offers.</td>
 <td><code>true</code></td>
-<td><code>false</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-display-per-unit</code></td>
-<td>Whether to display the price per unit (e.g:, per license)</td>
+<td>Show per-unit label (for example “per license”).</td>
 <td><code>false</code></td>
-<td><code>false</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-display-recurrence</code></td>
-<td>Whether to display the recurrence information (e.g:, /mo)</td>
+<td>Show recurrence (for example <code>/mo</code>).</td>
 <td><code>true</code></td>
-<td><code>false</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-display-tax</code></td>
-<td>Whether to display tax information</td>
+<td>Show tax label. When unset and <code>mas-ff-defaults</code> is on, resolved from locale/segment.</td>
 <td><code>false</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>data-display-plan-type</code></td>
+<td>Show plan type text.</td>
 <td><code>false</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>data-display-annual</code></td>
+<td>Enable annual price display for ABM offers when <code>mas-ff-annual-price</code> is on. Set to <code>false</code> to opt out.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-perpetual</code></td>
-<td>Whether this is a perpetual offer</td>
+<td>Whether the offer is perpetual.</td>
 <td><code>false</code></td>
-<td><code>false</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-promotion-code</code></td>
-<td>Flex promotion code to apply, if applicable</td>
-<td></td>
-<td><code>false</code></td>
+<td>Flex promotion code.</td>
+<td>—</td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-force-tax-exclusive</code></td>
-<td>Whether to force tax exclusive price, if <code>false</code>, it’s automatic, driven by country service</td>
+<td>Force tax-exclusive pricing. When unset and <code>mas-ff-defaults</code> is on, resolved from locale/segment.</td>
 <td><code>false</code></td>
-<td><code>false</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-template</code></td>
-<td>One of price, discount, optical, strikethrough, priceAnnual</td>
-<td>price</td>
-<td><code>false</code></td>
+<td>Price template (see table below).</td>
+<td><code>price</code></td>
+<td>no</td>
 </tr>
 <tr>
 <td><code>data-quantity</code></td>
-<td>Quantity of the offer, used with volume promotion codes to display either regular or promotional price.</td>
-<td>1</td>
-<td><code>false</code></td>
+<td>Quantity for volume promotions. <strong>Not supported for soft bundles.</strong></td>
+<td><code>1</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>isInlinePrice</code> (property)</td>
+<td>Returns <code>true</code> on inline-price elements.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>isFailed</code> (property)</td>
+<td>Returns <code>true</code> when render failed.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>value</code> (property)</td>
+<td>Resolved offer/price data.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>options</code> (property)</td>
+<td>Full option set used to resolve the price.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>onceSettled()</code> (method)</td>
+<td>Promise resolving when the element settles to resolved or failed.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>requestUpdate(force?)</code> (method)</td>
+<td>Re-renders from current attributes.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>InlinePrice.createInlinePrice(options)</code> (static)</td>
+<td>Programmatically creates an inline-price element. Returns <code>null</code> if service is missing.</td>
+<td>—</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<h3 id="data-template-values" tabindex="-1">data-template values <a class="header-anchor" href="#data-template-values" href="#data-template-values" title="Permalink to this heading">#</a></h3>
+<p><strong><code>data-template</code> values</strong> (from <code>price.js</code> / <code>buildPriceHTML</code>):</p>
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Description</th>
+<th>Value</th>
+<th>Behavior</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>price</code></td>
-<td>The default price of the offer</td>
+<td>Default price display</td>
 </tr>
 <tr>
 <td><code>discount</code></td>
-<td>Displays the promo price in percentage, e.g:, 19%</td>
+<td>Promo discount percentage. With two OSIs, uses cross-offer percentage logic.</td>
 </tr>
 <tr>
 <td><code>optical</code></td>
-<td>For <strong>paid upfront offers</strong>(PUF), renders the monthly price</td>
+<td>Monthly price for paid-upfront (PUF) offers</td>
 </tr>
 <tr>
 <td><code>annual</code></td>
-<td>For <strong>annual, billed monthly</strong> offers, renders the yearly price</td>
+<td>Yearly price for annual-billed-monthly offers</td>
 </tr>
 <tr>
 <td><code>strikethrough</code></td>
-<td>render the price as strikethrough.</td>
+<td>Strikethrough price styling</td>
+</tr>
+<tr>
+<td><code>promo-strikethrough</code></td>
+<td>Promo strikethrough styling</td>
+</tr>
+<tr>
+<td><code>legal</code></td>
+<td>Legal/plan-type price line</td>
 </tr>
 </tbody>
 </table>
-<h3 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" href="#examples" title="Permalink to this heading">#</a></h3>
-<h4 id="soft-bundle-(multiple-osis)" tabindex="-1">Soft Bundle (Multiple OSIs) <a class="header-anchor" href="#soft-bundle-(multiple-osis)" href="#soft-bundle-(multiple-osis)" title="Permalink to this heading">#</a></h4>
-<p>When multiple Offer Selector IDs are provided (comma-separated), the prices are summed together. This is useful for displaying the total price of a soft bundle containing multiple products.</p>
+<p>When <code>mas-ff-annual-price</code> is enabled and <code>data-display-annual</code> is not <code>false</code>, ABM offers may also render annual pricing through the default <code>price</code> template path.</p>
+<h3 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mas:resolved</code></td>
+<td>Fires when price HTML is rendered.</td>
+</tr>
+<tr>
+<td><code>mas:failed</code></td>
+<td>Fires when price cannot be resolved.</td>
+</tr>
+</tbody>
+</table>
+<p>CSS classes <code>placeholder-pending</code>, <code>placeholder-resolved</code>, and <code>placeholder-failed</code> reflect state. <strong><code>mas:pending</code> is not dispatched by the current implementation.</strong></p>
+<p>Clicks on child price nodes are re-dispatched from the host element so parent handlers can listen on the <code>inline-price</code> itself.</p>
+<h3 id="usage-example" tabindex="-1">Usage example <a class="header-anchor" href="#usage-example" href="#usage-example" title="Permalink to this heading">#</a></h3>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+</code></pre>
+<p>Soft bundle (summed price):</p>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
     <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
     <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M,Mutn1LYoGojkrcMdCLO7LQlx1FyTHw27ETsfLv0h8DQ&quot;</span>
 &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
 </code></pre>
-<div class="warning">
-<p><strong>Note</strong>: All OSIs in a soft bundle must resolve successfully. If any OSI fails to resolve, the entire price will fail to render. The <code>data-quantity</code> attribute is not supported for soft bundles.</p>
-</div>
-<h4 id="display-per-unit-price-with-tax" tabindex="-1">Display Per Unit Price with Tax <a class="header-anchor" href="#display-per-unit-price-with-tax" href="#display-per-unit-price-with-tax" title="Permalink to this heading">#</a></h4>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-    <span class="hljs-attr">data-display-per-unit</span>=<span class="hljs-string">&quot;true&quot;</span>
-    <span class="hljs-attr">data-display-tax</span>=<span class="hljs-string">&quot;true&quot;</span>
-&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-</code></pre>
-<h4 id="template%3Doptical" tabindex="-1">template=optical <a class="header-anchor" href="#template%3Doptical" href="#template%3Doptical" title="Permalink to this heading">#</a></h4>
+<p>Optical vs default template:</p>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
     <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
     <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;1ZyMOJpSngx9IU5AjEDyp7oRBz843zNlbbtPKbIb1gM&quot;</span>
@@ -173,146 +246,34 @@ vs
     <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;optical&quot;</span>
 &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
 </code></pre>
-<h4 id="template%3Dannual" tabindex="-1">template=annual <a class="header-anchor" href="#template%3Dannual" href="#template%3Dannual" title="Permalink to this heading">#</a></h4>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;Mutn1LYoGojkrcMdCLO7LQlx1FyTHw27ETsfLv0h8DQ&quot;</span>
-    <span class="hljs-attr">data-display-per-unit</span>=<span class="hljs-string">&quot;true&quot;</span>
-    <span class="hljs-attr">data-display-tax</span>=<span class="hljs-string">&quot;true&quot;</span>
-&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-vs
-<span class="hljs-tag">&lt;<span class="hljs-name">span</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;Mutn1LYoGojkrcMdCLO7LQlx1FyTHw27ETsfLv0h8DQ&quot;</span>
-    <span class="hljs-attr">data-display-per-unit</span>=<span class="hljs-string">&quot;true&quot;</span>
-    <span class="hljs-attr">data-display-tax</span>=<span class="hljs-string">&quot;true&quot;</span>
-    <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;annual&quot;</span>
-&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-</code></pre>
-<h2 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>isInlinePrice</code></td>
-<td>on inline price elements, it will return <code>true</code></td>
-</tr>
-<tr>
-<td><code>onceSettled</code></td>
-<td>Promise that resolves when the custom-element either resolves or fails to retrieve the price</td>
-</tr>
-<tr>
-<td><code>options</code></td>
-<td>JSON object with the complete set of properties used to resolve the price</td>
-</tr>
-<tr>
-<td><code>value</code></td>
-<td>The actual price data that is used to render the inline price.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="example-1" tabindex="-1">Example <a class="header-anchor" href="#example-1" href="#example-1" title="Permalink to this heading">#</a></h3>
+<p>Inspect resolved data:</p>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
     <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ip1&quot;</span>
     <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
     <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
 &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-    <span class="hljs-variable language_">document</span>
-        .<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ip1&#x27;</span>)
-        .<span class="hljs-title function_">onceSettled</span>()
-        .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">el</span>) =&gt;</span> {
-            <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ipValue&#x27;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(
-                el.<span class="hljs-property">value</span>,
-                <span class="hljs-literal">null</span>,
-                <span class="hljs-string">&#x27;\t&#x27;</span>,
-            );
-            <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ipOptions&#x27;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(
-                el.<span class="hljs-property">options</span>,
-                <span class="hljs-literal">null</span>,
-                <span class="hljs-string">&#x27;\t&#x27;</span>,
-            );
-        });
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-<h5 id="value-property" tabindex="-1">value property <a class="header-anchor" href="#value-property" href="#value-property" title="Permalink to this heading">#</a></h5>
-<pre><code id="ipValue" class="language-json">
-</code></pre>
-<h5 id="options-property" tabindex="-1">options property <a class="header-anchor" href="#options-property" href="#options-property" title="Permalink to this heading">#</a></h5>
-<pre><code id="ipOptions" class="language-json">
-</code></pre>
-<h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>requestUpdate(true | false)</code></td>
-<td>Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip</td>
-</tr>
-</tbody>
-</table>
-<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Event</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>mas:pending</code></td>
-<td>Fires when inline price starts loading</td>
-</tr>
-<tr>
-<td><code>mas:resolved</code></td>
-<td>Fires when the price is successfully resolved</td>
-</tr>
-<tr>
-<td><code>mas:failed</code></td>
-<td>Fires when the price could not be found or fetched</td>
-</tr>
-</tbody>
-</table>
-<p>For each event, the following CSS classes are toggled on the element: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
-<div class="warning">
-<p><strong>Note</strong>: Event names with <code>wcms:placeholder</code> prefix may be subject to change.</p>
-</div>
-<h3 id="example-2" tabindex="-1">Example <a class="header-anchor" href="#example-2" href="#example-2" title="Permalink to this heading">#</a></h3>
-<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
-    <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ip2&quot;</span>
-    <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
-    <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
-&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btnRefresh&quot;</span>&gt;</span>Refresh<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-    <span class="hljs-keyword">const</span> log = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;log&#x27;</span>);
-    <span class="hljs-keyword">const</span> <span class="hljs-title function_">logger</span> = (<span class="hljs-params">...messages</span>) =&gt;
-        (log.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`<span class="hljs-subst">${messages.join(<span class="hljs-string">&#x27; &#x27;</span>)}</span>&lt;br&gt;<span class="hljs-subst">${log.innerHTML}</span>`</span>);
-    <span class="hljs-keyword">const</span> span = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ip2&#x27;</span>);
-    span.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:pending&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;inline-price pending&#x27;</span>));
-    span.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">() =&gt;</span>
-        <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;inline-price resolved&#x27;</span>),
-    );
-    span.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:failed&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;inline-price failed&#x27;</span>));
-    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;btnRefresh&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-        span.<span class="hljs-title function_">requestUpdate</span>(<span class="hljs-literal">true</span>);
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ip1&#x27;</span>).<span class="hljs-title function_">onceSettled</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">el</span>) =&gt;</span> {
+        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ipValue&#x27;</span>).<span class="hljs-property">innerHTML</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(
+            el.<span class="hljs-property">value</span>,
+            <span class="hljs-literal">null</span>,
+            <span class="hljs-string">&#x27;\t&#x27;</span>,
+        );
     });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<h4 id="logs" tabindex="-1">Logs <a class="header-anchor" href="#logs" href="#logs" title="Permalink to this heading">#</a></h4>
-<pre><code id="log" class="language-html">
+<h4 id="value-property" tabindex="-1">value property <a class="header-anchor" href="#value-property" href="#value-property" title="Permalink to this heading">#</a></h4>
+<pre><code id="ipValue" class="language-json">
 </code></pre>
+<h3 id="notes" tabindex="-1">Notes <a class="header-anchor" href="#notes" href="#notes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li>All OSIs in a soft bundle must resolve successfully; partial failure fails the whole element.</li>
+<li><code>data-quantity</code> is ignored for soft bundles.</li>
+<li>With <code>mas-ff-defaults</code> enabled (via meta tag, service attribute, or parent <code>merch-card</code> / <code>mas-field</code>), unset tax flags are resolved using <code>resolvePriceTaxFlags()</code> based on country, language, and customer/market segment.</li>
+<li>With <code>mas-ff-defaults</code> off, <code>data-display-old-price</code> defaults to <code>true</code> when not explicitly set.</li>
+<li>When a parent contains paired strikethrough and price elements, the component may set <code>alternativePrice</code> on sibling inline-price elements to add screen-reader “Alternatively at” text.</li>
+<li>Tax defaults for Milo locales are documented under <a href="feature-flags.html#mas-ff-defaults">Feature Flags</a>.</li>
+</ul>
 
 </sp-theme>
 </main>
