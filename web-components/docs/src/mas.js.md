@@ -17,56 +17,24 @@ It will also fallback to last successfully loaded offers for the same OSI if ava
 
 ## Enablement `mas-commerce-service`
 
-⚠️ Safari does not support customized built-in elements. Therefore, you need to load the following polyfill before `mas.js` for browser compatibility (not required for in-app usage).
+Full API documentation: **[mas-commerce-service](mas-commerce-service.html)**.
+
+⚠️ Safari does not support customized built-in elements. Load the polyfill before `mas.js` (not required in-app):
 
 ```html
-<script src="https://www.adobe.comlibs/deps/custom-elements.js"></script>
+<script src="https://www.adobe.com/libs/deps/custom-elements.js"></script>
 ```
-
-To add `mas.js` to your page or application, include it as shown below:
 
 ```html
-<script
-    src="https://www.adobe.com/mas/libs/mas.js"
-    type="module"
-></script>
+<mas-commerce-service wcs-api-key="wcms-commerce-ims-ro-user-milo" lana-tags="your-surface"></mas-commerce-service>
+<script src="https://www.adobe.com/mas/libs/mas.js" type="module"></script>
 ```
 
-### Attributes
-
-For production, the minimun attributes to set are: `wcs-api-key` and `lana-tags`. Rest can be left default.
-
-| Name                     | Description                                                                                         | Default Value                    | Required |
-| ------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------- | -------- |
-| `allow-override`         | enables override of commerce env/landscape via query parameters(commerce.env/commerce.landscape)    |  `false`                         |  `false` |
-| `checkout-client-id`     | checkout client id                                                                                  |  `false`                         |  `false` |
-| `checkout-workflow-step` | default checkout workflow step                                                                      | `CheckoutWorkflowStep.EMAIL`     | `false`  |
-| `country`                | country of the offers to retrieve from WCS, determines the currency, price format, etc.             | US or locale country if set      | `false`  |
-| `env`                    | commerce environment you want this page to use, either `stage` or `prod`                            |  `prod`                          |  `false` |
-| `force-tax-exclusive`    | force all price display to be tax exclusive                                                         |  `false`                         |  `false` |
-| `locale`                 | currency & price locale you need, must belong to one of the [supported locales](#supported-locales) | `en_US`                          | `false`  |
-| `lana-tags`              | Enables logging via lana[^1][^2] with the given tags. e.g:`ccd`.                                    |                                  | `false`  |
-| `lana-sample-rate`       | Sets the sampling rate, see [^1] for details.                                                       | 1                                | `false`  |
-| `language`               | language of the price literal, e.g: per license                                                     | en or locale language if set     | `false`  |
-| `preview`                | enable preview (will only work on corp network), can be overriden with parameter `mas.preview=off`  | false / off                      | `false`  |
-| `wcs-api-key`            | api key used for making WCS calls                                                                   | `wcms-commerce-ims-ro-user-milo` | `false`  |
-
-[^1]: https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=WCMSOps&title=LANA+-+Log+Always+Never+Assume
-
-[^2]: https://github.com/adobecom/milo/blob/stage/libs/utils/lana.js
-
-### Methods
-
-| Name                               | Description                                                                                            |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
-|  `registerCheckoutAction (action)` |  registers an action, that must have signature (offers, options, imsSignedInPromise)                   |
-|  `flushWcsCache()`                 |  flush the payload cache for WCS calls                                                                 |
-|  `refreshOffers()`                 | `flushWcsCache` + refresh prices + checkout links                                                      |
-|  `refreshFragments()`              |  `flushWcsCache` + refresh fragment content from Odin. This results in card content update with offers |
+The service dispatches **`wcms:commerce:ready`** when activated (not `mas:ready`).
 
 ### Feature flags
 
-For detailed documentation on all available feature flags, see [Feature Flags](feature-flags.html).
+See [Feature Flags](feature-flags.html). Flags `mas-ff-defaults` and `mas-ff-annual-price` can be set on the service via `data-mas-ff-*` attributes.
 
 ### Examples
 

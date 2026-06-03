@@ -24,155 +24,133 @@
     <aside is="mas-sidenav"></aside>
 <main>
 <sp-theme color="light" scale="medium">
-<h1 id="aem-fragment-custom-element" tabindex="-1">aem-fragment custom element <a class="header-anchor" href="#aem-fragment-custom-element" href="#aem-fragment-custom-element" title="Permalink to this heading">#</a></h1>
-<p>The <code>aem-fragment</code> custom element is used to load a content fragment from MAS/Odin.
-It features a caching mechanism, supports retrying on fetch errors, and can serve stale content if fetching new content fails, ensuring robustness.</p>
-<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
-<p>The <code>aem-fragment</code> element is headless and does not render any content on its own. You should use its events to handle the loaded data.</p>
-<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<h1 id="aem-fragment" tabindex="-1">aem-fragment <a class="header-anchor" href="#aem-fragment" href="#aem-fragment" title="Permalink to this heading">#</a></h1>
+<h2 id="aem-fragment-1" tabindex="-1">aem-fragment <a class="header-anchor" href="#aem-fragment-1" href="#aem-fragment-1" title="Permalink to this heading">#</a></h2>
+<h3 id="what-it-does" tabindex="-1">What it does <a class="header-anchor" href="#what-it-does" href="#what-it-does" title="Permalink to this heading">#</a></h3>
+<p>Headless custom element (<code>&lt;aem-fragment&gt;</code>) that loads MAS/Odin content fragments over the network, caches them in a module-level <code>FragmentCache</code>, and exposes transformed data on the <code>data</code> property. It does not render DOM; consumers (typically <code>merch-card</code>) listen for <code>aem:load</code> and hydrate UI.</p>
+<p>Supports eager load, collection cache wait (<code>loading=&quot;cache&quot;</code>), stale fallback on fetch failure, preview generation, and WCS cache prefill from fragment payload when <code>wcs</code> is present.</p>
+<h3 id="attributes-%2F-props" tabindex="-1">Attributes / Props <a class="header-anchor" href="#attributes-%2F-props" href="#attributes-%2F-props" title="Permalink to this heading">#</a></h3>
+<p>Observed attributes (<code>aem-fragment.js</code>):</p>
 <table>
 <thead>
 <tr>
-<th>Name</th>
+<th>Attribute</th>
 <th>Description</th>
-<th>Default Value</th>
-<th>Required</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>fragment</code></td>
-<td>The ID of the fragment to load.</td>
-<td></td>
-<td><code>true</code></td>
+<td>Fragment UUID. Required; missing or <code>#</code> triggers <code>aem:error</code>.</td>
+<td>—</td>
 </tr>
 <tr>
 <td><code>loading</code></td>
-<td>If a fragment is known to be in a collection, set to <code>cache</code>, so that it can be initialized from the collection cache, falls back to <code>eager</code> after a timeout.</td>
+<td><code>eager</code> or <code>cache</code>. <code>cache</code> waits up to <code>timeout</code> for collection cache before fetching.</td>
 <td><code>eager</code></td>
-<td><code>false</code></td>
 </tr>
 <tr>
 <td><code>timeout</code></td>
-<td>The timeout in milliseconds for <code>loading=cache</code>.</td>
+<td>Milliseconds to wait when <code>loading=&quot;cache&quot;</code>.</td>
 <td><code>5000</code></td>
-<td><code>false</code></td>
 </tr>
 <tr>
 <td><code>author</code></td>
-<td>Enables author mode, which affects data transformation.</td>
-<td><code>false</code></td>
-<td><code>false</code></td>
+<td>Author mode (<code>true</code> or empty string enables). Affects data transformation.</td>
+<td>off</td>
 </tr>
 <tr>
 <td><code>preview</code></td>
-<td>Enables preview mode, fetching data from the preview service.</td>
-<td><code>false</code></td>
-<td><code>false</code></td>
+<td>Preview mode on element; service <code>preview</code> setting also applies in <code>connectedCallback</code>.</td>
+<td>from service</td>
 </tr>
 <tr>
 <td><code>title</code></td>
-<td>An informative title for the fragment.</td>
-<td></td>
-<td><code>false</code></td>
+<td>Informative title (optional).</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<h2 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
 <tr>
-<th>Name</th>
+<th>Property / method</th>
 <th>Description</th>
-<th>Type</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>data</code></td>
-<td>The transformed fragment data.</td>
-<td><code>Object</code></td>
+<td>Transformed fragment for consumers.</td>
 </tr>
 <tr>
 <td><code>updateComplete</code></td>
-<td>A promise that resolves when the fragment is loaded, or rejects on error.</td>
-<td><code>Promise</code></td>
+<td>Alias for internal fetch promise completion.</td>
 </tr>
 <tr>
 <td><code>fetchInfo</code></td>
-<td>An object containing information about the fetch operation (URL, status, retries, etc.).</td>
-<td><code>Object</code></td>
+<td>Metrics keys prefixed with <code>aem-fragment:</code> (url, status, retryCount, stale, measure).</td>
 </tr>
-</tbody>
-</table>
-<h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td><code>refresh(flushCache = true)</code></td>
-<td>Refreshes the fragment content. If <code>flushCache</code> is <code>true</code>, it will bypass the cache.</td>
+<td>Reload fragment; clears cache entry when <code>flushCache</code> is true.</td>
+</tr>
+<tr>
+<td><code>AemFragment.cache</code></td>
+<td>Shared <code>FragmentCache</code> instance (also exposed as instance <code>cache</code>, deprecated).</td>
 </tr>
 </tbody>
 </table>
-<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<h3 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>Description</th>
+<th>Event</th>
+<th>When</th>
+<th><code>detail</code></th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>aem:load</code></td>
-<td>Fires when the fragment is successfully loaded. The event <code>detail</code> property contains the fragment data.</td>
+<td>Successful load</td>
+<td>Fragment data plus <code>references</code>, <code>referencesTree</code>, <code>placeholders</code>, and fetch metadata</td>
 </tr>
 <tr>
 <td><code>aem:error</code></td>
-<td>Fires when the fragment fails to load. The event <code>detail</code> property contains error information.</td>
+<td>Missing id, fetch failure, bad response</td>
+<td><code>{ message, context }</code> — element gets class <code>error</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="error-handling" tabindex="-1">Error Handling <a class="header-anchor" href="#error-handling" href="#error-handling" title="Permalink to this heading">#</a></h2>
-<p>The <code>aem-fragment</code> component can encounter several types of errors during its lifecycle, such as a missing fragment ID, network issues, or server errors. When an error occurs, it dispatches an <code>aem:error</code> event. The <code>detail</code> property of this event contains information about the error.</p>
-<p>You can handle these errors by adding an event listener to the <code>aem-fragment</code> element.</p>
-<style>
-  #log1 {
-    max-height: 400px;
-  }
-</style>
+<h3 id="usage-example" tabindex="-1">Usage example <a class="header-anchor" href="#usage-example" href="#usage-example" title="Permalink to this heading">#</a></h3>
 <pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;fragment-container&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
-    <span class="hljs-keyword">const</span> target = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;log1&#x27;</span>);
     <span class="hljs-keyword">const</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;fragment-container&#x27;</span>);
-
-    container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;aem:load&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
-        <span class="hljs-keyword">const</span> pre = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;pre&#x27;</span>);
-        pre.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;aem:load: &#x27;</span> + <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(e.<span class="hljs-property">detail</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>);
-        target.<span class="hljs-title function_">append</span>(pre);
-    });
-
-    container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;aem:error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
-        <span class="hljs-keyword">const</span> pre = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;pre&#x27;</span>);
-        pre.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;aem:error: &#x27;</span> + <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(e.<span class="hljs-property">detail</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>);
-        target.<span class="hljs-title function_">append</span>(pre);
-    });
-
+    container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;aem:load&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;loaded&#x27;</span>, e.<span class="hljs-property">detail</span>));
+    container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;aem:error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(e.<span class="hljs-property">detail</span>));
     container.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`
         &lt;aem-fragment fragment=&quot;d8008cac-010f-4607-bacc-a7a327da1312&quot;&gt;&lt;/aem-fragment&gt;
         &lt;aem-fragment fragment=&quot;wrong-fragment-id&quot;&gt;&lt;/aem-fragment&gt;
     `</span>;
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<h4 id="logs" tabindex="-1">Logs <a class="header-anchor" href="#logs" href="#logs" title="Permalink to this heading">#</a></h4>
-<pre><code id="log1" class="language-html">
+<p>Inside <code>merch-card</code>:</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">aem-fragment</span> <span class="hljs-attr">fragment</span>=<span class="hljs-string">&quot;830f76be-0e83-4faf-9051-3dbb1a1dff04&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">aem-fragment</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
 </code></pre>
+<p>Refresh all fragments on the page:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;mas-commerce-service&#x27;</span>).<span class="hljs-title function_">refreshFragments</span>();
+</code></pre>
+<h3 id="notes" tabindex="-1">Notes <a class="header-anchor" href="#notes" href="#notes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><code>mas-commerce-service.refreshFragments()</code> clears <code>AemFragment.cache</code> and calls <code>refresh(false)</code> on each <code>aem-fragment</code>.</li>
+<li>Stale content: if a refetch fails but prior <code>#rawData</code> exists, stale data is served and <code>fetchInfo.stale</code> is true.</li>
+<li>Query param <code>mas.disableWcsCache</code> prevents WCS prefill from fragment response.</li>
+<li>Corp preview behavior depends on service preview settings and <code>generatePreview()</code> (implementation in same file).</li>
+</ul>
 
 </sp-theme>
 </main>
