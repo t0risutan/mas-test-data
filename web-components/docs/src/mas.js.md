@@ -15,7 +15,9 @@ mas.js includes the followings custom elements:
 In case of network issues, the requests will be retried up to 3 times with 500ms of delay between attempts.
 It will also fallback to last successfully loaded offers for the same OSI if available.
 
-## Enablement `mas-commerce-service`
+## Enablement `mas-commerce-service` {#enablement}
+
+For full API details see [mas-commerce-service](mas-commerce-service.html).
 
 ⚠️ Safari does not support customized built-in elements. Therefore, you need to load the following polyfill before `mas.js` for browser compatibility (not required for in-app usage).
 
@@ -50,10 +52,22 @@ For production, the minimun attributes to set are: `wcs-api-key` and `lana-tags`
 | `language`               | language of the price literal, e.g: per license                                                     | en or locale language if set     | `false`  |
 | `preview`                | enable preview (will only work on corp network), can be overriden with parameter `mas.preview=off`  | false / off                      | `false`  |
 | `wcs-api-key`            | api key used for making WCS calls                                                                   | `wcms-commerce-ims-ro-user-milo` | `false`  |
+| `mas-io-url`             | MAS IO base URL for fragment fetches                                                                | prod/stage adobe.com `/mas/io`   | `false`  |
+| `instant`                | Instant preview flag for AEM fragment preview                                                       |                                  | `false`  |
+| `data-mas-ff-defaults`   | Feature flag (see [Feature Flags](feature-flags.html))                                              | off                              | `false`  |
+| `data-mas-ff-annual-price` | Feature flag (see [Feature Flags](feature-flags.html))                                          | off                              | `false`  |
 
 [^1]: https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=WCMSOps&title=LANA+-+Log+Always+Never+Assume
 
+⚠️ Internal reference — cannot be verified by agent
+
 [^2]: https://github.com/adobecom/milo/blob/stage/libs/utils/lana.js
+
+### Events {#service-events}
+
+| Event | Description |
+| --- | --- |
+| `wcms:commerce:ready` | Fires when `mas-commerce-service` has activated. `detail` is the service element. |
 
 ### Methods
 
@@ -63,6 +77,7 @@ For production, the minimun attributes to set are: `wcs-api-key` and `lana-tags`
 |  `flushWcsCache()`                 |  flush the payload cache for WCS calls                                                                 |
 |  `refreshOffers()`                 | `flushWcsCache` + refresh prices + checkout links                                                      |
 |  `refreshFragments()`              |  `flushWcsCache` + refresh fragment content from Odin. This results in card content update with offers |
+|  `resolvePriceTaxFlags(...)`       |  resolve default tax display flags for country, language, and segments                                 |
 
 ### Feature flags
 

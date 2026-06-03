@@ -25,56 +25,65 @@
 <main>
 <sp-theme color="light" scale="medium">
 <h1 id="feature-flags" tabindex="-1">Feature Flags <a class="header-anchor" href="#feature-flags" href="#feature-flags" title="Permalink to this heading">#</a></h1>
-<p>Feature flags can be set via a meta tag.</p>
-<p>e.g <code>&lt;meta name=&quot;mas-ff-defaults&quot; content=&quot;on&quot;&gt;</code></p>
+<p>Feature flags for <strong>web-components</strong> can be set via a meta tag or on <a href="mas-commerce-service.html"><code>mas-commerce-service</code></a>.</p>
+<p>e.g. <code>&lt;meta name=&quot;mas-ff-defaults&quot; content=&quot;on&quot;&gt;</code> or <code>&lt;mas-commerce-service data-mas-ff-defaults=&quot;on&quot;&gt;&lt;/mas-commerce-service&gt;</code></p>
+<p>URL query parameters with the same name also apply (via <code>@dexter/tacocat-core</code> <code>getParameter</code>).</p>
 <table>
 <thead>
 <tr>
 <th>Flag Name</th>
+<th>Implemented in web-components</th>
 <th>Description</th>
-<th>Default Value</th>
+<th>Default</th>
 <th>Valid Values</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>mas-ff-defaults</code></td>
-<td>Enables good defaults for each locale and segment so that authors don’t have to set them manually. This includes automatic tax display settings based on country and customer segment.</td>
+<td>Yes (<code>mas-commerce-service</code>, <code>inline-price</code>, <code>merch-card</code>)</td>
+<td>Locale/segment-aware defaults for tax labels, per-unit display, and related price options.</td>
+<td><code>off</code></td>
+<td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
+</tr>
+<tr>
+<td><code>mas-ff-annual-price</code></td>
+<td>Yes (<code>mas-commerce-service</code>, <code>inline-price</code>)</td>
+<td>Shows annual price for ABM offers when <code>data-display-annual</code> is not <code>false</code>.</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-3in1</code></td>
-<td>Controls the 3-in-1 modal checkout experience. When enabled, TWP (Trial With Purchase), D2P (Direct to Purchase), and CRM (Content Rich Modals) modals will use the unified 3-in-1 checkout flow.</td>
-<td><code>on</code></td>
+<td>Yes (meta tag only; read in <code>checkout.js</code> / <code>checkout-mixin.js</code>)</td>
+<td>Unified 3-in-1 modal checkout for <code>data-modal</code> values <code>twp</code>, <code>d2p</code>, <code>crm</code>.</td>
+<td><code>on</code> (absent meta = enabled)</td>
 <td><code>on</code>, <code>off</code></td>
-</tr>
-<tr>
-<td><code>mas-ff-annual-price</code></td>
-<td>Enables the display of annual pricing alongside monthly prices. When enabled and <code>annual</code> parameter is not set to <code>false</code>, prices will show the calculated annual cost.</td>
-<td><code>off</code></td>
-<td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-copy-cta</code></td>
-<td>Adds a copy-to-clipboard button next to checkout CTAs. Useful for authors who need to copy CTA links for use in other contexts.</td>
-<td><code>off</code></td>
-<td><code>on</code>, <code>off</code></td>
+<td><strong>Not found in web-components source</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
 </tr>
 <tr>
 <td><code>mas-ff-mas-deps</code></td>
-<td>Controls whether MAS components are loaded from an external URL (when masLibs is present) or from local dependencies. When enabled, components load from external sources.</td>
-<td><code>off</code></td>
-<td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
+<td><strong>Not found in web-components source</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
 </tr>
 <tr>
 <td><code>mas-geo-detection</code></td>
-<td>Enables geographic locale detection using Akamai geolocation. When enabled, the user’s actual geographic location is used to determine locale settings instead of the URL prefix.</td>
-<td><code>off</code></td>
-<td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
+<td><strong>Not found in web-components source</strong></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
+<p>Flags marked as not found in this repository may be implemented in consumer surfaces (e.g. Milo/mas.js loaders) outside <code>web-components/src/</code>.</p>
 <h2 id="detailed-flag-descriptions" tabindex="-1">Detailed Flag Descriptions <a class="header-anchor" href="#detailed-flag-descriptions" href="#detailed-flag-descriptions" title="Permalink to this heading">#</a></h2>
 <h3 id="mas-ff-defaults" tabindex="-1">mas-ff-defaults <a class="header-anchor" href="#mas-ff-defaults" href="#mas-ff-defaults" title="Permalink to this heading">#</a></h3>
 <p><strong>Purpose:</strong> Eliminates the need for authors to manually configure tax display and pricing settings for each locale. This flag automatically applies region-appropriate defaults based on country, language, and customer segment.</p>
@@ -493,66 +502,8 @@
 </code></pre>
 <p>When enabled, individual price elements can opt out using the <code>annual=false</code> parameter in the merch link.</p>
 <hr>
-<h3 id="mas-ff-copy-cta" tabindex="-1">mas-ff-copy-cta <a class="header-anchor" href="#mas-ff-copy-cta" href="#mas-ff-copy-cta" title="Permalink to this heading">#</a></h3>
-<p><strong>Purpose:</strong> Adds a copy-to-clipboard utility button next to checkout CTA buttons, enabling content authors to easily copy CTA links for documentation or reuse in other contexts.</p>
-<p><strong>What it controls:</strong></p>
-<ul>
-<li><strong>Copy button placement:</strong> Adds a small clipboard icon button adjacent to each checkout CTA</li>
-<li><strong>Copy format:</strong> Copies the CTA as an HTML anchor tag with the full checkout URL and text placeholder, e.g.:<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://commerce.adobe.com/...&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Special Link&quot;</span>&gt;</span>CTA {{Buy now}}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-</code></pre>
-</li>
-</ul>
-<p><strong>When to use:</strong> Enable this flag during content authoring and review phases. This is primarily a development/authoring tool and is disabled in production.</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mas-ff-copy-cta&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;on&quot;</span>&gt;</span>
-</code></pre>
-<hr>
-<h3 id="mas-ff-mas-deps" tabindex="-1">mas-ff-mas-deps <a class="header-anchor" href="#mas-ff-mas-deps" href="#mas-ff-mas-deps" title="Permalink to this heading">#</a></h3>
-<p><strong>Purpose:</strong> Controls the source location for loading MAS (Merch at Scale) component dependencies, allowing teams to use either the centralized MAS repository or local Milo dependencies.</p>
-<p><strong>What it controls:</strong></p>
-<ul>
-<li><strong>Component loading source:</strong> Determines where MAS components (commerce service, merch cards, inline prices, checkout links) are loaded from</li>
-<li><strong>Loading priority:</strong>
-<ol>
-<li>If <code>masLibs</code> config is set: Load from the specified external URL</li>
-<li>If this flag is enabled: Load from <code>https://www.adobe.com/mas/libs/</code></li>
-<li>Fallback: Load from local Milo deps (<code>../../deps/mas/</code>)</li>
-</ol>
-</li>
-<li><strong>Error handling:</strong> If external load fails, automatically falls back to local Milo dependencies with a console warning</li>
-</ul>
-<p><strong>Components affected:</strong></p>
-<ul>
-<li><code>mas-commerce-service</code></li>
-<li><code>merch-card</code></li>
-<li><code>inline-price</code></li>
-<li><code>checkout-link</code></li>
-</ul>
-<p><strong>When to use:</strong> Enable when you want to use the latest MAS components from the centralized Adobe MAS repository instead of the bundled Milo versions.</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mas-ff-mas-deps&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;on&quot;</span>&gt;</span>
-</code></pre>
-<hr>
-<h3 id="mas-geo-detection" tabindex="-1">mas-geo-detection <a class="header-anchor" href="#mas-geo-detection" href="#mas-geo-detection" title="Permalink to this heading">#</a></h3>
-<p><strong>Purpose:</strong> Enables automatic geographic locale detection using Akamai EdgeScape geolocation data, ensuring users see prices and checkout flows appropriate for their actual location rather than the URL-inferred locale.</p>
-<p><strong>What it controls:</strong></p>
-<ul>
-<li><strong>Locale resolution:</strong> Uses Akamai’s geolocation (stored in <code>sessionStorage</code> as <code>akamai</code>, or provided in the page URL in the query parameter <code>akamaiLocale</code>) to determine the user’s country</li>
-<li><strong>Language-first site handling:</strong> Particularly useful for sites with URL structures like <code>/ar</code>, <code>/africa</code>, or <code>/langstore/[lang]</code> where the URL indicates language but not country</li>
-<li><strong>Price localization:</strong> Ensures WCS (Web Commerce Service) calls use the correct country code for accurate pricing</li>
-<li><strong>Checkout flow:</strong> Routes users to the appropriate regional checkout experience</li>
-</ul>
-<p><strong>Behavior by URL pattern:</strong></p>
-<ul>
-<li><code>/ar</code> (Argentina) + Akamai ES (Spain) → Uses <code>es_AR</code> locale with ES country for pricing</li>
-<li><code>/africa</code> + Akamai ES → Uses <code>en_MU</code> locale with ES country</li>
-<li><code>/langstore/en</code> + Akamai ES → Uses <code>en_US</code> locale with ES country</li>
-<li>Standard country-prefixed URLs (e.g., <code>/ae_ar</code>) → Uses URL locale regardless of Akamai</li>
-</ul>
-<p><strong>When to use:</strong> Enable for language-first sites or multi-region sites where users may access content from different geographic locations than the URL suggests.</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mas-geo-detection&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;on&quot;</span>&gt;</span>
-</code></pre>
+<h3 id="unimplemented-flags" tabindex="-1">Flags not implemented in web-components <a class="header-anchor" href="#unimplemented-flags" href="#unimplemented-flags" title="Permalink to this heading">#</a></h3>
+<p><code>mas-ff-copy-cta</code>, <code>mas-ff-mas-deps</code>, and <code>mas-geo-detection</code> are documented historically but have <strong>no references</strong> under <code>web-components/src/</code>. Do not assume they work from <code>mas.js</code> alone without verifying the consuming page loader. For local/stage library overrides, <code>aem-fragment</code> preview uses the <code>maslibs</code> URL query parameter (see <a href="aem-fragment.html">aem-fragment</a>).</p>
 <h2 id="notes" tabindex="-1">Notes <a class="header-anchor" href="#notes" href="#notes" title="Permalink to this heading">#</a></h2>
 <ul>
 <li>Feature flags default to <code>off</code> unless otherwise specified (except <code>mas-ff-3in1</code> which defaults to <code>on</code>)</li>

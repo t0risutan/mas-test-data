@@ -27,8 +27,10 @@
 <h1 id="checkout-button" tabindex="-1">checkout-button <a class="header-anchor" href="#checkout-button" href="#checkout-button" title="Permalink to this heading">#</a></h1>
 <h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>This custom element renders a checkout button supporting most of the features documented at <a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide.">https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide.</a><br></p>
+<p>⚠️ Internal reference — cannot be verified by agent</p>
 <p>Behind the scene, it uses <a href="https://git.corp.adobe.com/PandoraUI/commerce-core">https://git.corp.adobe.com/PandoraUI/commerce-core</a> to generate the checkout url.</p>
-<p>It requires an Offer Selector ID to retrieve the offer details from WCS.</p>
+<p>⚠️ Internal reference — cannot be verified by agent</p>
+<p>It requires an Offer Selector ID to retrieve the offer details from WCS. A <a href="mas-commerce-service.html"><code>mas-commerce-service</code></a> must be on the page before placeholders resolve.</p>
 <p>See <a href="mas.html#terminology">MAS</a> to learn more.</p>
 <p>ℹ️ Unlike <code>checkout-link</code>, in order to prevent the default click event from redirecting to checkout url, register the click event using <code>{capture: true}</code>.
 <br>See the demo at the <a href="#example-2">end</a></p>
@@ -68,10 +70,17 @@
 </tr>
 <tr>
 <td><code>data-checkout-workflow-step</code></td>
-<td><a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-RegularWorkflow">workflow step</a> to land on the unified checkout page</td>
+<td><a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-RegularWorkflow">workflow step</a> to land on the unified checkout page. Valid values: <code>segmentation</code>, <code>bundle</code>, <code>commitment</code>, <code>recommendation</code>, <code>email</code>, <code>payment</code>, <code>change-plan/team-upgrade/plans</code>, <code>change-plan/team-upgrade/payment</code>.</td>
 <td>email</td>
 <td><code>false</code></td>
 <td>mas.js</td>
+</tr>
+<tr>
+<td><code>data-checkout-market-segment</code></td>
+<td>Override market segment (<code>ms</code>) in checkout URL generation when not inferred from the offer</td>
+<td></td>
+<td><code>false</code></td>
+<td>mas.js or consumer code</td>
 </tr>
 <tr>
 <td><code>data-extra-options</code></td>
@@ -124,7 +133,7 @@
 </tr>
 <tr>
 <td><code>data-modal</code></td>
-<td><code>modal</code> flag for client side interpretation</td>
+<td>Modal checkout type. When set to <code>twp</code>, <code>d2p</code>, or <code>crm</code> and <code>mas-ff-3in1</code> is not <code>off</code>, checkout uses the unified 3-in-1 modal flow (<code>cli=mini_plans</code> or <code>cli=creative</code>). Other values set <code>href</code> to <code>#</code> when modal is <code>true</code>.</td>
 <td><code>false</code></td>
 <td><code>false</code></td>
 <td>mas.js</td>
@@ -145,6 +154,8 @@
 </tr>
 </tbody>
 </table>
+<p>Wiki links for UCv3 workflow steps and query params: <a href="https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide">https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&amp;title=UCv3+button+Creation+Guide</a></p>
+<p>⚠️ Internal reference — cannot be verified by agent</p>
 <h3 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" href="#examples" title="Permalink to this heading">#</a></h3>
 <h4 id="custom-workflow-step" tabindex="-1">Custom Workflow Step <a class="header-anchor" href="#custom-workflow-step" href="#custom-workflow-step" title="Permalink to this heading">#</a></h4>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
@@ -208,6 +219,26 @@
 <td><code>value</code></td>
 <td>The actual offer that is used to render the checkout button. In some cases WCS can return multiple offers but only one will be picked to render for a single app.</td>
 </tr>
+<tr>
+<td><code>href</code></td>
+<td>Resolved checkout URL (stored in <code>data-href</code> attribute). Used by <code>clickHandler</code> for navigation unless a custom <code>checkoutActionHandler</code> is set.</td>
+</tr>
+<tr>
+<td><code>marketSegment</code></td>
+<td>Resolved market segment from options or offer (<code>ms</code> query mapping applied).</td>
+</tr>
+<tr>
+<td><code>customerSegment</code></td>
+<td>Resolved customer segment from options or offer (<code>cs</code> query mapping applied).</td>
+</tr>
+<tr>
+<td><code>is3in1Modal</code></td>
+<td><code>true</code> when <code>data-modal</code> is <code>twp</code>, <code>d2p</code>, or <code>crm</code>.</td>
+</tr>
+<tr>
+<td><code>isOpen3in1Modal</code></td>
+<td><code>true</code> when <code>is3in1Modal</code> and meta <code>mas-ff-3in1</code> is not <code>off</code>.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="example-1" tabindex="-1">Example <a class="header-anchor" href="#example-1" href="#example-1" title="Permalink to this heading">#</a></h3>
@@ -265,10 +296,6 @@
 </thead>
 <tbody>
 <tr>
-<td><code>mas:pending</code></td>
-<td>fires when checkout button starts loading</td>
-</tr>
-<tr>
 <td><code>mas:resolved</code></td>
 <td>fires when the offer is successfully resolved</td>
 </tr>
@@ -279,7 +306,7 @@
 </tbody>
 </table>
 <br>
-<p>For each event, the following css classes are toggled on the element: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
+<p>While loading, the element uses the <code>placeholder-pending</code> CSS class. On success or failure, <code>placeholder-resolved</code> or <code>placeholder-failed</code> is applied respectively. A <code>mas:pending</code> event is <strong>not</strong> dispatched by the current implementation (only resolved and failed events fire).</p>
 <h3 id="example-2" tabindex="-1">Example <a class="header-anchor" href="#example-2" href="#example-2" title="Permalink to this heading">#</a></h3>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;eventsDemo&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
@@ -300,9 +327,6 @@
     <span class="hljs-keyword">const</span> <span class="hljs-title function_">logger</span> = (<span class="hljs-params">...messages</span>) =&gt;
         (log.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`<span class="hljs-subst">${messages.join(<span class="hljs-string">&#x27; &#x27;</span>)}</span>&lt;br&gt;<span class="hljs-subst">${log.innerHTML}</span>`</span>);
     <span class="hljs-keyword">const</span> eventsDemo = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;eventsDemo&#x27;</span>);
-    eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:pending&#x27;</span>, <span class="hljs-function">() =&gt;</span>
-        <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button pending&#x27;</span>),
-    );
     eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span>
         <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button resolved&#x27;</span>),
     );

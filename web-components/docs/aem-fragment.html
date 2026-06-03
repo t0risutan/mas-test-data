@@ -24,9 +24,9 @@
     <aside is="mas-sidenav"></aside>
 <main>
 <sp-theme color="light" scale="medium">
-<h1 id="aem-fragment-custom-element" tabindex="-1">aem-fragment custom element <a class="header-anchor" href="#aem-fragment-custom-element" href="#aem-fragment-custom-element" title="Permalink to this heading">#</a></h1>
-<p>The <code>aem-fragment</code> custom element is used to load a content fragment from MAS/Odin.
-It features a caching mechanism, supports retrying on fetch errors, and can serve stale content if fetching new content fails, ensuring robustness.</p>
+<h1 id="aem-fragment" tabindex="-1">aem-fragment <a class="header-anchor" href="#aem-fragment" href="#aem-fragment" title="Permalink to this heading">#</a></h1>
+<p>The <code>aem-fragment</code> custom element is used to load a content fragment from MAS/Odin via the <a href="mas-commerce-service.html"><code>mas-commerce-service</code></a> <code>mas-io-url</code> API.
+It features a shared in-memory cache (<code>AemFragment.cache</code>), supports retries on fetch errors (via <code>masFetch</code>), and can serve stale content if a refetch fails while prior data exists.</p>
 <h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
 <p>The <code>aem-fragment</code> element is headless and does not render any content on its own. You should use its events to handle the loaded data.</p>
 <h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
@@ -90,17 +90,22 @@ It features a caching mechanism, supports retrying on fetch errors, and can serv
 <tbody>
 <tr>
 <td><code>data</code></td>
-<td>The transformed fragment data.</td>
+<td>The transformed fragment data (<code>fields</code>, <code>tags</code>, <code>settings</code>, <code>placeholders</code>, etc.). Author mode uses <code>transformAuthorData</code>; publish uses <code>transformPublishData</code>.</td>
+<td><code>Object</code></td>
+</tr>
+<tr>
+<td><code>rawData</code></td>
+<td>Untransformed fragment JSON from the API (before field normalization).</td>
 <td><code>Object</code></td>
 </tr>
 <tr>
 <td><code>updateComplete</code></td>
-<td>A promise that resolves when the fragment is loaded, or rejects on error.</td>
+<td>A promise that resolves when the fragment fetch completes, or rejects with <code>AEM fragment cannot be loaded</code> if never started.</td>
 <td><code>Promise</code></td>
 </tr>
 <tr>
 <td><code>fetchInfo</code></td>
-<td>An object containing information about the fetch operation (URL, status, retries, etc.).</td>
+<td>Fetch metadata prefixed with <code>aem-fragment:</code> keys (<code>url</code>, <code>status</code>, <code>retryCount</code>, <code>stale</code>, <code>measure</code>, etc.).</td>
 <td><code>Object</code></td>
 </tr>
 </tbody>
@@ -131,14 +136,17 @@ It features a caching mechanism, supports retrying on fetch errors, and can serv
 <tbody>
 <tr>
 <td><code>aem:load</code></td>
-<td>Fires when the fragment is successfully loaded. The event <code>detail</code> property contains the fragment data.</td>
+<td>Fires when the fragment is successfully loaded. <code>detail</code> includes transformed data plus <code>references</code>, <code>referencesTree</code>, <code>placeholders</code>, and fetch metadata. Bubbles and is composed.</td>
 </tr>
 <tr>
 <td><code>aem:error</code></td>
-<td>Fires when the fragment fails to load. The event <code>detail</code> property contains error information.</td>
+<td>Fires when the fragment fails to load. <code>detail</code> includes fetch info and service duration. The element gets class <code>error</code>.</td>
 </tr>
 </tbody>
 </table>
+<p>When the fragment response includes a <code>wcs</code> payload and <code>mas.disableWcsCache</code> is not in the URL, the service prefills the WCS cache (<code>prefillWcsCache</code>) before <code>aem:load</code> fires.</p>
+<h3 id="preview-mode" tabindex="-1">Preview mode <a class="header-anchor" href="#preview-mode" href="#preview-mode" title="Permalink to this heading">#</a></h3>
+<p>With <code>preview</code> enabled on <code>mas-commerce-service</code>, fragments load via dynamically imported <code>fragment-client.js</code>. The script URL is resolved from the <code>maslibs</code> query parameter (<code>local</code>, AEM preview host, or default <code>https://mas.adobe.com/studio/libs/fragment-client.js</code>).</p>
 <h2 id="error-handling" tabindex="-1">Error Handling <a class="header-anchor" href="#error-handling" href="#error-handling" title="Permalink to this heading">#</a></h2>
 <p>The <code>aem-fragment</code> component can encounter several types of errors during its lifecycle, such as a missing fragment ID, network issues, or server errors. When an error occurs, it dispatches an <code>aem:error</code> event. The <code>detail</code> property of this event contains information about the error.</p>
 <p>You can handle these errors by adding an event listener to the <code>aem-fragment</code> element.</p>
