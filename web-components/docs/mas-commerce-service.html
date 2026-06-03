@@ -1,0 +1,277 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<h1 id="mas-commerce-service" tabindex="-1">mas-commerce-service <a class="header-anchor" href="#mas-commerce-service" href="#mas-commerce-service" title="Permalink to this heading">#</a></h1>
+<h2 id="mas-commerce-service-1" tabindex="-1">mas-commerce-service <a class="header-anchor" href="#mas-commerce-service-1" href="#mas-commerce-service-1" title="Permalink to this heading">#</a></h2>
+<h3 id="what-it-does" tabindex="-1">What it does <a class="header-anchor" href="#what-it-does" href="#what-it-does" title="Permalink to this heading">#</a></h3>
+<p>Root custom element (<code>&lt;mas-commerce-service&gt;</code>) that bootstraps M@S on a page: loads locale/commerce settings, price literals, WCS and checkout APIs, IMS helpers, and logging. On <code>connectedCallback</code> it calls <code>activate()</code>, composes APIs from <code>Checkout</code>, <code>Ims</code>, <code>Price</code>, and <code>Wcs</code> modules onto the element, and dispatches <code>wcms:commerce:ready</code>.</p>
+<p>All <code>inline-price</code>, <code>checkout-link</code>, and <code>checkout-button</code> elements depend on this service being present and activated.</p>
+<p>Tag name constant: <code>mas-commerce-service</code> (<code>TAG_NAME_SERVICE</code> in <code>constants.js</code>).</p>
+<h3 id="attributes-%2F-props" tabindex="-1">Attributes / Props <a class="header-anchor" href="#attributes-%2F-props" href="#attributes-%2F-props" title="Permalink to this heading">#</a></h3>
+<p>Root / locale attributes (<code>mas-commerce-service.js</code> <code>#config</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Config key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td><code>commerce.env</code>, <code>hostEnv.name</code></td>
+<td><code>prod</code> or <code>stage</code>. Default <code>prod</code>.</td>
+</tr>
+<tr>
+<td><code>locale</code></td>
+<td><code>locale</code></td>
+<td>Locale string (e.g. <code>en_US</code>).</td>
+</tr>
+<tr>
+<td><code>country</code></td>
+<td><code>country</code></td>
+<td>Country code for WCS/pricing.</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td><code>language</code></td>
+<td>Language for literals and formatting.</td>
+</tr>
+<tr>
+<td><code>preview</code></td>
+<td><code>preview</code></td>
+<td>Preview mode (<code>true</code>, <code>on</code>, etc.).</td>
+</tr>
+<tr>
+<td><code>instant</code></td>
+<td><code>instant</code></td>
+<td>Optional “current date” for promo/price preview (also URL param).</td>
+</tr>
+<tr>
+<td><code>mas-io-url</code></td>
+<td><code>masIOUrl</code></td>
+<td>MAS IO API base URL.</td>
+</tr>
+<tr>
+<td><code>lana-tags</code></td>
+<td><code>lana.tags</code></td>
+<td>LANA logging tags.</td>
+</tr>
+<tr>
+<td><code>lana-sample-rate</code></td>
+<td><code>lana.sampleRate</code></td>
+<td>LANA sample rate (integer, default <code>1</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>Commerce attributes (camelCased into <code>config.commerce</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Commerce key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkout-workflow-step</code></td>
+<td><code>checkoutWorkflowStep</code></td>
+<td>Default UCv3 step for CTAs.</td>
+</tr>
+<tr>
+<td><code>force-tax-exclusive</code></td>
+<td><code>forceTaxExclusive</code></td>
+<td>Force tax-exclusive prices globally.</td>
+</tr>
+<tr>
+<td><code>checkout-client-id</code></td>
+<td><code>checkoutClientId</code></td>
+<td>Checkout client id.</td>
+</tr>
+<tr>
+<td><code>allow-override</code></td>
+<td><code>allowOverride</code></td>
+<td>Allow <code>commerce.env</code> / landscape overrides via query params.</td>
+</tr>
+<tr>
+<td><code>wcs-api-key</code></td>
+<td><code>wcsApiKey</code></td>
+<td>WCS API key.</td>
+</tr>
+</tbody>
+</table>
+<p>Feature flags on the element (read once, <code>data-{flag}</code> or URL param via <code>getParameter</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Flag constant</th>
+<th>Enabled when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-mas-ff-defaults</code></td>
+<td><code>mas-ff-defaults</code></td>
+<td><code>on</code> or <code>true</code></td>
+</tr>
+<tr>
+<td><code>data-mas-ff-annual-price</code></td>
+<td><code>mas-ff-annual-price</code></td>
+<td><code>on</code> or <code>true</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods</strong> (defined in <code>activate()</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>registerCheckoutAction(action)</code></td>
+<td><code>action(offers, options, imsSignedInPromise, el)</code> may return <code>{ url, text, className, handler }</code> to override CTA behavior.</td>
+</tr>
+<tr>
+<td><code>flushWcsCache()</code></td>
+<td>Clears internal WCS cache.</td>
+</tr>
+<tr>
+<td><code>refreshOffers()</code></td>
+<td>Flushes cache and calls <code>requestUpdate(true)</code> on all MAS elements (<code>SELECTOR_MAS_ELEMENT</code>).</td>
+</tr>
+<tr>
+<td><code>refreshFragments()</code></td>
+<td>Flushes WCS cache, clears <code>aem-fragment</code> cache, refreshes all fragments.</td>
+</tr>
+<tr>
+<td><code>isPreview()</code></td>
+<td>True when <code>preview</code> attribute is <code>true</code> or <code>on</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exposed APIs</strong> (from composed modules): <code>buildCheckoutURL</code>, <code>collectCheckoutOptions</code>, <code>collectPriceOptions</code>, <code>buildPriceHTML</code>, <code>createInlinePrice</code>, <code>createCheckoutLink</code>, <code>resolvePriceTaxFlags</code>, <code>providers</code> (checkout/price provider registry), <code>settings</code>, <code>log</code>, <code>defaults</code>, WCS/IMS/checkout helpers, and re-exported <code>Constants</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Getter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>duration</code></td>
+<td>Performance measure for service ready time.</td>
+</tr>
+<tr>
+<td><code>featureFlags</code></td>
+<td><code>{ 'mas-ff-defaults', 'mas-ff-annual-price' }</code> booleans.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>When</th>
+<th><code>detail</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcms:commerce:ready</code></td>
+<td>After <code>activate()</code> completes</td>
+<td>The service element (<code>this</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>(<code>EVENT_TYPE_READY</code> in <code>constants.js</code> — not <code>mas:ready</code>.)</p>
+<h3 id="usage-example" tabindex="-1">Usage example <a class="header-anchor" href="#usage-example" href="#usage-example" title="Permalink to this heading">#</a></h3>
+<p>Production (minimum: set <code>wcs-api-key</code> and <code>lana-tags</code> in real deployments):</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span>
+    <span class="hljs-attr">wcs-api-key</span>=<span class="hljs-string">&quot;wcms-commerce-ims-ro-user-milo&quot;</span>
+    <span class="hljs-attr">lana-tags</span>=<span class="hljs-string">&quot;your-surface&quot;</span>
+&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/mas/libs/mas.js&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>Stage:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span> <span class="hljs-attr">country</span>=<span class="hljs-string">&quot;CA&quot;</span> <span class="hljs-attr">language</span>=<span class="hljs-string">&quot;fr&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+</code></pre>
+<p>Custom checkout action:</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">const</span> service = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;mas-commerce-service&#x27;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span>
+    service.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;wcms:commerce:ready&#x27;</span>, r, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> }),
+);
+service.<span class="hljs-title function_">registerCheckoutAction</span>(<span class="hljs-title function_">async</span> (offers, options, imsSignedIn, el) =&gt; ({
+    <span class="hljs-attr">handler</span>: <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+        e.<span class="hljs-title function_">preventDefault</span>();
+        <span class="hljs-comment">/* custom flow */</span>
+    },
+}));
+</code></pre>
+<p>Refresh offers:</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btnRefresh&quot;</span>&gt;</span>Refresh<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span>&gt;</span><span class="language-javascript">
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;btnRefresh&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;mas-commerce-service&#x27;</span>).<span class="hljs-title function_">refreshOffers</span>();
+    });
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<h3 id="notes" tabindex="-1">Notes <a class="header-anchor" href="#notes" href="#notes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li>Safari: load customized built-in elements polyfill before <code>mas.js</code> (see <a href="mas.js.html">mas.js</a>).</li>
+<li><code>logFailedRequests()</code> runs ~10s after ready and logs fragment/WCS resource failures.</li>
+<li>Meta-tag feature flags are documented in <a href="feature-flags.html">feature-flags</a>; only <code>mas-ff-defaults</code> and <code>mas-ff-annual-price</code> are read on the service element itself.</li>
+<li>Broader enablement and locale table: <a href="mas.js.html">mas.js</a>.</li>
+</ul>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>
