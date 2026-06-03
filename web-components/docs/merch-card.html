@@ -152,21 +152,56 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </tr>
 </tbody>
 </table>
-<h4 id="active-variants%3A" tabindex="-1">Active variants: <a class="header-anchor" href="#active-variants%3A" href="#active-variants%3A" title="Permalink to this heading">#</a></h4>
+<h4 id="active-variants" tabindex="-1">Active variants <a class="header-anchor" href="#active-variants" href="#active-variants" title="Permalink to this heading">#</a></h4>
+<p>Registered in <code>variants/variants.js</code> (set <code>variant</code> on the element or let AEM fragment mapping infer it):</p>
 <ul>
 <li><code>catalog</code></li>
 <li><code>image</code></li>
 <li><code>inline-heading</code></li>
 <li><code>mini-compare-chart</code></li>
+<li><code>mini-compare-chart-mweb</code></li>
 <li><code>plans</code></li>
+<li><code>plans-students</code></li>
+<li><code>plans-education</code></li>
+<li><code>plans-v2</code></li>
 <li><code>product</code></li>
 <li><code>segment</code></li>
+<li><code>media</code></li>
+<li><code>headless</code></li>
 <li><code>special-offers</code></li>
+<li><code>simplified-pricing-express</code></li>
+<li><code>full-pricing-express</code></li>
+<li><code>mini</code> (headless data for custom rendering in React, Vue, or vanilla JS)</li>
+<li><code>fries</code></li>
+</ul>
+<p>Registered in <code>mas.js</code> (CCD / Adobe Home surfaces; not in the core variant registry):</p>
+<ul>
 <li><code>ccd-slice</code></li>
 <li><code>ccd-suggested</code></li>
 <li><code>ah-try-buy-widget</code></li>
-<li><code>mini</code> (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)</li>
+<li><code>ah-promoted-plans</code></li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>background-color</code></td>
+<td>Background treatment on some Adobe Home variants (e.g. <code>gray</code>)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>gradient-border</code></td>
+<td>Enables gradient border on supported AH variants</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>

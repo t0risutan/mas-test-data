@@ -24,21 +24,27 @@ See [MAS](mas.html#terminology) to learn more.
 | `data-display-per-unit`    | Whether to display the price per unit (e.g:, per license)                                               | `false`       | `false`  |
 | `data-display-recurrence`  | Whether to display the recurrence information (e.g:, /mo)                                               | `true`        | `false`  |
 | `data-display-tax`         | Whether to display tax information                                                                      | `false`       | `false`  |
+| `data-display-plan-type`   | Whether to display plan type text (e.g. Annual, paid monthly)                                           | `false`       | `false`  |
+| `data-display-annual`    | When [mas-ff-annual-price](feature-flags.html#mas-ff-annual-price) is on, show annual price for ABM offers unless set to `false` | (flag-driven) | `false`  |
 | `data-perpetual`           | Whether this is a perpetual offer                                                                       | `false`       | `false`  |
 | `data-promotion-code`      | Flex promotion code to apply, if applicable                                                             |               | `false`  |
 | `data-force-tax-exclusive` | Whether to force tax exclusive price, if `false`, it's automatic, driven by country service             | `false`       | `false`  |
-| `data-template`            | One of price, discount, optical, strikethrough, priceAnnual                                             | price         | `false`  |
+| `data-template`            | Price template (see table below)                                                                        | price         | `false`  |
 | `data-quantity`            | Quantity of the offer, used with volume promotion codes to display either regular or promotional price. | 1             | `false`  |
 
 ### data-template values
 
-| Name            | Description                                                     |
-| --------------- | --------------------------------------------------------------- |
-| `price`         | The default price of the offer                                  |
-| `discount`      | Displays the promo price in percentage, e.g:, 19%               |
-| `optical`       | For **paid upfront offers**(PUF), renders the monthly price     |
-| `annual`        | For **annual, billed monthly** offers, renders the yearly price |
-| `strikethrough` | render the price as strikethrough.                              |
+| Name                 | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| `price`              | The default price of the offer                                  |
+| `discount`           | Displays the promo price in percentage, e.g:, 19%               |
+| `optical`            | For **paid upfront offers** (PUF), renders the monthly price    |
+| `annual`             | For **annual, billed monthly** offers, renders the yearly price |
+| `strikethrough`      | Render the price as strikethrough                               |
+| `promo-strikethrough`| Promo price with strikethrough styling                          |
+| `legal`              | Legal price line (used on cards; may set `displayDot` from variant layout) |
+
+With exactly two comma-separated OSIs and `data-template="discount"`, the percentage is computed from the first offer against the second offer's price as reference.
 
 ### Examples {#examples}
 
@@ -111,7 +117,8 @@ vs
 | Property        | Description                                                                                  |
 | --------------- | -------------------------------------------------------------------------------------------- |
 | `isInlinePrice` | on inline price elements, it will return `true`                                              |
-| `onceSettled`   | Promise that resolves when the custom-element either resolves or fails to retrieve the price |
+| `isFailed`      | `true` when the element is in failed state                                                   |
+| `onceSettled()` | Promise that resolves when the custom-element either resolves or fails to retrieve the price |
 | `options`       | JSON object with the complete set of properties used to resolve the price                    |
 | `value`         | The actual price data that is used to render the inline price.                               |
 
@@ -154,25 +161,28 @@ vs
 
 ```
 
+## Static factory {#static-factory}
+
+`InlinePrice.createInlinePrice(options)` returns a configured `<span is="inline-price">` when `mas-commerce-service` is active, or `null` otherwise.
+
+When [mas-ff-defaults](feature-flags.html#mas-ff-defaults) is enabled (on the service or via options inside a `merch-card` with an `aem-fragment`), unset `data-display-per-unit`, `data-display-tax`, and `data-force-tax-exclusive` are resolved from geo and customer segment via `resolvePriceTaxFlags`.
+
 ## Methods {#methods}
 
-| Property                       | Description                                                                                                    |
+| Method                         | Description                                                                                                    |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
 | `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
+
+Clicks on child price markup are re-dispatched on the `inline-price` element so parent card listeners receive price clicks.
 
 ## Events {#events}
 
 | Event          | Description                                        |
 | -------------- | -------------------------------------------------- |
-| `mas:pending`  | Fires when inline price starts loading             |
 | `mas:resolved` | Fires when the price is successfully resolved      |
 | `mas:failed`   | Fires when the price could not be found or fetched |
 
-For each event, the following CSS classes are toggled on the element: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
-
-::: warning
-**Note**: Event names with `wcms:placeholder` prefix may be subject to change.
-:::
+There is no `mas:pending` event in the current implementation. Loading state is reflected with CSS classes: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
 
 ### Example
 
@@ -188,7 +198,6 @@ For each event, the following CSS classes are toggled on the element: `placehold
     const logger = (...messages) =>
         (log.innerHTML = `${messages.join(' ')}<br>${log.innerHTML}`);
     const span = document.getElementById('ip2');
-    span.addEventListener('mas:pending', () => logger('inline-price pending'));
     span.addEventListener('mas:resolved', () =>
         logger('inline-price resolved'),
     );

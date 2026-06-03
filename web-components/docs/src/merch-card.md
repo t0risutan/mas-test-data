@@ -108,20 +108,40 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 | `size`      | card width; a card can span over 2 columns or entire row on a css grid `wide\|super-wide`                                                                                                             |               |          | mas.js   |
 | `daa-lh`    | Analytics identifier of a card. Value is coming from the 'PRODUCT_CODE' tag set on the card (for now manual authoring required, later will be tagged automatically). Sample values: 'ccsn' or 'phlt'. |               |          | mas.js   |
 
-#### Active variants:
+#### Active variants
+
+Registered in `variants/variants.js` (set `variant` on the element or let AEM fragment mapping infer it):
 
 - `catalog`
 - `image`
 - `inline-heading`
 - `mini-compare-chart`
+- `mini-compare-chart-mweb`
 - `plans`
+- `plans-students`
+- `plans-education`
+- `plans-v2`
 - `product`
 - `segment`
+- `media`
+- `headless`
 - `special-offers`
+- `simplified-pricing-express`
+- `full-pricing-express`
+- `mini` (headless data for custom rendering in React, Vue, or vanilla JS)
+- `fries`
+
+Registered in `mas.js` (CCD / Adobe Home surfaces; not in the core variant registry):
+
 - `ccd-slice`
 - `ccd-suggested`
 - `ah-try-buy-widget`
-- `mini` (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)
+- `ah-promoted-plans`
+
+| Attribute | Description | Default |
+| --- | --- | --- |
+| `background-color` | Background treatment on some Adobe Home variants (e.g. `gray`) | — |
+| `gradient-border` | Enables gradient border on supported AH variants | — |
 
 ### Properties
 
