@@ -1,7 +1,7 @@
-# aem-fragment custom element
+# aem-fragment {#aem-fragment}
 
-The `aem-fragment` custom element is used to load a content fragment from MAS/Odin.
-It features a caching mechanism, supports retrying on fetch errors, and can serve stale content if fetching new content fails, ensuring robustness.
+The `aem-fragment` custom element is used to load a content fragment from MAS/Odin via the [`mas-commerce-service`](mas-commerce-service.html) `mas-io-url` API.
+It features a shared in-memory cache (`AemFragment.cache`), supports retries on fetch errors (via `masFetch`), and can serve stale content if a refetch fails while prior data exists.
 
 ## Example
 
@@ -22,9 +22,10 @@ The `aem-fragment` element is headless and does not render any content on its ow
 
 | Name             | Description                                                                              | Type      |
 | ---------------- | ---------------------------------------------------------------------------------------- | --------- |
-| `data`           | The transformed fragment data.                                                           | `Object`  |
-| `updateComplete` | A promise that resolves when the fragment is loaded, or rejects on error.                | `Promise` |
-| `fetchInfo`      | An object containing information about the fetch operation (URL, status, retries, etc.). | `Object`  |
+| `data`           | The transformed fragment data (`fields`, `tags`, `settings`, `placeholders`, etc.). Author mode uses `transformAuthorData`; publish uses `transformPublishData`. | `Object`  |
+| `rawData`        | Untransformed fragment JSON from the API (before field normalization).                   | `Object`  |
+| `updateComplete` | A promise that resolves when the fragment fetch completes, or rejects with `AEM fragment cannot be loaded` if never started. | `Promise` |
+| `fetchInfo`      | Fetch metadata prefixed with `aem-fragment:` keys (`url`, `status`, `retryCount`, `stale`, `measure`, etc.). | `Object`  |
 
 ## Methods
 
@@ -36,10 +37,16 @@ The `aem-fragment` element is headless and does not render any content on its ow
 
 | Name        | Description                                                                                             |
 | ----------- | ------------------------------------------------------------------------------------------------------- |
-| `aem:load`  | Fires when the fragment is successfully loaded. The event `detail` property contains the fragment data. |
-| `aem:error` | Fires when the fragment fails to load. The event `detail` property contains error information.          |
+| `aem:load`  | Fires when the fragment is successfully loaded. `detail` includes transformed data plus `references`, `referencesTree`, `placeholders`, and fetch metadata. Bubbles and is composed. |
+| `aem:error` | Fires when the fragment fails to load. `detail` includes fetch info and service duration. The element gets class `error`. |
 
-## Error Handling
+When the fragment response includes a `wcs` payload and `mas.disableWcsCache` is not in the URL, the service prefills the WCS cache (`prefillWcsCache`) before `aem:load` fires.
+
+### Preview mode {#preview-mode}
+
+With `preview` enabled on `mas-commerce-service`, fragments load via dynamically imported `fragment-client.js`. The script URL is resolved from the `maslibs` query parameter (`local`, AEM preview host, or default `https://mas.adobe.com/studio/libs/fragment-client.js`).
+
+## Error Handling {#error-handling}
 
 The `aem-fragment` component can encounter several types of errors during its lifecycle, such as a missing fragment ID, network issues, or server errors. When an error occurs, it dispatches an `aem:error` event. The `detail` property of this event contains information about the error.
 

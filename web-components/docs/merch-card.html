@@ -117,7 +117,7 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 <tbody>
 <tr>
 <td><code>variant</code></td>
-<td>Variant in terms design. Not required when used with an <code>aem-fragment</code></td>
+<td>Design variant. Often inferred from <code>aem-fragment</code> content when omitted.</td>
 <td></td>
 <td></td>
 <td>mas.js</td>
@@ -131,41 +131,75 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </tr>
 <tr>
 <td><code>spectrum</code></td>
-<td>Uses Spectrum for the footer CTA styles during hydration from an aem fragment. (options: <code>css</code>, <code>swc</code>)</td>
+<td>Footer CTA technology during hydration: <code>css</code> (default) or <code>swc</code> (Spectrum Web Components <code>sp-button</code> with checkout routed via <code>e.target.source</code>)</td>
 <td><code>css</code></td>
 <td></td>
 <td>mas.js</td>
 </tr>
 <tr>
 <td><code>size</code></td>
-<td>card width; a card can span over 2 columns or entire row on a css grid <code>wide|super-wide</code></td>
+<td>Card width; can span 2 columns or full row on a CSS grid: <code>wide</code>, <code>super-wide</code></td>
 <td></td>
 <td></td>
 <td>mas.js</td>
 </tr>
 <tr>
 <td><code>daa-lh</code></td>
-<td>Analytics identifier of a card. Value is coming from the ‘PRODUCT_CODE’ tag set on the card (for now manual authoring required, later will be tagged automatically). Sample values: ‘ccsn’ or ‘phlt’.</td>
+<td>Analytics card id (<code>daa-lh</code>). From <code>PRODUCT_CODE</code> tag in Studio.</td>
+<td></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>loading</code></td>
+<td>Lazy-load behavior for card hydration</td>
+<td><code>lazy</code></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Set to <code>true</code> when the card enters an error state (reflected attribute)</td>
+<td><code>false</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated OSIs for PUF, ABM, M2M stock add-ons used with stock toggle UI</td>
+<td></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>filters</code></td>
+<td>Collection filter config (encoded <code>key:order:size</code> entries)</td>
+<td></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>badge-color</code>, <code>badge-background-color</code>, <code>badge-text</code>, <code>border-color</code>, <code>background-color</code>, <code>background-image</code></td>
+<td>Visual styling when using static markup</td>
 <td></td>
 <td></td>
 <td>mas.js</td>
 </tr>
 </tbody>
 </table>
-<h4 id="active-variants%3A" tabindex="-1">Active variants: <a class="header-anchor" href="#active-variants%3A" href="#active-variants%3A" title="Permalink to this heading">#</a></h4>
+<p>Requires <a href="mas-commerce-service.html"><code>mas-commerce-service</code></a> on the page.</p>
+<h4 id="registered-variants" tabindex="-1">Registered variants <a class="header-anchor" href="#registered-variants" href="#registered-variants" title="Permalink to this heading">#</a></h4>
+<p>Variants registered in <code>web-components/src/variants/variants.js</code> and <code>mas.js</code>:</p>
 <ul>
-<li><code>catalog</code></li>
-<li><code>image</code></li>
-<li><code>inline-heading</code></li>
-<li><code>mini-compare-chart</code></li>
-<li><code>plans</code></li>
-<li><code>product</code></li>
-<li><code>segment</code></li>
+<li><code>catalog</code>, <code>image</code>, <code>inline-heading</code></li>
+<li><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></li>
+<li><code>plans</code>, <code>plans-students</code>, <code>plans-education</code>, <code>plans-v2</code></li>
+<li><code>product</code>, <code>segment</code>, <code>media</code></li>
 <li><code>special-offers</code></li>
-<li><code>ccd-slice</code></li>
-<li><code>ccd-suggested</code></li>
-<li><code>ah-try-buy-widget</code></li>
-<li><code>mini</code> (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)</li>
+<li><code>headless</code>, <code>mini</code> (headless data for custom UI)</li>
+<li><code>simplified-pricing-express</code>, <code>full-pricing-express</code>, <code>fries</code></li>
+<li><code>ccd-slice</code>, <code>ccd-suggested</code> (registered in <code>mas.js</code>)</li>
+<li><code>ah-try-buy-widget</code>, <code>ah-promoted-plans</code> (registered in <code>mas.js</code>)</li>
 </ul>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
@@ -261,6 +295,21 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 <td><code>secondaryCta</code></td>
 <td>Secondary CTA element, mostly for checkout buttons for TRIAL offers</td>
 <td><code>{analyticsId: string, href: string, text: string}</code></td>
+</tr>
+<tr>
+<td><code>variantLayout</code></td>
+<td>Active variant layout controller instance</td>
+<td><code>VariantLayout</code></td>
+</tr>
+<tr>
+<td><code>compatVersion</code></td>
+<td>Fragment compatibility version for promo and feature behavior</td>
+<td><code>number</code></td>
+</tr>
+<tr>
+<td><code>contextPromotionCode</code></td>
+<td>Card-level promotion code applied to nested placeholders when compat version allows</td>
+<td><code>string</code></td>
 </tr>
 </tbody>
 </table>

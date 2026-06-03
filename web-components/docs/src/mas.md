@@ -29,10 +29,11 @@ MAS includes the following key components:
 
 4. **Web Components**:
 
-    - Core commerce for basic functionality
-    - UI components for user interface elements
+    - [`mas-commerce-service`](mas-commerce-service.html) — bootstraps WCS, checkout, pricing, and fragments on a page
+    - Core commerce placeholders: `inline-price`, `checkout-link`, `checkout-button`
+    - UI components: `merch-card` and variants
 
-5. **mas.js**: A JavaScript library to enable "4" on any page. [mas.js documentation](mas.js.html){.con-button .primary-link}
+5. **mas.js**: A JavaScript library to enable commerce on any page. [mas.js documentation](mas.js.html){.con-button .primary-link}
 
 ## Terminology
 
@@ -42,11 +43,15 @@ An AOS-generated stable reference for a set of natural keys, allowing retrieval 
 
 API Specification: https://developers.corp.adobe.com/aos/docs/guide/apis/api.yaml#/paths/offer_selectors/post
 
+⚠️ Internal reference — cannot be verified by agent
+
 ### WCS {#wcs}
 
 [WCS](https://developers.corp.adobe.com/wcs/docs/guide/introduction.md) (pronounced "weks") is the Web Commerce Service that provides APIs returning Commerce data required by Adobe.com.
 
 API Specification: https://developers.corp.adobe.com/wcs/docs/api/openapi/wcs/latest.yaml#/schemas/Web-Commerce-Artifacts
+
+⚠️ Internal reference — cannot be verified by agent
 
 ## How It Works
 

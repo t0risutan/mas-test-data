@@ -98,32 +98,38 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </merch-card>
 ```
 
-### Attributes
+### Attributes {#attributes}
 
 | Name        | Description                                                                                                                                                                                           | Default Value | Required | Provider |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------- | -------- |
-| `variant`   | Variant in terms design. Not required when used with an `aem-fragment`                                                                                                                                |               |          | mas.js   |
+| `variant`   | Design variant. Often inferred from `aem-fragment` content when omitted.                                                                                                                            |               |          | mas.js   |
 | `consonant` | Uses Consonant for the footer CTA styles during hydration from an aem fragment                                                                                                                        | `false`       |          | mas.js   |
-| `spectrum`  | Uses Spectrum for the footer CTA styles during hydration from an aem fragment. (options: `css`, `swc`)                                                                                                | `css`         |          | mas.js   |
-| `size`      | card width; a card can span over 2 columns or entire row on a css grid `wide\|super-wide`                                                                                                             |               |          | mas.js   |
-| `daa-lh`    | Analytics identifier of a card. Value is coming from the 'PRODUCT_CODE' tag set on the card (for now manual authoring required, later will be tagged automatically). Sample values: 'ccsn' or 'phlt'. |               |          | mas.js   |
+| `spectrum`  | Footer CTA technology during hydration: `css` (default) or `swc` (Spectrum Web Components `sp-button` with checkout routed via `e.target.source`)                                                     | `css`         |          | mas.js   |
+| `size`      | Card width; can span 2 columns or full row on a CSS grid: `wide`, `super-wide`                                                                                                                      |               |          | mas.js   |
+| `daa-lh`    | Analytics card id (`daa-lh`). From `PRODUCT_CODE` tag in Studio.                                                                                                                                      |               |          | mas.js   |
+| `loading`   | Lazy-load behavior for card hydration                                                                                                                                                                 | `lazy`        |          | mas.js   |
+| `failed`    | Set to `true` when the card enters an error state (reflected attribute)                                                                                                                               | `false`       |          |          |
+| `stock-offer-osis` | Comma-separated OSIs for PUF, ABM, M2M stock add-ons used with stock toggle UI                                                                                                                  |               |          | mas.js   |
+| `filters`   | Collection filter config (encoded `key:order:size` entries)                                                                                                                                           |               |          | mas.js   |
+| `badge-color`, `badge-background-color`, `badge-text`, `border-color`, `background-color`, `background-image` | Visual styling when using static markup                                                                                  |               |          | mas.js   |
 
-#### Active variants:
+Requires [`mas-commerce-service`](mas-commerce-service.html) on the page.
 
-- `catalog`
-- `image`
-- `inline-heading`
-- `mini-compare-chart`
-- `plans`
-- `product`
-- `segment`
+#### Registered variants {#registered-variants}
+
+Variants registered in `web-components/src/variants/variants.js` and `mas.js`:
+
+- `catalog`, `image`, `inline-heading`
+- `mini-compare-chart`, `mini-compare-chart-mweb`
+- `plans`, `plans-students`, `plans-education`, `plans-v2`
+- `product`, `segment`, `media`
 - `special-offers`
-- `ccd-slice`
-- `ccd-suggested`
-- `ah-try-buy-widget`
-- `mini` (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)
+- `headless`, `mini` (headless data for custom UI)
+- `simplified-pricing-express`, `full-pricing-express`, `fries`
+- `ccd-slice`, `ccd-suggested` (registered in `mas.js`)
+- `ah-try-buy-widget`, `ah-promoted-plans` (registered in `mas.js`)
 
-### Properties
+### Properties {#properties}
 
 | Name                | Description                                                                                                         | Type                                                |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
@@ -144,8 +150,11 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 | `ctas`              | checkout-link (if consonant) / checkout-button elements that are rendered in the card.                              | `Array`                                             |
 | `primaryCta`        | Primary CTA element, mostly for checkout buttons for BASE offers                                                    | `{analyticsId: string, href: string, text: string}` |
 | `secondaryCta`      | Secondary CTA element, mostly for checkout buttons for TRIAL offers                                                 | `{analyticsId: string, href: string, text: string}` |
+| `variantLayout`     | Active variant layout controller instance                                                                           | `VariantLayout`                                     |
+| `compatVersion`     | Fragment compatibility version for promo and feature behavior                                                     | `number`                                            |
+| `contextPromotionCode` | Card-level promotion code applied to nested placeholders when compat version allows                              | `string`                                            |
 
-### Events
+### Events {#events}
 
 We recommend to listen to events on the container, so that listener is attached before the merch card is appended to DOM.
 The reason is that some merch cards are resolved very quickly and event could dispatch before event listener is attached by consumer code.
