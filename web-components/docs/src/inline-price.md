@@ -31,6 +31,7 @@ See [MAS](mas.html#terminology) to learn more.
 | `data-force-tax-exclusive` | Whether to force tax exclusive price, if `false`, it's automatic, driven by country service             | `false`       | `false`  |
 | `data-template`            | Price template (see table below)                                                                        | price         | `false`  |
 | `data-quantity`            | Quantity of the offer, used with volume promotion codes to display either regular or promotional price. | 1             | `false`  |
+| `data-alternative-price`   | When paired strikethrough prices are present in the parent, adds screen-reader “Alternatively at” labeling on the non-strikethrough price | `false`       | `false`  |
 
 ### data-template values
 

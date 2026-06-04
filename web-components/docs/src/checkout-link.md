@@ -4,14 +4,10 @@
 
 This custom element renders a checkout link supporting most of the features documented at https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide.<br>
 
-⚠️ Internal reference — cannot be verified by agent
-
 Sometimes a checkout-link can be also referred as placeholder, as it can be used as an inline link resolving at runtime.<br>
 The term placeholder will be deprecated and it is recommended to refer as **checkout-link custom element** going forward.
 
 Behind the scene, it uses https://git.corp.adobe.com/PandoraUI/commerce-core to generate the checkout url.
-
-⚠️ Internal reference — cannot be verified by agent
 
 It requires an Offer Selector ID to retrieve the offer details from WCS.
 
@@ -36,18 +32,20 @@ See [MAS](mas.html#terminology) to learn more.
 | `data-checkout-workflow`      | Target checkout workflow for the generation of checkout urls                                                                                                                                                                                 | UCv3          | `false`  | mas.js                  |
 | `data-checkout-workflow-step` | [workflow step](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-RegularWorkflow) to land on the unified checkout page                                       | email         | `false`  | mas.js                  |
 | `data-extra-options`          | additional query params to append to the url, see: [Table of public query params](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-Tableofpublicqueryparams) | {}            | `false`  | mas.js                  |
-
-⚠️ Internal reference — cannot be verified by agent (workflow step and query param tables)
 | `data-ims-country`            | the ims country to code of the user if signed in, overrides the locale country in the generated checkout url                                                                                                                                 |               | `false`  | mas.js or consumer code |
+| `data-checkout-market-segment`| Overrides market segment in the checkout URL when the resolved offer segment is not sufficient                                                                                                                                    |               | `false`  | mas.js or consumer code |
+| `data-ms`                     | Short market segment override passed to checkout URL building (`e` → `EDU`, `t` → `TEAM`; other values pass through)                                                                                                              |               | `false`  | mas.js or consumer code |
+| `data-cs`                     | Customer segment override for checkout URL building (e.g. `TEAM`)                                                                                                                                                                |               | `false`  | mas.js or consumer code |
 | `data-perpetual`              | whether this is a perpetual offer `true\|false`                                                                                                                                                                                              |               | `false`  | mas.js                  |
 | `data-promotion-code`         | Flex promotion code, if applicable                                                                                                                                                                                                           |               | `false`  | mas.js                  |
 | `data-quantity`               | Quantity of the offer to purchase                                                                                                                                                                                                            | 1             | `false`  | mas.js or consumer code |
 | `data-entitlement`            | `entitlement` flag for client side interpretation                                                                                                                                                                                            | `false`       | `false`  | mas.js                  |
 | `data-upgrade`                | `upgrade` flag for client side interpretation                                                                                                                                                                                                | `false`       | `false`  | mas.js                  |
-| `data-modal`                  | `modal` flag for client side interpretation                                                                                                                                                                                                  | `false`       | `false`  | mas.js                  |
-| `data-analytics-id`           | human-readable, non-translatable link id for analytics. Authored in Studio in Link Editor.                                                                                                                                                   | `false`       | `false`  | mas.js                  |
-| `daa-ll`                      | martech-compatible link id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the link within a card. E.g. : see-terms-1, buy-now-2                                                                              | `false`       | `false`  | mas.js                  |
 | `data-modal`                  | Modal checkout type. Values `twp`, `d2p`, or `crm` enable the [3-in-1 modal flow](feature-flags.html#mas-ff-3in1) when `mas-ff-3in1` is not `off`. Other truthy values set `href` to `#` for modal handling. | `false`       | `false`  | mas.js or consumer code |
+| `data-analytics-id`           | human-readable, non-translatable link id for analytics. Authored in Studio in Link Editor.                                                                                                                                                   |               | `false`  | mas.js                  |
+| `daa-ll`                      | martech-compatible link id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the link within a card. E.g. : see-terms-1, buy-now-2                                                                              |               | `false`  | mas.js                  |
+
+`data-analytics-id`, `daa-ll`, and `data-template` are read from `dataset` when present but are not listed in `observedAttributes`; changing them at runtime may not trigger a re-render unless you call `requestUpdate(true)`.
 
 Unlike `checkout-button`, the native `href` attribute holds the resolved checkout URL. The element does not navigate on its own in `clickHandler`; use default link behavior or call `window.location` from your listener.
 
@@ -165,6 +163,10 @@ Two photoshop and three acrobat pro single apps (TEAMS):
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
 | `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
 | `updateOptions(options)`       | Updates `dataset` from collected checkout options.                                                           |
+
+When `registerCheckoutAction` on [mas-commerce-service](mas-commerce-service.html) returns a `handler`, the element sets `checkoutActionHandler` and `href` to `#`; the handler runs on click instead of navigation.
+
+Resolved download/upgrade CTAs add CSS classes `download` or `upgrade` and may leave `href` empty until the custom action applies.
 
 ## Events {#events}
 

@@ -45,6 +45,8 @@ Place it in the document **before** `aem-fragment` or other M@S elements are cre
 
 Feature flag attributes accept `on` or `true` to enable. URL query parameters with the same names can also enable flags (see `#getFeatureFlag` in source).
 
+The `preselect-plan` URL query parameter (`edu` or `team`) is read at activation and passed into checkout URL building to preselect EDU market segment or TEAM customer segment on catalog-style pages.
+
 ## Events {#events}
 
 | Event | Description |

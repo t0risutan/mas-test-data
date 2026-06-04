@@ -107,6 +107,19 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 | `spectrum`  | Uses Spectrum for the footer CTA styles during hydration from an aem fragment. (options: `css`, `swc`)                                                                                                | `css`         |          | mas.js   |
 | `size`      | card width; a card can span over 2 columns or entire row on a css grid `wide\|super-wide`                                                                                                             |               |          | mas.js   |
 | `daa-lh`    | Analytics identifier of a card. Value is coming from the 'PRODUCT_CODE' tag set on the card (for now manual authoring required, later will be tagged automatically). Sample values: 'ccsn' or 'phlt'. |               |          | mas.js   |
+| `badge-color` | Badge text color (static or hydrated cards) | — | | mas.js |
+| `badge-background-color` | Badge background color | — | | mas.js |
+| `badge-text` | Badge label text | — | | mas.js |
+| `border-color` | Card border color | — | | mas.js |
+| `background-color` | Card background color or treatment | — | | mas.js |
+| `background-image` | Background image URL | — | | mas.js |
+| `filters` | Collection filter key and sort order (`key:order:size` comma-separated) | — | | mas.js |
+| `types` | Comma-separated card type tags used by collection layouts | — | | mas.js |
+| `stock-offer-osis` | Comma-separated PUF, ABM, and M2M offer selector IDs for stock UI | — | | mas.js |
+| `height-sync` | When `true`, re-measures card height after layout for Express pricing variants | — | | mas.js |
+| `aria-selected` | Reflects selection state in segmented layouts (`selected` property) | `false` | | mas.js |
+| `loading` | Fragment loading strategy passed to nested `aem-fragment` (`lazy` default) | `lazy` | | mas.js |
+| `failed` | Set when the card errors; reflected to the attribute | `false` | | |
 
 #### Active variants
 
@@ -140,8 +153,9 @@ Registered in `mas.js` (CCD / Adobe Home surfaces; not in the core variant regis
 
 | Attribute | Description | Default |
 | --- | --- | --- |
-| `background-color` | Background treatment on some Adobe Home variants (e.g. `gray`) | — |
-| `gradient-border` | Enables gradient border on supported AH variants | — |
+| `gradient-border` | Enables gradient border on Express and Adobe Home variants (set from fragment hydration or authored markup) | — |
+
+`compatVersion` is assigned from fragment fields during hydration and controls promotion-code inheritance on child `inline-price` and checkout elements.
 
 ### Properties
 

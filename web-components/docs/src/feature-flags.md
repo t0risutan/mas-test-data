@@ -162,7 +162,7 @@ Or on the commerce service element:
 <meta name="mas-ff-annual-price" content="on">
 ```
 
-When enabled, individual price elements can opt out using the `annual=false` parameter in the merch link.
+When enabled, individual price elements can opt out using `data-display-annual="false"` on the `inline-price` element.
 
 ---
 

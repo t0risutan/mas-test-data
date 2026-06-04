@@ -150,6 +150,97 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 <td></td>
 <td>mas.js</td>
 </tr>
+<tr>
+<td><code>badge-color</code></td>
+<td>Badge text color (static or hydrated cards)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>badge-background-color</code></td>
+<td>Badge background color</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>badge-text</code></td>
+<td>Badge label text</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>border-color</code></td>
+<td>Card border color</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>background-color</code></td>
+<td>Card background color or treatment</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>Background image URL</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>filters</code></td>
+<td>Collection filter key and sort order (<code>key:order:size</code> comma-separated)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td>Comma-separated card type tags used by collection layouts</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated PUF, ABM, and M2M offer selector IDs for stock UI</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>height-sync</code></td>
+<td>When <code>true</code>, re-measures card height after layout for Express pricing variants</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>aria-selected</code></td>
+<td>Reflects selection state in segmented layouts (<code>selected</code> property)</td>
+<td><code>false</code></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>loading</code></td>
+<td>Fragment loading strategy passed to nested <code>aem-fragment</code> (<code>lazy</code> default)</td>
+<td><code>lazy</code></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Set when the card errors; reflected to the attribute</td>
+<td><code>false</code></td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h4 id="active-variants" tabindex="-1">Active variants <a class="header-anchor" href="#active-variants" href="#active-variants" title="Permalink to this heading">#</a></h4>
@@ -191,17 +282,13 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </thead>
 <tbody>
 <tr>
-<td><code>background-color</code></td>
-<td>Background treatment on some Adobe Home variants (e.g. <code>gray</code>)</td>
-<td>—</td>
-</tr>
-<tr>
 <td><code>gradient-border</code></td>
-<td>Enables gradient border on supported AH variants</td>
+<td>Enables gradient border on Express and Adobe Home variants (set from fragment hydration or authored markup)</td>
 <td>—</td>
 </tr>
 </tbody>
 </table>
+<p><code>compatVersion</code> is assigned from fragment fields during hydration and controls promotion-code inheritance on child <code>inline-price</code> and checkout elements.</p>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>

@@ -4,11 +4,7 @@
 
 This custom element renders a checkout button supporting most of the features documented at https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide.<br>
 
-⚠️ Internal reference — cannot be verified by agent
-
 Behind the scene, it uses https://git.corp.adobe.com/PandoraUI/commerce-core to generate the checkout url.
-
-⚠️ Internal reference — cannot be verified by agent
 
 It requires an Offer Selector ID to retrieve the offer details from WCS.
 
@@ -36,20 +32,20 @@ See [MAS](mas.html#terminology) to learn more.
 | `data-checkout-workflow`      | Target checkout workflow for the generation of checkout urls                                                                                                                                                                                     | UCv3          | `false`  | mas.js                  |
 | `data-checkout-workflow-step` | [workflow step](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-RegularWorkflow) to land on the unified checkout page                                       | email         | `false`  | mas.js                  |
 | `data-extra-options`          | additional query params to append to the url, see: [Table of public query params](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+button+Creation+Guide#UCv3buttonCreationGuide-Tableofpublicqueryparams) | {}            | `false`  | mas.js                  |
-
-⚠️ Internal reference — cannot be verified by agent (workflow step and query param tables)
 | `data-ims-country`            | the ims country to code of the user if signed in, overrides the locale country in the generated checkout url                                                                                                                                     |               | `false`  | mas.js or consumer code |
+| `data-checkout-market-segment`| Overrides market segment in the checkout URL when the resolved offer segment is not sufficient                                                                                                                                    |               | `false`  | mas.js or consumer code |
+| `data-ms`                     | Short market segment override passed to checkout URL building (`e` → `EDU`, `t` → `TEAM`; other values pass through)                                                                                                              |               | `false`  | mas.js or consumer code |
+| `data-cs`                     | Customer segment override for checkout URL building (e.g. `TEAM`)                                                                                                                                                                |               | `false`  | mas.js or consumer code |
 | `data-perpetual`              | whether this is a perpetual offer `true\|false`                                                                                                                                                                                                  |               | `false`  | mas.js                  |
 | `data-promotion-code`         | Flex promotion code, if applicable                                                                                                                                                                                                               |               | `false`  | mas.js                  |
 | `data-quantity`               | Quantity of the offer to purchase                                                                                                                                                                                                                | 1             | `false`  | mas.js or consumer code |
 | `data-entitlement`            | `entitlement` flag for client side interpretation                                                                                                                                                                                                | `false`       | `false`  | mas.js                  |
 | `data-upgrade`                | `upgrade` flag for client side interpretation                                                                                                                                                                                                    | `false`       | `false`  | mas.js                  |
-| `data-modal`                  | `modal` flag for client side interpretation                                                                                                                                                                                                      | `false`       | `false`  | mas.js                  |
-| `data-analytics-id`           | human-readable, non-translatable button id for analytics. Authored in Studio in button Editor.                                                                                                                                                   | `false`       | `false`  | mas.js                  |
-| `daa-ll`                      | martech-compatible button id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the button within a card. E.g. : see-terms-1, buy-now-2                                                                              | `false`       | `false`  | mas.js                  |
 | `data-modal`                  | Modal checkout type. Values `twp`, `d2p`, or `crm` enable the [3-in-1 modal flow](feature-flags.html#mas-ff-3in1) when `mas-ff-3in1` is not `off`. Other truthy values set `href` to `#` for modal handling. | `false`       | `false`  | mas.js or consumer code |
+| `data-analytics-id`           | human-readable, non-translatable button id for analytics. Authored in Studio in button Editor.                                                                                                                                                   |               | `false`  | mas.js                  |
+| `daa-ll`                      | martech-compatible button id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the button within a card. E.g. : see-terms-1, buy-now-2                                                                              |               | `false`  | mas.js                  |
 
-`data-checkout-workflow`, `data-template`, and analytics attributes are read from `dataset` when present but are not listed in `observedAttributes`; changing them at runtime may not trigger a re-render unless you call `requestUpdate(true)`.
+`data-analytics-id`, `daa-ll`, and `data-template` are read from `dataset` when present but are not listed in `observedAttributes`; changing them at runtime may not trigger a re-render unless you call `requestUpdate(true)`.
 
 ### Examples {#examples}
 
