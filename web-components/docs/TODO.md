@@ -1,7 +1,6 @@
 ## TODO
 
 ### High
-- [ ] merch-offer-select + merch-offer: No docs for the multi-offer selection stack used in plans, product, and mini-compare variants — missing `container`, `variant`, slots, and the `merch-offer:ready` / `merch-offer-select:ready` / `merch-offer:selected` event chain
 - [ ] merch-quantity-select: No docs for quantity UI used in product and plans cards — missing attributes, `merch-quantity-selector:change` event, and sync with `merch-card-quantity:change`
 - [ ] merch-sidenav + merch-search: No docs though collections auto-wire them — missing `autoclose`/`modal`, deeplink hash sync, and AEM-driven `tagFilters` → checkbox groups
 - [ ] plans / catalog / product / segment / commerce galleries: Gallery-only pages with no variant slot maps or AEM fragment field references — developers cannot infer authoring contracts from screenshots
@@ -34,4 +33,5 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] merch-offer-select + merch-offer: No docs for the multi-offer selection stack used in plans, product, and mini-compare variants — missing `container`, `variant`, slots, and the `merch-offer:ready` / `merch-offer-select:ready` / `merch-offer:selected` event chain (completed in merch-offer-select.md)
 - [x] merch-card-collection: No API page — only live examples in plans-collection.md; missing attributes, events, AEM hydration, deeplink hash params, header placeholders, and sidenav integration (completed in merch-card-collection.md)

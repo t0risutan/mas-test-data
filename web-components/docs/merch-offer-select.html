@@ -1,0 +1,384 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-offer-select" tabindex="-1">merch-offer-select <a class="header-anchor" href="#merch-offer-select" href="#merch-offer-select" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-offer-select</code> and its child <code>merch-offer</code> elements implement multi-offer selection inside a parent container (typically <code>merch-card</code>). Each <code>merch-offer</code> bundles an <a href="inline-price.html">inline-price</a>, <a href="checkout-link.html">checkout-link</a>, and optional per-offer copy. When the shopper picks an offer, the select component copies the active offer’s slotted content into matching slots on the container — updating price, CTAs, description, and badge without re-fetching the card fragment.</p>
+<p>Used in <code>plans</code>, <code>product</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code> card variants. When nested inside <code>merch-quantity-select</code>, offer selection is driven by quantity instead of radio clicks.</p>
+<p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a>.</p>
+<p>See also: <a href="merch-card.html">merch-card</a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>, <a href="minicompare.html">Mini Compare Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Access advanced PDF.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer-select</span> <span class="hljs-attr">container</span>=<span class="hljs-string">&quot;merch-card&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer</span> <span class="hljs-attr">text</span>=<span class="hljs-string">&quot;Annual, monthly payment&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+          <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+          <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+          <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+        &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+          <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+          <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+          <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+          <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+          &gt;</span>Buy now&lt;/a
+        &gt;
+      <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer</span> <span class="hljs-attr">text</span>=<span class="hljs-string">&quot;Annual, one-time payment&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Only today!&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+          <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+          <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+          <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+        &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+          <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+          <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+          <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+          <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+          &gt;</span>Buy now&lt;/a
+        &gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>New description text.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer-select</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<p>Place empty placeholder elements (<code>span[slot=&quot;price&quot;]</code>, <code>a[slot=&quot;cta&quot;]</code>, and so on) on the container for each slot the select should update. The first <code>merch-offer</code> is selected on load.</p>
+<h2 id="attributes" tabindex="-1">merch-offer-select attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>container</code></td>
+<td>Tag name passed to <code>Element.closest()</code> to find the parent whose slots are updated (e.g. <code>merch-card</code>). Required for slot syncing.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>variant</code></td>
+<td>Layout class applied to the default slot. <code>plans</code> (default) stacks offers vertically; <code>horizontal</code> lays them out in a row; <code>subscription-options</code> applies a column flex layout with spacing.</td>
+<td><code>plans</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>plan-type</code></td>
+<td>Plan type of the currently selected offer. Set automatically after offers initialize; also set on each selection.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>stock</code></td>
+<td>Boolean attribute defined on the element. Not read by component logic.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="merch-offer-attributes" tabindex="-1">merch-offer attributes <a class="header-anchor" href="#merch-offer-attributes" href="#merch-offer-attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Label shown for <code>type=&quot;radio&quot;</code> offers.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>Render mode: <code>radio</code> (default) shows a radio control with <code>text</code>; <code>subscription-option</code> renders commitment/price/teaser/condition slots as a selectable card.</td>
+<td><code>radio</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>badge-text</code></td>
+<td>Per-offer badge override for the container. Empty string removes the badge; omitting the attribute restores the container default.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>Numeric threshold used when nested in <code>merch-quantity-select</code> to map quantity values to offers (see <a href="#quantity-mode">Quantity mode</a>).</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>plan-type</code></td>
+<td>Set automatically from the resolved WCS offer after the inline price settles.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>aria-selected</code></td>
+<td>Reflects selection state (<code>selected</code> property). Managed by <code>merch-offer-select</code>.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<h3 id="container-slots" tabindex="-1">Container slots updated by merch-offer-select <a class="header-anchor" href="#container-slots" href="#container-slots" title="Permalink to this heading">#</a></h3>
+<p><code>merch-offer-select</code> clones content from the selected <code>merch-offer</code> into the nearest <code>container</code> element. Only direct container children are targeted — elements inside a <code>merch-offer</code> are excluded.</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Updated</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>price</code></td>
+<td>yes</td>
+<td>Replaced with the selected offer’s <code>inline-price</code></td>
+</tr>
+<tr>
+<td><code>cta</code></td>
+<td>yes</td>
+<td>Replaced with the selected offer’s checkout link</td>
+</tr>
+<tr>
+<td><code>secondary-cta</code></td>
+<td>yes</td>
+<td>Replaced when the offer provides one</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>yes</td>
+<td>Skipped when inside <code>merch-quantity-select</code></td>
+</tr>
+<tr>
+<td>badge</td>
+<td>via property</td>
+<td>Container <code>badgeText</code> is set from offer <code>badge-text</code>, or restored from saved defaults</td>
+</tr>
+</tbody>
+</table>
+<h3 id="merch-offer-slots" tabindex="-1">merch-offer child slots <a class="header-anchor" href="#merch-offer-slots" href="#merch-offer-slots" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Used when</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>price</code></td>
+<td>always</td>
+<td>Required. <code>inline-price</code> element; triggers offer initialization</td>
+</tr>
+<tr>
+<td><code>cta</code></td>
+<td>always</td>
+<td>Primary checkout link copied to the container</td>
+</tr>
+<tr>
+<td><code>secondary-cta</code></td>
+<td>optional</td>
+<td>Secondary checkout link (e.g. free trial)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>optional</td>
+<td>Per-offer description text</td>
+</tr>
+<tr>
+<td><code>commitment</code></td>
+<td><code>type=&quot;subscription-option&quot;</code></td>
+<td>Commitment label</td>
+</tr>
+<tr>
+<td><code>teaser</code></td>
+<td><code>type=&quot;subscription-option&quot;</code></td>
+<td>Promotional teaser line</td>
+</tr>
+<tr>
+<td><code>condition</code></td>
+<td><code>type=&quot;subscription-option&quot;</code></td>
+<td>Condition text with info tooltip</td>
+</tr>
+<tr>
+<td><code>condition-tooltip</code></td>
+<td><code>type=&quot;subscription-option&quot;</code></td>
+<td>Tooltip content for the condition info icon</td>
+</tr>
+</tbody>
+</table>
+<p>On connect, <code>merch-offer</code> assigns <code>slot=&quot;price&quot;</code> to every <code>inline-price</code> descendant (except strikethrough templates) before waiting for price resolution.</p>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<p>Events fire in this order during initialization:</p>
+<ol>
+<li>Each <code>merch-offer</code> dispatches <code>merch-offer:ready</code> after its inline price settles and <code>plan-type</code> is set.</li>
+<li>When every child <code>merch-offer</code> has a <code>plan-type</code>, <code>merch-offer-select</code> performs the initial selection and dispatches <code>merch-offer-select:ready</code>.</li>
+<li>On every subsequent selection change, <code>merch-offer-select</code> dispatches <code>merch-offer:selected</code>.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Target</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-offer:ready</code></td>
+<td><code>merch-offer</code></td>
+<td>yes</td>
+<td>—</td>
+<td>Inline price resolved; <code>plan-type</code> attribute set from WCS offer data.</td>
+</tr>
+<tr>
+<td><code>merch-offer-select:ready</code></td>
+<td><code>merch-offer-select</code></td>
+<td>yes</td>
+<td>—</td>
+<td>All offers initialized; initial offer selected and container slots updated.</td>
+</tr>
+<tr>
+<td><code>merch-offer:selected</code></td>
+<td><code>merch-offer-select</code></td>
+<td>yes</td>
+<td><code>merch-offer-select</code> element</td>
+<td>Fired after each <code>selectOffer()</code> call, including the initial auto-selection.</td>
+</tr>
+</tbody>
+</table>
+<p><code>merch-card</code> listens for <code>merch-offer-select:ready</code> to finalize footer layout (for example, stacking CTAs in the <code>product</code> variant).</p>
+<h2 id="selection" tabindex="-1">Selection behavior <a class="header-anchor" href="#selection" href="#selection" title="Permalink to this heading">#</a></h2>
+<p>On <code>connectedCallback</code>, <code>merch-offer-select</code>:</p>
+<ol>
+<li>Collects child <code>merch-offer</code> elements into its <code>offers</code> array.</li>
+<li>Saves the container’s default <code>description</code> and <code>badgeText</code> (unless in quantity mode).</li>
+<li>Sets <code>selectedOffer</code> to the first offer.</li>
+<li>Listens for <code>focusin</code> and <code>click</code> — when the target is a <code>merch-offer</code>, calls <code>selectOffer()</code> on that element.</li>
+</ol>
+<p><code>selectOffer()</code> marks the previous offer deselected, sets <code>aria-selected</code> on the new offer, copies slotted content into the container, and dispatches <code>merch-offer:selected</code>.</p>
+<h3 id="horizontal" tabindex="-1">Horizontal variant <a class="header-anchor" href="#horizontal" href="#horizontal" title="Permalink to this heading">#</a></h3>
+<p>Set <code>variant=&quot;horizontal&quot;</code> to lay out radio offers in a row. Supports multiple CTAs per offer (<code>cta</code> and <code>secondary-cta</code>), as used in storage-picker patterns on <code>mini-compare-chart</code> cards (<code>offers</code> slot).</p>
+<h3 id="subscription-options" tabindex="-1">Subscription options variant <a class="header-anchor" href="#subscription-options" href="#subscription-options" title="Permalink to this heading">#</a></h3>
+<p>Set <code>variant=&quot;subscription-options&quot;</code> on <code>merch-offer-select</code> and <code>type=&quot;subscription-option&quot;</code> on each <code>merch-offer</code> to render card-style subscription choices with commitment, price, teaser, and condition slots instead of radio buttons.</p>
+<h2 id="quantity-mode" tabindex="-1">Quantity mode <a class="header-anchor" href="#quantity-mode" href="#quantity-mode" title="Permalink to this heading">#</a></h2>
+<p>When <code>merch-offer-select</code> is a descendant of <code>merch-quantity-select</code>:</p>
+<ul>
+<li>Container default values are not saved.</li>
+<li>Description and badge are not updated on selection.</li>
+<li>The select listens for <code>merch-quantity-selector:change</code> instead of click/focus selection.</li>
+<li><code>findAppropriateOffer()</code> maps the quantity to an offer by comparing the <code>value</code> attribute on each <code>merch-offer</code>. If no exact match exists, the nearest lower <code>value</code> is used.</li>
+<li>The container <code>cta</code> element receives <code>data-quantity</code> matching the selected quantity.</li>
+</ul>
+<p>See <code>merch-quantity-select</code> for the quantity-picker integration.</p>
+<h2 id="variant-placement" tabindex="-1">Variant placement <a class="header-anchor" href="#variant-placement" href="#variant-placement" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Typical slot</th>
+<th><code>variant</code> attribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code></td>
+<td><code>body-xs</code> or <code>quantity-select</code></td>
+<td><code>plans</code> (default) or <code>horizontal</code></td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>quantity-select</code></td>
+<td><code>plans</code> (default)</td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code></td>
+<td><code>offers</code></td>
+<td><code>horizontal</code></td>
+</tr>
+<tr>
+<td><code>mini-compare-chart-mweb</code></td>
+<td><code>body-xs</code> or <code>offers</code></td>
+<td><code>plans</code> (default) or <code>horizontal</code></td>
+</tr>
+</tbody>
+</table>
+<p>AEM hydration creates the <code>quantity-select</code> slot wrapper for <code>plans</code> and <code>product</code> variants when the fragment field is present (<code>quantitySelect</code> in <code>PLANS_AEM_FRAGMENT_MAPPING</code> / <code>PRODUCT_AEM_FRAGMENT_MAPPING</code>). Offer markup inside that slot is authored in the card fragment.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import both elements via <a href="mas.js.html">mas.js</a> or the standalone bundle:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../dist/merch-offer-select.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>The standalone bundle contains <code>merch-offer</code> and <code>merch-offer-select</code> only. Use <code>mas.js</code> when the container is a full <code>merch-card</code>.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>
