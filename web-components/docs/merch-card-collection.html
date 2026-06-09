@@ -1,0 +1,438 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/merch-card-collection.js"></script>
+<h1 id="merch-card-collection" tabindex="-1">merch-card-collection <a class="header-anchor" href="#merch-card-collection" href="#merch-card-collection" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>The <code>merch-card-collection</code> custom element loads a collection fragment from MAS/Odin, hydrates child <code>merch-card</code> elements, and orchestrates filtering, sorting, search, and pagination across them.</p>
+<p>It is typically used with a sibling <code>merch-sidenav</code> for category navigation and a <code>merch-card-collection-header</code> (created automatically when a sidenav is attached) for search, filter, sort, and result-count UI.</p>
+<p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a>.</p>
+<p>See also: <a href="plans-collection.html">Plans Collection Gallery</a>, <a href="merch-card.html">merch-card</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container plans&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-card-collection</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">aem-fragment</span> <span class="hljs-attr">fragment</span>=<span class="hljs-string">&quot;4a466a3c-efa2-4406-ae47-93abd2167e27&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">aem-fragment</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-card-collection</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>On <code>aem:load</code>, the collection removes the nested <code>aem-fragment</code>, creates one <code>merch-card</code> per referenced card fragment, and applies grid column classes based on the card variant and count.</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Collection fragment ID. Set from the nested <code>aem-fragment</code> during hydration.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td>Active category filter key. Cards expose matching keys on their <code>filters</code> object (populated from the collection hierarchy).</td>
+<td><code>all</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>filtered</code></td>
+<td>When set, freezes <code>filter</code> to this value and disables deeplink-driven filter changes. Also hides the “Show more” footer.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td>Comma-separated type tags. Only cards whose <code>types</code> include at least one listed type remain visible.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>Search term matched against each card’s <code>title</code> (case-insensitive substring).</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>Sort order: <code>authored</code> (fragment hierarchy order) or <code>alphabetical</code> (by card title).</td>
+<td><code>authored</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>Current page number for pagination. Combined with <code>limit</code> to determine how many cards are shown.</td>
+<td><code>1</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>Maximum cards per page. Set to <code>27</code> automatically during AEM hydration.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>single-app</code></td>
+<td>When set, calls <code>updateFilters()</code> on each card where <code>card.name === single-app</code>.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>overrides</code></td>
+<td>Comma-separated <code>fragmentId:overrideFragmentId</code> pairs. Replaces card or hierarchy node references at hydration time.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>display-result</code></td>
+<td>Internal flag set to <code>true</code> after hydration completes.</td>
+<td><code>false</code></td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sort-order" tabindex="-1">Sort order constants <a class="header-anchor" href="#sort-order" href="#sort-order" title="Permalink to this heading">#</a></h3>
+<pre><code class="hljs language-javascript"><span class="hljs-title class_">MerchCardCollection</span>.<span class="hljs-property">SortOrder</span>.<span class="hljs-property">authored</span>      <span class="hljs-comment">// &#x27;authored&#x27;</span>
+<span class="hljs-title class_">MerchCardCollection</span>.<span class="hljs-property">SortOrder</span>.<span class="hljs-property">alphabetical</span>  <span class="hljs-comment">// &#x27;alphabetical&#x27;</span>
+</code></pre>
+<h2 id="aem-hydration" tabindex="-1">AEM hydration <a class="header-anchor" href="#aem-hydration" href="#aem-hydration" title="Permalink to this heading">#</a></h2>
+<p>Place a single <code>aem-fragment</code> inside the collection. On <code>aem:load</code>:</p>
+<ol>
+<li>Card references are resolved from the fragment’s <code>referencesTree</code> and <code>references</code>.</li>
+<li>A <code>merch-card</code> is created for each card, with <code>consonant</code> set and an nested <code>aem-fragment</code> for the card content.</li>
+<li>Each card receives a <code>filters</code> map: hierarchy nodes contribute <code>{ order, size }</code> keyed by <code>queryLabel</code> or lowercased <code>label</code>; cards with no hierarchy membership get <code>{ all: { order, size } }</code>.</li>
+<li>Cards tagged with <code>mas:types/*</code> receive a <code>types</code> attribute (comma-separated suffix values).</li>
+<li>Variants that support default-child selection (<code>supportsDefaultChild</code> in the variant’s fragment mapping) may receive <code>data-default-card=&quot;true&quot;</code>.</li>
+<li>The collection <code>variant</code> and grid classes are derived from the first card’s variant and total card count (see <a href="#grid-layout">Grid layout</a>).</li>
+<li>Fragment <code>placeholders</code> are injected as slotted <code>&lt;p&gt;</code> or <code>&lt;div&gt;</code> elements inside the collection.</li>
+<li><code>sidenavSettings</code> are prepared from <code>checkboxGroups</code>, or parsed from <code>tagFilters</code> + <code>tagFiltersTitle</code>.</li>
+</ol>
+<h3 id="overrides" tabindex="-1">Overrides <a class="header-anchor" href="#overrides" href="#overrides" title="Permalink to this heading">#</a></h3>
+<p>The <code>overrides</code> attribute accepts tokens like <code>cardId1:replacementId1,cardId2:replacementId2</code>. During hydration, matching card IDs and hierarchy <code>defaultchild</code> references are swapped. Override fragments must already be present in the DOM as <code>aem-fragment[fragment=&quot;…&quot;]</code> elements with loaded <code>rawData</code>.</p>
+<h3 id="hierarchy" tabindex="-1">Hierarchy and default filter <a class="header-anchor" href="#hierarchy" href="#hierarchy" title="Permalink to this heading">#</a></h3>
+<p>When the collection fragment has no nested <code>collections</code> hierarchy, <code>filtered</code> is set to <code>all</code> automatically, which freezes the filter and hides pagination controls.</p>
+<h2 id="filtering" tabindex="-1">Filtering, sorting, and pagination <a class="header-anchor" href="#filtering" href="#filtering" title="Permalink to this heading">#</a></h2>
+<p>On each attribute change, the collection:</p>
+<ol>
+<li>Filters by <code>filter</code> (cards must have the key on their <code>filters</code> object).</li>
+<li>Filters by <code>types</code> when set.</li>
+<li>Filters by <code>search</code> against card <code>title</code>.</li>
+<li>Sorts by authored order or alphabetically.</li>
+<li>Applies pagination: visible cards = first <code>page × limit</code> results; sets <code>hasMore</code> when additional cards exist.</li>
+<li>Reorders visible cards in the DOM and sets <code>display: none</code> on hidden cards.</li>
+<li>Applies per-filter <code>size</code> from <code>card.filters[filter].size</code>.</li>
+</ol>
+<p>When <code>filtered</code> is set at init (from AEM or markup), <code>page</code> resets to <code>1</code> and deeplink filter changes are ignored.</p>
+<h2 id="deeplink" tabindex="-1">URL hash deeplink <a class="header-anchor" href="#deeplink" href="#deeplink" title="Permalink to this heading">#</a></h2>
+<p>Unless <code>filtered</code> is set, the collection listens to <code>hashchange</code> and reads these hash parameters:</p>
+<table>
+<thead>
+<tr>
+<th>Hash key</th>
+<th>Maps to attribute</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter</code> or <code>category</code></td>
+<td><code>filter</code></td>
+<td>Changing filter resets <code>page</code> to <code>1</code></td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td><code>types</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td><code>search</code></td>
+<td>Also driven by <code>merch-search</code> with <code>deeplink=&quot;search&quot;</code></td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td><code>sort</code></td>
+<td><code>authored</code> clears the hash key</td>
+</tr>
+<tr>
+<td><code>single_app</code></td>
+<td><code>single-app</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td><code>page</code></td>
+<td>Incremented by “Show more”</td>
+</tr>
+</tbody>
+</table>
+<p>Hash updates preserve scroll position. Sort and pagination changes call <code>pushState()</code> from <code>deeplink.js</code>.</p>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-card-collection:sort</code></td>
+<td>yes</td>
+<td><code>{ value }</code></td>
+<td>Dispatched when the header sort menu changes.</td>
+</tr>
+<tr>
+<td><code>merch-card-collection:showmore</code></td>
+<td>yes</td>
+<td>—</td>
+<td>Dispatched before incrementing <code>page</code>.</td>
+</tr>
+<tr>
+<td><code>merch-card-collection:literals-changed</code></td>
+<td>no</td>
+<td><code>{ resultCount, searchTerm, filter }</code></td>
+<td>Dispatched after filter/sort/search updates; <code>filter</code> is the sidenav selected text.</td>
+</tr>
+<tr>
+<td><code>merch-card-collection:sidenav-attached</code></td>
+<td>no</td>
+<td>—</td>
+<td>Dispatched after <code>attachSidenav()</code> completes.</td>
+</tr>
+<tr>
+<td><code>mas:error</code></td>
+<td>yes</td>
+<td><code>{ message, … }</code></td>
+<td>Dispatched when AEM hydration fails.</td>
+</tr>
+</tbody>
+</table>
+<p>Child <code>merch-card</code> elements also emit <code>mas:ready</code> and <code>mas:error</code> per <a href="merch-card.html">merch-card</a>.</p>
+<h2 id="placeholder-slots" tabindex="-1">Placeholder slots <a class="header-anchor" href="#placeholder-slots" href="#placeholder-slots" title="Permalink to this heading">#</a></h2>
+<p>Fragment <code>placeholders</code> and header UI text use named slots. Placeholders authored in the collection fragment are auto-created; header-related placeholders can also be provided as child elements with a <code>placeholder</code> attribute.</p>
+<h3 id="collection-slots" tabindex="-1">Collection slots <a class="header-anchor" href="#collection-slots" href="#collection-slots" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>showMoreText</code></td>
+<td>Label for the pagination “Show more” button (rendered in the collection footer).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="header-slots-(merch-card-collection-header)" tabindex="-1">Header slots (<code>merch-card-collection-header</code>) <a class="header-anchor" href="#header-slots-(merch-card-collection-header)" href="#header-slots-(merch-card-collection-header)" title="Permalink to this heading">#</a></h3>
+<p>Created by <code>attachSidenav()</code> or manually. Transferred from collection children when the slot name is in <code>placeholderKeys</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>searchText</code></td>
+<td>Search field placeholder</td>
+</tr>
+<tr>
+<td><code>filtersText</code></td>
+<td>Mobile/tablet filter button label</td>
+</tr>
+<tr>
+<td><code>sortText</code></td>
+<td>Sort menu prefix label</td>
+</tr>
+<tr>
+<td><code>popularityText</code></td>
+<td>“Authored” sort option label</td>
+</tr>
+<tr>
+<td><code>alphabeticallyText</code></td>
+<td>Alphabetical sort option label</td>
+</tr>
+<tr>
+<td><code>noResultText</code></td>
+<td>Zero results (filter, desktop)</td>
+</tr>
+<tr>
+<td><code>resultText</code></td>
+<td>Single result (filter, desktop)</td>
+</tr>
+<tr>
+<td><code>resultsText</code></td>
+<td>Multiple results (filter, desktop)</td>
+</tr>
+<tr>
+<td><code>resultMobileText</code></td>
+<td>Single result (filter, mobile/tablet)</td>
+</tr>
+<tr>
+<td><code>resultsMobileText</code></td>
+<td>Multiple results (filter, mobile/tablet)</td>
+</tr>
+<tr>
+<td><code>noSearchResultsText</code></td>
+<td>Zero search results (desktop)</td>
+</tr>
+<tr>
+<td><code>searchResultText</code></td>
+<td>Single search result (desktop)</td>
+</tr>
+<tr>
+<td><code>searchResultsText</code></td>
+<td>Multiple search results (desktop)</td>
+</tr>
+<tr>
+<td><code>noSearchResultsMobileText</code></td>
+<td>Zero search results (mobile/tablet)</td>
+</tr>
+<tr>
+<td><code>searchResultMobileText</code></td>
+<td>Single search result (mobile/tablet)</td>
+</tr>
+<tr>
+<td><code>searchResultsMobileText</code></td>
+<td>Multiple search results (mobile/tablet)</td>
+</tr>
+</tbody>
+</table>
+<p>Result slots support <code>data-placeholder</code> attributes (<code>resultCount</code>, <code>searchTerm</code>, <code>filter</code>) that the header updates from <code>merch-card-collection:literals-changed</code>.</p>
+<h2 id="sidenav" tabindex="-1">Sidenav integration <a class="header-anchor" href="#sidenav" href="#sidenav" title="Permalink to this heading">#</a></h2>
+<p>On <code>connectedCallback</code>, the collection looks for a sibling <code>merch-sidenav</code> on its parent element. Call <code>attachSidenav(sidenav, append)</code> to:</p>
+<ol>
+<li>Optionally prepend the sidenav to the parent.</li>
+<li>Set <code>sidenav.variant</code> and apply the variant CSS class.</li>
+<li>Set <code>autoclose</code> on the sidenav for the <code>plans</code> variant.</li>
+<li>Create and insert a <code>merch-card-collection-header</code> before the collection.</li>
+<li>Run the variant’s <code>onSidenavAttached</code> hook (if defined in <code>collectionOptions</code>).</li>
+</ol>
+<p>The <code>plans</code> and <code>plans-v2</code> variants define custom <code>headerVisibility</code> and <code>customHeaderArea</code> in their <code>collectionOptions</code> — for example, plans hides search/sort on desktop and shows a custom results area.</p>
+<h2 id="grid-layout" tabindex="-1">Grid layout <a class="header-anchor" href="#grid-layout" href="#grid-layout" title="Permalink to this heading">#</a></h2>
+<p>After hydration, CSS grid classes are applied based on variant and card count:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Condition</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>catalog</code>, <code>plans</code>, <code>product</code>, <code>segment</code></td>
+<td>default</td>
+<td><code>four-merch-cards</code></td>
+</tr>
+<tr>
+<td><code>plans</code></td>
+<td>3 cards, none wide</td>
+<td><code>three-merch-cards</code></td>
+</tr>
+<tr>
+<td><code>product</code>, <code>segment</code></td>
+<td>2 or 3 cards</td>
+<td><code>two-merch-cards</code> or <code>three-merch-cards</code></td>
+</tr>
+<tr>
+<td><code>special-offers</code>, <code>image</code>, <code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td>default</td>
+<td><code>three-merch-cards</code></td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td>≤2 cards</td>
+<td><code>two-merch-cards</code></td>
+</tr>
+</tbody>
+</table>
+<p>Wrap the collection in a <code>.collection-container</code> element for correct grid and header spacing.</p>
+<h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>attachSidenav(sidenav, append?)</code></td>
+<td>Wire sidenav, create header, dispatch <code>merch-card-collection:sidenav-attached</code>. <code>append</code> defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>checkReady()</code></td>
+<td>Returns a promise resolving <code>true</code> when hydration completes, or <code>false</code> after a 30s timeout.</td>
+</tr>
+<tr>
+<td><code>showMore()</code></td>
+<td>Increments <code>page</code>, updates the URL hash, and dispatches <code>merch-card-collection:showmore</code>.</td>
+</tr>
+<tr>
+<td><code>sortChanged(event)</code></td>
+<td>Called by the header sort menu; updates hash and dispatches <code>merch-card-collection:sort</code>.</td>
+</tr>
+<tr>
+<td><code>openFilters(event)</code></td>
+<td>Opens the sidenav modal (mobile/tablet filter button).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="error-handling" tabindex="-1">Error handling <a class="header-anchor" href="#error-handling" href="#error-handling" title="Permalink to this heading">#</a></h2>
+<p>If the nested <code>aem-fragment</code> dispatches <code>aem:error</code>, the collection logs the error, sets <code>failed = true</code>, removes the fragment, and dispatches <code>mas:error</code> with the error detail.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>
