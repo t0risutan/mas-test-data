@@ -8,7 +8,7 @@
 
 Commerce gallery cards set `spectrum="swc"` on `<merch-card>` so footer CTAs hydrate as Spectrum Web Components (`sp-button`) instead of Consonant or Spectrum CSS buttons (`hydrate.js` → `createSpectrumSwcButton`).
 
-The card layout mapping is selected by the fragment `variant` field — commonly `plans-v2` (`PLANS_V2_AEM_FRAGMENT_MAPPING` in `web-components/src/variants/plans-v2.js`) or `plans` (`PLANS_AEM_FRAGMENT_MAPPING` in `web-components/src/variants/plans.js`). See the [Plans Gallery](plans.html) authoring reference for field details shared by the plans family.
+The card layout mapping is selected by the fragment `variant` field — commonly `plans-v2` (`PLANS_V2_AEM_FRAGMENT_MAPPING` in `web-components/src/variants/plans-v2.js`) or `plans` (`PLANS_AEM_FRAGMENT_MAPPING` in `web-components/src/variants/plans.js`). See [Plans v2](plans-v2.html) for the `plans-v2` authoring reference, or the [Plans Gallery](plans.html) for the original plans variants.
 
 ## Commerce-specific markup {#commerce-markup}
 
@@ -23,7 +23,7 @@ The card layout mapping is selected by the fragment `variant` field — commonly
 | `spectrum` | `swc` | Footer checkout links render as `sp-button` with `treatment`, `variant`, and `size` from the link class and mapping `ctas.size`. |
 | `variant` | From fragment | Omit on the element when using `aem-fragment`; hydration sets it from `fields.variant`. |
 
-When the fragment variant is `plans-v2`, additional fields beyond the base plans mapping include `shortDescription` (slotted to `short-description` with a mobile accordion toggle) and Spectrum-prefixed badge/border color tokens (`spectrum-*-plans`).
+When the fragment variant is `plans-v2`, see [Plans v2](plans-v2.html) for `shortDescription`, stock toggle, legal price, collection layout, and Spectrum-prefixed badge/border tokens.
 
 ## Fragment settings {#fragment-settings}
 

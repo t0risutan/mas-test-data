@@ -11,6 +11,7 @@ See [merch-card](merch-card.html) for shared attributes and events, and [merch-q
 | `plans` | `PLANS_AEM_FRAGMENT_MAPPING` | Individual and business cards |
 | `plans-education` | `PLANS_EDUCATION_AEM_FRAGMENT_MAPPING` | Education cards |
 | `plans-students` | `PLANS_STUDENTS_AEM_FRAGMENT_MAPPING` | Student pricing (not shown in this gallery) |
+| `plans-v2` | `PLANS_V2_AEM_FRAGMENT_MAPPING` | [Plans v2 Gallery](plans-v2.html) (Commerce examples) |
 
 Education omits `whatsIncluded`, `size`, and `secureLabel` from the base mapping and places the title in `heading-s` instead of `heading-xs`. Students omits `subtitle`, `whatsIncluded`, `size`, and `quantitySelect`.
 

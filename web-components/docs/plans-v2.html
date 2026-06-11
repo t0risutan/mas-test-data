@@ -1,0 +1,485 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The <code>plans-v2</code> card variant is a redesigned plans layout registered in <code>web-components/src/variants/plans-v2.js</code>. Set <code>variant=&quot;plans-v2&quot;</code> on <code>&lt;merch-card&gt;</code> or let AEM hydration infer it from the fragment <code>variant</code> field.</p>
+<p>Compared to the original <code>plans</code> variant (<a href="plans.html">Plans Gallery</a>), plans-v2 adds a collapsible <strong>short description</strong> region, Spectrum-prefixed badge/border tokens (including red), a cloned <strong>legal price</strong> line under the main price, and collection height sync across card rows.</p>
+<p>See <a href="merch-card.html">merch-card</a> for shared attributes and events, <a href="merch-quantity-select.html">merch-quantity-select</a> for quantity UI, and <a href="merch-card-collection.html">merch-card-collection</a> for collection integration.</p>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<p>During hydration (<code>hydrate.js</code>), each field below is mapped through <code>PLANS_V2_AEM_FRAGMENT_MAPPING</code>:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required. Must be <code>plans-v2</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Plan title. Slot config comes from mapping key <code>title</code>.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td><code>subtitle</code></td>
+<td><code>p</code></td>
+<td>On <code>size=&quot;wide&quot;</code>, rendered as large display type below the title row.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>heading-m</code></td>
+<td><code>p</code></td>
+<td>HTML with <code>inline-price</code> elements. Per-unit text is moved to a legal clone (see <a href="#legal-price">Legal price</a>).</td>
+</tr>
+<tr>
+<td><code>shortDescription</code></td>
+<td><code>short-description</code></td>
+<td><code>p</code></td>
+<td>Expandable footer region; mobile accordion toggle (see <a href="#short-description">Short description</a>). Sets <code>action-menu=&quot;true&quot;</code> on the card during hydration.</td>
+</tr>
+<tr>
+<td><code>promoText</code></td>
+<td><code>promo-text</code></td>
+<td><code>p</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td>Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>callout</code></td>
+<td><code>callout-content</code></td>
+<td><code>div</code></td>
+<td>Tooltip icons in callout HTML get touch/mouse handling in <code>adjustCallout()</code>.</td>
+</tr>
+<tr>
+<td><code>whatsIncluded</code></td>
+<td><code>whats-included</code></td>
+<td><code>div</code></td>
+<td><code>merch-whats-included</code> markup.</td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td><code>quantity-select</code></td>
+<td><code>div</code></td>
+<td>Serialized <code>merch-quantity-select</code> HTML. Rendered in the footer region.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td><code>addon</code></td>
+<td>—</td>
+<td>Creates <code>merch-addon</code> from field HTML or <code>settings.addon</code>. Receives <code>custom-checkbox</code> after hydration; <code>planType</code> synced from main price.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td><code>badge</code></td>
+<td><code>div</code></td>
+<td>Plain text is wrapped in <code>merch-badge</code>; HTML passthrough when already tagged. Default background <code>spectrum-red-700-plans</code>.</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td><code>border-color</code> attribute / CSS variable</td>
+<td>—</td>
+<td>Allowed values in <code>allowedBorderColors</code>. Spectrum <code>*-plans</code> tokens enable variant-specific border styling and drop-shadow on red.</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code> attribute</td>
+<td>—</td>
+<td><code>wide</code> or <code>super-wide</code>. Slot placement adjusts in collections (see <a href="#responsive-layout">Responsive layout</a>).</td>
+</tr>
+<tr>
+<td><code>mnemonicIcon</code>, <code>mnemonicAlt</code>, <code>mnemonicLink</code></td>
+<td><code>icons</code></td>
+<td><code>merch-icon</code></td>
+<td>Parallel arrays; icon size <code>l</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer links hydrated as Consonant buttons (<code>style: 'consonant'</code> sets the <code>consonant</code> attribute). CTA size <code>m</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="allowed-colors" tabindex="-1">Allowed badge and border colors <a class="header-anchor" href="#allowed-colors" href="#allowed-colors" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>spectrum-yellow-300-plans</code></td>
+<td>Badge and/or border</td>
+</tr>
+<tr>
+<td><code>spectrum-gray-300-plans</code></td>
+<td>Badge and/or border</td>
+</tr>
+<tr>
+<td><code>spectrum-gray-700-plans</code></td>
+<td>Badge only</td>
+</tr>
+<tr>
+<td><code>spectrum-green-900-plans</code></td>
+<td>Badge and/or border</td>
+</tr>
+<tr>
+<td><code>spectrum-red-700-plans</code></td>
+<td>Badge and/or border (default badge color; adds drop-shadow when used as border or badge)</td>
+</tr>
+<tr>
+<td><code>gradient-purple-blue</code></td>
+<td>Badge and/or border</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fragment-settings" tabindex="-1">Fragment settings <a class="header-anchor" href="#fragment-settings" href="#fragment-settings" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secureLabel</code></td>
+<td>Sets <code>secure-label</code> on the card when the mapping includes <code>secureLabel: true</code>.</td>
+</tr>
+<tr>
+<td><code>displayPlanType</code></td>
+<td>Passed to the legal price clone via <code>priceOptionsProvider()</code>; controls plan-type text in the legal line.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td>Fallback HTML for <code>merch-addon</code> when <code>fields.addon</code> is absent.</td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td>Fallback markup when <code>fields.quantitySelect</code> is absent.</td>
+</tr>
+<tr>
+<td><code>hideTrialCTAs</code></td>
+<td>Removes trial CTAs from the footer during hydration.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stock-toggle" tabindex="-1">Stock toggle <a class="header-anchor" href="#stock-toggle" href="#stock-toggle" title="Permalink to this heading">#</a></h2>
+<p>When <code>checkbox-label</code> is present on <code>merch-card</code>, the layout renders a stock checkbox in the card body (<code>#stock-checkbox</code>). The checkbox label text comes from the attribute value.</p>
+<p><code>toggleStockOffer()</code> in <code>merch-card.js</code> runs on checkbox change. It requires:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Format</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated PUF, ABM, M2M offer IDs</td>
+<td>Parsed into <code>{ PUF, ABM, M2M }</code>. The OSI matching the checkout link’s <code>planType</code> is appended to or removed from each footer checkout link’s <code>data-wcs-osi</code> when the checkbox is toggled.</td>
+</tr>
+</tbody>
+</table>
+<p>These attributes are <strong>not</strong> set by <code>hydrate.js</code>. Set them on the element in markup, or author <code>checkboxLabel</code> / <code>stockOfferOsis</code> fragment fields where your integration maps them to card attributes (as in Studio preview).</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans-v2&quot;</span>
+  <span class="hljs-attr">checkbox-label</span>=<span class="hljs-string">&quot;Add a 30-day free trial of Adobe Stock.*&quot;</span>
+  <span class="hljs-attr">stock-offer-osis</span>=<span class="hljs-string">&quot;stock-puf,stock-abm,stock-m2m&quot;</span>
+&gt;</span>
+  <span class="hljs-comment">&lt;!-- slotted content with checkout links --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="short-description" tabindex="-1">Short description <a class="header-anchor" href="#short-description" href="#short-description" title="Permalink to this heading">#</a></h2>
+<p>The <code>shortDescription</code> AEM field hydrates into the <code>short-description</code> slot. <code>PlansV2</code> renders it below the footer:</p>
+<table>
+<thead>
+<tr>
+<th>Viewport</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mobile (<code>Media.isMobile</code>)</td>
+<td>Collapsed accordion. Toggle label is extracted from the first <code>&lt;strong&gt;</code>, <code>&lt;b&gt;</code>, heading, <code>&lt;p&gt;</code>, or first text line in the slot content. The matched first element is hidden in the expanded panel (shown only in the toggle label). Click toggles <code>.expanded</code> on the toggle and content panels.</td>
+</tr>
+<tr>
+<td>Tablet and up</td>
+<td>Always-visible <code>.short-description-content.desktop</code> panel with top border; no toggle.</td>
+</tr>
+</tbody>
+</table>
+<p>When short description content is present, the card sets <code>has-short-description</code> (used for collection grid height sync). Hydration also sets <code>action-menu=&quot;true&quot;</code> and defaults <code>action-menu-label</code> to <code>More options</code> when <code>actionMenuLabel</code> is absent.</p>
+<p>Toggle and panel colors use CSS custom properties (<code>--consonant-merch-card-plans-v2-toggle-*</code>, <code>--consonant-merch-card-plans-v2-divider-color</code>). In <code>.dark</code> context, short-description panels stay white with dark text.</p>
+<h2 id="legal-price" tabindex="-1">Legal price <a class="header-anchor" href="#legal-price" href="#legal-price" title="Permalink to this heading">#</a></h2>
+<p>After hydration, <code>adjustLegal()</code> clones the main <code>inline-price</code> (<code>data-template=&quot;price&quot;</code>) in <code>heading-m</code>, inserts it as a sibling with <code>data-template=&quot;legal&quot;</code>, and disables per-unit, tax, and plan-type display on the main price. Per-unit and plan-type text appear on the legal clone instead, controlled by <code>settings.displayPlanType</code>.</p>
+<h2 id="responsive-layout" tabindex="-1">Responsive layout <a class="header-anchor" href="#responsive-layout" href="#responsive-layout" title="Permalink to this heading">#</a></h2>
+<p><code>renderLayout()</code> branches on <code>size</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Size</th>
+<th>Body layout</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default</td>
+<td>Icons + title/subtitle wrapper, <code>heading-m</code>, description, stock checkbox, addon, badge.</td>
+</tr>
+<tr>
+<td><code>wide</code></td>
+<td>Horizontal icon + title row, subtitle, description, stock checkbox, addon, badge, price divider, then <code>heading-m</code>. Max width 768px. Subtitle uses large display typography.</td>
+</tr>
+</tbody>
+</table>
+<p>Inside a collection (<code>merch-card-collection</code>, grid wrappers, etc.), <code>adaptForMedia()</code> relocates slots at desktop widths:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Moves to footer when</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>heading-m</code></td>
+<td><code>size=&quot;wide&quot;</code></td>
+<td>Collection context + desktop</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td><code>size=&quot;super-wide&quot;</code></td>
+<td>Collection context + desktop</td>
+</tr>
+<tr>
+<td><code>callout-content</code></td>
+<td><code>size=&quot;super-wide&quot;</code></td>
+<td>Collection context + desktop</td>
+</tr>
+</tbody>
+</table>
+<p>At desktop widths (≥768px), visible cards in the same collection row sync <code>.body</code>, <code>footer</code>, and <code>[slot=&quot;short-description&quot;]</code> heights via <code>syncHeights()</code>.</p>
+<h2 id="collection-options" tabindex="-1">Collection options <a class="header-anchor" href="#collection-options" href="#collection-options" title="Permalink to this heading">#</a></h2>
+<p><code>PlansV2.collectionOptions</code> (registered in <code>variants/variants.js</code>) customizes <a href="merch-card-collection.html">merch-card-collection</a> behavior:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>headerVisibility.search</code></td>
+<td><code>false</code></td>
+<td>Hides collection search in the header.</td>
+</tr>
+<tr>
+<td><code>headerVisibility.sort</code></td>
+<td><code>false</code></td>
+<td>Hides sort menu.</td>
+</tr>
+<tr>
+<td><code>headerVisibility.result</code></td>
+<td><code>['mobile', 'tablet']</code></td>
+<td>Shows result-count text on mobile/tablet.</td>
+</tr>
+<tr>
+<td><code>headerVisibility.custom</code></td>
+<td><code>['desktop']</code></td>
+<td>Shows custom header area on desktop.</td>
+</tr>
+<tr>
+<td><code>customHeaderArea</code></td>
+<td>Renders <code>&lt;slot name=&quot;resultsText&quot;&gt;</code></td>
+<td>Only when a sidenav is attached; replaces default header content on desktop.</td>
+</tr>
+<tr>
+<td><code>onSidenavAttached</code></td>
+<td><code>minifyOverflowingWideCards</code></td>
+<td>On desktop, wide cards spanning 2 columns and super-wide cards spanning 3 columns are tracked against a 3-column grid. A wide card at column index 2 is downgraded: <code>size</code> moves to <code>data-size</code> and is removed so the card reflows to one column. Runs on desktop media change and <code>merch-card-collection:literals-changed</code>. Restores <code>size</code> from <code>data-size</code> before recalculating.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<p>Layout from <code>PlansV2.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icons</code></td>
+<td>Body</td>
+<td>Product mnemonics with horizontal fade mask (mask removed on <code>wide</code>).</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Body</td>
+<td>Plan title.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>heading-m</code></td>
+<td>Body or footer</td>
+<td>Main price; moves to footer on <code>wide</code> in collections at desktop.</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Body</td>
+<td>Stock checkbox when <code>checkbox-label</code> is set.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td>Body or footer</td>
+<td>Moves to footer on <code>super-wide</code> at desktop in collections.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>promo-text</code></td>
+<td>—</td>
+<td>In mapping; not placed by <code>renderLayout()</code> (hydrated slot exists if authored).</td>
+</tr>
+<tr>
+<td><code>whats-included</code></td>
+<td>—</td>
+<td>In mapping; not placed by <code>renderLayout()</code> (hydrated slot exists if authored).</td>
+</tr>
+<tr>
+<td><code>callout-content</code></td>
+<td>—</td>
+<td>In mapping; may move to footer on <code>super-wide</code> at desktop in collections.</td>
+</tr>
+<tr>
+<td><code>quantity-select</code></td>
+<td>Footer</td>
+<td>Inside <code>secureLabelFooter</code>.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs; preceded by secure-transaction label when <code>secure-label</code> is set.</td>
+</tr>
+<tr>
+<td><code>short-description</code></td>
+<td>Below footer</td>
+<td>Accordion on mobile; static panel on tablet+.</td>
+</tr>
+</tbody>
+</table>
+<div class="commerce-gallery-content">
+  <h1 id="plans-v2-gallery">Plans v2 Gallery</h1>
+  <p>Examples from the <a href="commerce.html">Commerce Gallery</a> — cards use <code>spectrum="swc"</code> for Spectrum Web Component CTAs.</p>
+  <div class="commerce-container">
+    <h2 id="plans-v2-commerce">Commerce Plans v2 <a class="header-anchor" href="#plans-v2-commerce" title="Permalink to this heading">#</a></h2>
+    <div class="four-merch-cards commerce-plans">
+      <div class="commerce-item">
+        <merch-card spectrum="swc"><aem-fragment fragment="8bd9c722-8b3c-4c65-b135-7f6a1b84f800"></aem-fragment></merch-card>
+        <a class="commerce-link" target="_blank" href="https://main--mas--adobecom.aem.live/studio.html?#path=nala&query=8bd9c722-8b3c-4c65-b135-7f6a1b84f800"> Open in Studio</a>
+      </div>
+      <div class="commerce-item">
+        <merch-card spectrum="swc"><aem-fragment fragment="8487f19d-b038-44fa-9db6-0dc55a85b326"></aem-fragment></merch-card>
+        <a class="commerce-link" target="_blank" href="https://main--mas--adobecom.aem.live/studio.html?#path=nala&query=8487f19d-b038-44fa-9db6-0dc55a85b326"> Open in Studio</a>
+      </div>
+      <div class="commerce-item">
+        <merch-card spectrum="swc"><aem-fragment fragment="a7179d35-1dd2-4f9a-9223-2f8c7062acc7"></aem-fragment></merch-card>
+        <a class="commerce-link" target="_blank" href="https://main--mas--adobecom.aem.live/studio.html?#path=nala&query=a7179d35-1dd2-4f9a-9223-2f8c7062acc7"> Open in Studio</a>
+      </div>
+      <div class="commerce-item">
+        <merch-card spectrum="swc"><aem-fragment fragment="e243cb07-cb53-439d-bb62-d80f0fd719e5"></aem-fragment></merch-card>
+        <a class="commerce-link" target="_blank" href="https://main--mas--adobecom.aem.live/studio.html?#path=nala&query=e243cb07-cb53-439d-bb62-d80f0fd719e5"> Open in Studio</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

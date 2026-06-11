@@ -31,7 +31,7 @@
 <script type="module" src="https://www.adobe.com/libs/features/spectrum-web-components/dist/popover.js"></script>
 <h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>Commerce gallery cards set <code>spectrum=&quot;swc&quot;</code> on <code>&lt;merch-card&gt;</code> so footer CTAs hydrate as Spectrum Web Components (<code>sp-button</code>) instead of Consonant or Spectrum CSS buttons (<code>hydrate.js</code> → <code>createSpectrumSwcButton</code>).</p>
-<p>The card layout mapping is selected by the fragment <code>variant</code> field — commonly <code>plans-v2</code> (<code>PLANS_V2_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/plans-v2.js</code>) or <code>plans</code> (<code>PLANS_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/plans.js</code>). See the <a href="plans.html">Plans Gallery</a> authoring reference for field details shared by the plans family.</p>
+<p>The card layout mapping is selected by the fragment <code>variant</code> field — commonly <code>plans-v2</code> (<code>PLANS_V2_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/plans-v2.js</code>) or <code>plans</code> (<code>PLANS_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/plans.js</code>). See <a href="plans-v2.html">Plans v2</a> for the <code>plans-v2</code> authoring reference, or the <a href="plans.html">Plans Gallery</a> for the original plans variants.</p>
 <h2 id="commerce-markup" tabindex="-1">Commerce-specific markup <a class="header-anchor" href="#commerce-markup" href="#commerce-markup" title="Permalink to this heading">#</a></h2>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">spectrum</span>=<span class="hljs-string">&quot;swc&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">aem-fragment</span> <span class="hljs-attr">fragment</span>=<span class="hljs-string">&quot;…&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">aem-fragment</span>&gt;</span>
@@ -58,7 +58,7 @@
 </tr>
 </tbody>
 </table>
-<p>When the fragment variant is <code>plans-v2</code>, additional fields beyond the base plans mapping include <code>shortDescription</code> (slotted to <code>short-description</code> with a mobile accordion toggle) and Spectrum-prefixed badge/border color tokens (<code>spectrum-*-plans</code>).</p>
+<p>When the fragment variant is <code>plans-v2</code>, see <a href="plans-v2.html">Plans v2</a> for <code>shortDescription</code>, stock toggle, legal price, collection layout, and Spectrum-prefixed badge/border tokens.</p>
 <h2 id="fragment-settings" tabindex="-1">Fragment settings <a class="header-anchor" href="#fragment-settings" href="#fragment-settings" title="Permalink to this heading">#</a></h2>
 <p>Same settings as plans cards apply when the underlying variant is from the plans family:</p>
 <table>
