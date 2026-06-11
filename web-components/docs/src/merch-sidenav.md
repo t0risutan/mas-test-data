@@ -8,7 +8,7 @@
 
 On desktop, the sidenav renders as a static aside. On tablet and mobile (`TABLET_DOWN` media query), it switches to a modal dialog opened from the collection header filter button.
 
-See also: [merch-card-collection](merch-card-collection.html), [Catalog Gallery](catalog.html), [Plans Collection Gallery](plans-collection.html).
+See also: [URL hash deeplink](deeplink.html), [merch-card-collection](merch-card-collection.html), [Catalog Gallery](catalog.html), [Plans Collection Gallery](plans-collection.html).
 
 ## Example {#example}
 
@@ -148,18 +148,7 @@ After filtering, the collection listens for `merch-sidenav:select` on the sidena
 
 ## URL hash deeplink {#deeplink}
 
-Sidenav children and the collection share the same hash contract. Components call `pushStateFromComponent()` (from `deeplink.js`) on interaction; the collection's `startDeeplink()` reads the hash and updates its attributes.
-
-| Hash key | Set by | Maps to collection attribute | Notes |
-| --- | --- | --- | --- |
-| `filter` | `merch-sidenav-list` (`deeplink="filter"`) | `filter` | Also accepts legacy `category` key |
-| `types` | `merch-sidenav-checkbox-group` (`deeplink="types"`) | `types` | Comma-separated checkbox `name` values |
-| `search` | `merch-search` (`deeplink="search"`) | `search` | Also used by collection header search |
-| `sort` | Collection header sort menu | `sort` | — |
-| `single_app` | External / query-param migration | `single-app` | Migrated from query string by sidenav list on connect |
-| `page` | Collection "Show more" | `page` | Filter changes reset `page` to `1` |
-
-Hash updates preserve scroll position. Empty values remove the key from the hash.
+Sidenav children write hash keys via `pushStateFromComponent()`; [merch-card-collection](merch-card-collection.html) reads the same keys. See [URL hash deeplink](deeplink.html) for the full contract, supported keys, query-param migration, and edge cases.
 
 ## Events {#events}
 

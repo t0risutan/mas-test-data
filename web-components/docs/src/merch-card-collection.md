@@ -10,7 +10,7 @@ It is typically used with a sibling `merch-sidenav` for category navigation and 
 
 Requires an active [mas-commerce-service](mas-commerce-service.html).
 
-See also: [merch-sidenav](merch-sidenav.html), [Plans Collection Gallery](plans-collection.html), [merch-card](merch-card.html).
+See also: [URL hash deeplink](deeplink.html), [merch-sidenav](merch-sidenav.html), [Plans Collection Gallery](plans-collection.html), [merch-card](merch-card.html).
 
 ## Example {#example}
 
@@ -84,18 +84,9 @@ When `filtered` is set at init (from AEM or markup), `page` resets to `1` and de
 
 ## URL hash deeplink {#deeplink}
 
-Unless `filtered` is set, the collection listens to `hashchange` and reads these hash parameters:
+Unless `filtered` is set, the collection calls `startDeeplink()` on init and reads hash parameters into its reflected attributes (`filter`, `types`, `search`, `sort`, `single-app`, `page`). Sort and pagination changes call `pushState()` from `deeplink.js`.
 
-| Hash key | Maps to attribute | Notes |
-| --- | --- | --- |
-| `filter` or `category` | `filter` | Changing filter resets `page` to `1` |
-| `types` | `types` | |
-| `search` | `search` | Also driven by `merch-search` with `deeplink="search"` |
-| `sort` | `sort` | `authored` clears the hash key |
-| `single_app` | `single-app` | |
-| `page` | `page` | Incremented by "Show more" |
-
-Hash updates preserve scroll position. Sort and pagination changes call `pushState()` from `deeplink.js`.
+See [URL hash deeplink](deeplink.html) for the full hash key reference, writers/readers, query-param migration, and `deeplink.js` API.
 
 ## Events {#events}
 

@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] deeplink / URL hash contract: Shared by collection, search, and sidenav — no docs on supported hash keys
 - [ ] mas-mnemonic + merch-mnemonic-list: Used across express, fries, whats-included — no component pages
 - [ ] catalog collection pattern: `catalog.md` shows isolated cards only — no `merch-card-collection` example
 
@@ -18,6 +17,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] deeplink / URL hash contract: Shared by collection, search, and sidenav — no docs on supported hash keys (completed in deeplink.md)
 - [x] plans-modal: Shipped with attributes and slots but zero usage documentation (completed in plans-modal.md)
 - [x] Express variants (simplified-pricing-express, full-pricing-express): `express.html` gallery only — no slot map or collection setup docs (completed in express.md)
 - [x] mini-compare-chart (+ mweb): Gallery-only — depends on undocumented merch-offer-select, merch-addon, merch-whats-included (completed in minicompare.md, minicomparemweb.md)

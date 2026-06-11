@@ -30,7 +30,7 @@
 <p>The <code>merch-card-collection</code> custom element loads a collection fragment from MAS/Odin, hydrates child <code>merch-card</code> elements, and orchestrates filtering, sorting, search, and pagination across them.</p>
 <p>It is typically used with a sibling <code>merch-sidenav</code> for category navigation and a <code>merch-card-collection-header</code> (created automatically when a sidenav is attached) for search, filter, sort, and result-count UI.</p>
 <p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a>.</p>
-<p>See also: <a href="merch-sidenav.html">merch-sidenav</a>, <a href="plans-collection.html">Plans Collection Gallery</a>, <a href="merch-card.html">merch-card</a>.</p>
+<p>See also: <a href="deeplink.html">URL hash deeplink</a>, <a href="merch-sidenav.html">merch-sidenav</a>, <a href="plans-collection.html">Plans Collection Gallery</a>, <a href="merch-card.html">merch-card</a>.</p>
 <h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
 <pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container plans&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">merch-card-collection</span>&gt;</span>
@@ -151,49 +151,8 @@
 </ol>
 <p>When <code>filtered</code> is set at init (from AEM or markup), <code>page</code> resets to <code>1</code> and deeplink filter changes are ignored.</p>
 <h2 id="deeplink" tabindex="-1">URL hash deeplink <a class="header-anchor" href="#deeplink" href="#deeplink" title="Permalink to this heading">#</a></h2>
-<p>Unless <code>filtered</code> is set, the collection listens to <code>hashchange</code> and reads these hash parameters:</p>
-<table>
-<thead>
-<tr>
-<th>Hash key</th>
-<th>Maps to attribute</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>filter</code> or <code>category</code></td>
-<td><code>filter</code></td>
-<td>Changing filter resets <code>page</code> to <code>1</code></td>
-</tr>
-<tr>
-<td><code>types</code></td>
-<td><code>types</code></td>
-<td></td>
-</tr>
-<tr>
-<td><code>search</code></td>
-<td><code>search</code></td>
-<td>Also driven by <code>merch-search</code> with <code>deeplink=&quot;search&quot;</code></td>
-</tr>
-<tr>
-<td><code>sort</code></td>
-<td><code>sort</code></td>
-<td><code>authored</code> clears the hash key</td>
-</tr>
-<tr>
-<td><code>single_app</code></td>
-<td><code>single-app</code></td>
-<td></td>
-</tr>
-<tr>
-<td><code>page</code></td>
-<td><code>page</code></td>
-<td>Incremented by “Show more”</td>
-</tr>
-</tbody>
-</table>
-<p>Hash updates preserve scroll position. Sort and pagination changes call <code>pushState()</code> from <code>deeplink.js</code>.</p>
+<p>Unless <code>filtered</code> is set, the collection calls <code>startDeeplink()</code> on init and reads hash parameters into its reflected attributes (<code>filter</code>, <code>types</code>, <code>search</code>, <code>sort</code>, <code>single-app</code>, <code>page</code>). Sort and pagination changes call <code>pushState()</code> from <code>deeplink.js</code>.</p>
+<p>See <a href="deeplink.html">URL hash deeplink</a> for the full hash key reference, writers/readers, query-param migration, and <code>deeplink.js</code> API.</p>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>

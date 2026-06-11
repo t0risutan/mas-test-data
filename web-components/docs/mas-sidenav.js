@@ -17,6 +17,7 @@ class MasSidenav extends HTMLElement {
       <a href="/web-components/docs/headless.html">Headless Variant</a>
       <a href="/web-components/docs/merch-card-collection.html">Merch Card Collection</a>
       <a href="/web-components/docs/merch-sidenav.html">Merch Sidenav</a>
+      <a href="/web-components/docs/deeplink.html">URL Hash Deeplink</a>
       <a href="/web-components/docs/merch-offer-select.html">Merch Offer Select</a>
       <a href="/web-components/docs/merch-quantity-select.html">Merch Quantity Select</a>
       <a href="/web-components/docs/merch-addon.html">Merch Addon</a>

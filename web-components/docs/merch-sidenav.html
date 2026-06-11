@@ -29,7 +29,7 @@
 <h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p><code>merch-sidenav</code> is the filter sidebar for <a href="merch-card-collection.html">merch-card-collection</a>. It wraps Spectrum navigation (<code>sp-sidenav</code>), optional search (<code>merch-search</code>), and optional type tag checkboxes (<code>merch-sidenav-checkbox-group</code>). Selections update the URL hash; the collection reads the same hash keys to filter cards.</p>
 <p>On desktop, the sidenav renders as a static aside. On tablet and mobile (<code>TABLET_DOWN</code> media query), it switches to a modal dialog opened from the collection header filter button.</p>
-<p>See also: <a href="merch-card-collection.html">merch-card-collection</a>, <a href="catalog.html">Catalog Gallery</a>, <a href="plans-collection.html">Plans Collection Gallery</a>.</p>
+<p>See also: <a href="deeplink.html">URL hash deeplink</a>, <a href="merch-card-collection.html">merch-card-collection</a>, <a href="catalog.html">Catalog Gallery</a>, <a href="plans-collection.html">Plans Collection Gallery</a>.</p>
 <h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
 <p>Catalog-style sidenav with category list, type checkboxes, and in-sidenav search (desktop only — search is hidden inside the modal and rendered in the collection header instead).</p>
 <pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container catalog&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;gap:30px;&quot;</span>&gt;</span>
@@ -282,56 +282,7 @@
 <p>The header filter button calls <code>collection.openFilters()</code> → <code>sidenav.showModal()</code>.</p>
 <p>After filtering, the collection listens for <code>merch-sidenav:select</code> on the sidenav to refresh result-count placeholders via <code>merch-card-collection:literals-changed</code>. The <code>filter</code> detail value comes from <code>sidenav.filters.selectedText</code> (the first <code>merch-sidenav-list</code>).</p>
 <h2 id="deeplink" tabindex="-1">URL hash deeplink <a class="header-anchor" href="#deeplink" href="#deeplink" title="Permalink to this heading">#</a></h2>
-<p>Sidenav children and the collection share the same hash contract. Components call <code>pushStateFromComponent()</code> (from <code>deeplink.js</code>) on interaction; the collection’s <code>startDeeplink()</code> reads the hash and updates its attributes.</p>
-<table>
-<thead>
-<tr>
-<th>Hash key</th>
-<th>Set by</th>
-<th>Maps to collection attribute</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>filter</code></td>
-<td><code>merch-sidenav-list</code> (<code>deeplink=&quot;filter&quot;</code>)</td>
-<td><code>filter</code></td>
-<td>Also accepts legacy <code>category</code> key</td>
-</tr>
-<tr>
-<td><code>types</code></td>
-<td><code>merch-sidenav-checkbox-group</code> (<code>deeplink=&quot;types&quot;</code>)</td>
-<td><code>types</code></td>
-<td>Comma-separated checkbox <code>name</code> values</td>
-</tr>
-<tr>
-<td><code>search</code></td>
-<td><code>merch-search</code> (<code>deeplink=&quot;search&quot;</code>)</td>
-<td><code>search</code></td>
-<td>Also used by collection header search</td>
-</tr>
-<tr>
-<td><code>sort</code></td>
-<td>Collection header sort menu</td>
-<td><code>sort</code></td>
-<td>—</td>
-</tr>
-<tr>
-<td><code>single_app</code></td>
-<td>External / query-param migration</td>
-<td><code>single-app</code></td>
-<td>Migrated from query string by sidenav list on connect</td>
-</tr>
-<tr>
-<td><code>page</code></td>
-<td>Collection “Show more”</td>
-<td><code>page</code></td>
-<td>Filter changes reset <code>page</code> to <code>1</code></td>
-</tr>
-</tbody>
-</table>
-<p>Hash updates preserve scroll position. Empty values remove the key from the hash.</p>
+<p>Sidenav children write hash keys via <code>pushStateFromComponent()</code>; <a href="merch-card-collection.html">merch-card-collection</a> reads the same keys. See <a href="deeplink.html">URL hash deeplink</a> for the full contract, supported keys, query-param migration, and edge cases.</p>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
