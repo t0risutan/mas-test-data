@@ -10,7 +10,7 @@ It is typically used with a sibling `merch-sidenav` for category navigation and 
 
 Requires an active [mas-commerce-service](mas-commerce-service.html).
 
-See also: [Plans Collection Gallery](plans-collection.html), [merch-card](merch-card.html).
+See also: [merch-sidenav](merch-sidenav.html), [Plans Collection Gallery](plans-collection.html), [merch-card](merch-card.html).
 
 ## Example {#example}
 
@@ -145,6 +145,8 @@ Created by `attachSidenav()` or manually. Transferred from collection children w
 Result slots support `data-placeholder` attributes (`resultCount`, `searchTerm`, `filter`) that the header updates from `merch-card-collection:literals-changed`.
 
 ## Sidenav integration {#sidenav}
+
+See [merch-sidenav](merch-sidenav.html) for sidenav markup, modal behavior, hash deeplink keys, and AEM `tagFilters` → checkbox group mapping.
 
 On `connectedCallback`, the collection looks for a sibling `merch-sidenav` on its parent element. Call `attachSidenav(sidenav, append)` to:
 

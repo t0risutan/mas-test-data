@@ -30,7 +30,7 @@
 <p>The <code>merch-card-collection</code> custom element loads a collection fragment from MAS/Odin, hydrates child <code>merch-card</code> elements, and orchestrates filtering, sorting, search, and pagination across them.</p>
 <p>It is typically used with a sibling <code>merch-sidenav</code> for category navigation and a <code>merch-card-collection-header</code> (created automatically when a sidenav is attached) for search, filter, sort, and result-count UI.</p>
 <p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a>.</p>
-<p>See also: <a href="plans-collection.html">Plans Collection Gallery</a>, <a href="merch-card.html">merch-card</a>.</p>
+<p>See also: <a href="merch-sidenav.html">merch-sidenav</a>, <a href="plans-collection.html">Plans Collection Gallery</a>, <a href="merch-card.html">merch-card</a>.</p>
 <h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
 <pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container plans&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">merch-card-collection</span>&gt;</span>
@@ -333,6 +333,7 @@
 </table>
 <p>Result slots support <code>data-placeholder</code> attributes (<code>resultCount</code>, <code>searchTerm</code>, <code>filter</code>) that the header updates from <code>merch-card-collection:literals-changed</code>.</p>
 <h2 id="sidenav" tabindex="-1">Sidenav integration <a class="header-anchor" href="#sidenav" href="#sidenav" title="Permalink to this heading">#</a></h2>
+<p>See <a href="merch-sidenav.html">merch-sidenav</a> for sidenav markup, modal behavior, hash deeplink keys, and AEM <code>tagFilters</code> → checkbox group mapping.</p>
 <p>On <code>connectedCallback</code>, the collection looks for a sibling <code>merch-sidenav</code> on its parent element. Call <code>attachSidenav(sidenav, append)</code> to:</p>
 <ol>
 <li>Optionally prepend the sidenav to the parent.</li>
