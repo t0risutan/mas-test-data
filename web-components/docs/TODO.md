@@ -1,7 +1,6 @@
 ## TODO
 
 ### High
-- [ ] merch-card commerce attributes (incomplete in merch-card.md): `checkbox-label`/`toggleStockOffer()`, `addon-offers`/`addon-title`, `secure-label`, `action-menu`, `plan-type`, `storage`, `custom-hr`, `detail-bg` documented in attributes table but without usage context
 
 ### Medium
 - [ ] merch-addon: No docs for addon checkbox used in plans, plans-v2, product, mini-compare — missing `plan-type`, `custom-checkbox`, `checked`, `change` event, and `getOsi()` checkout mutation
@@ -29,6 +28,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] merch-card commerce attributes (incomplete in merch-card.md): `checkbox-label`/`toggleStockOffer()`, `addon-offers`/`addon-title`, `secure-label`, `action-menu`, `plan-type`, `storage`, `custom-hr`, `detail-bg` documented in attributes table but without usage context (completed in merch-card.md)
 - [x] plans-v2 variant: Listed in merch-card.md only; no variant guide for `PLANS_V2_AEM_FRAGMENT_MAPPING`, mobile accordion, stock toggle, or `collectionOptions` (completed in plans-v2.md)
 - [x] plans / catalog / product / segment / commerce galleries: Gallery-only pages with no variant slot maps or AEM fragment field references — developers cannot infer authoring contracts from screenshots (completed in plans.md, catalog.md, product.md, segment.md, commerce.md)
 - [x] merch-sidenav + merch-search: No docs though collections auto-wire them — missing `autoclose`/`modal`, deeplink hash sync, and AEM-driven `tagFilters` → checkbox groups (completed in merch-sidenav.md)

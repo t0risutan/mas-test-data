@@ -214,6 +214,76 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 <td>mas.js</td>
 </tr>
 <tr>
+<td><code>checkbox-label</code></td>
+<td>Label text for the stock trial checkbox in plans layouts</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>secure-label</code></td>
+<td>Secure-transaction text rendered above footer CTAs</td>
+<td>—</td>
+<td></td>
+<td>mas.js / hydrate.js</td>
+</tr>
+<tr>
+<td><code>action-menu</code></td>
+<td>Enables catalog action-menu behavior; set during hydration when short description is present</td>
+<td>—</td>
+<td></td>
+<td>hydrate.js</td>
+</tr>
+<tr>
+<td><code>action-menu-label</code></td>
+<td>Accessible label for the catalog action-menu control</td>
+<td><code>More options</code> (when set by hydration)</td>
+<td></td>
+<td>hydrate.js</td>
+</tr>
+<tr>
+<td><code>plan-type</code></td>
+<td>PUF, ABM, or M2M plan type hint; synced to child <code>merch-addon</code> after price settles</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>addon-title</code></td>
+<td>Declared attribute; not read by variant layouts or hydration in the current codebase</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>addon-offers</code></td>
+<td>Declared attribute; not read by variant layouts or hydration in the current codebase</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td>Fragment storage option; reflected on the element (Studio preview maps <code>storageOption</code>)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>custom-hr</code></td>
+<td>When present, suppresses the default <code>&lt;hr /&gt;</code> before the footer in the inline-heading layout</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>detail-bg</code></td>
+<td>CSS background value for the <code>detail-bg</code> region on evergreen image/special-offers cards</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
 <td><code>height-sync</code></td>
 <td>When <code>true</code>, re-measures card height after layout for Express pricing variants</td>
 <td>—</td>
@@ -289,6 +359,71 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </tbody>
 </table>
 <p><code>compatVersion</code> is assigned from fragment fields during hydration and controls promotion-code inheritance on child <code>inline-price</code> and checkout elements.</p>
+<h2 id="commerce-attributes" tabindex="-1">Commerce attributes <a class="header-anchor" href="#commerce-attributes" href="#commerce-attributes" title="Permalink to this heading">#</a></h2>
+<p>These attributes control stock toggles, secure checkout labels, expandable menus, addon checkout mutation, and layout chrome. Variant-specific slot and hydration details live in <a href="plans.html">plans</a>, <a href="plans-v2.html">plans-v2</a>, <a href="catalog.html">catalog</a>, <a href="product.html">product</a>, and <a href="image.html">image</a>.</p>
+<h3 id="stock-toggle" tabindex="-1">Stock toggle (<code>checkbox-label</code>, <code>stock-offer-osis</code>) <a class="header-anchor" href="#stock-toggle" href="#stock-toggle" title="Permalink to this heading">#</a></h3>
+<p>When <code>checkbox-label</code> is present, the <code>plans</code> and <code>plans-v2</code> layouts render a stock checkbox in the card body (<code>#stock-checkbox</code>). The label text comes from the attribute value.</p>
+<p><code>toggleStockOffer()</code> in <code>merch-card.js</code> runs on checkbox <code>@change</code>. It requires both attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Format</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkbox-label</code></td>
+<td>Plain text</td>
+<td>Checkbox label rendered in the body.</td>
+</tr>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated PUF, ABM, M2M offer IDs</td>
+<td>Parsed into <code>{ PUF, ABM, M2M }</code>. The OSI matching each checkout link’s resolved <code>planType</code> is appended to or removed from <code>data-wcs-osi</code> when the checkbox is toggled.</td>
+</tr>
+</tbody>
+</table>
+<p>Neither attribute is set by <code>hydrate.js</code>. Set them on the element in markup, or map fragment fields such as <code>checkboxLabel</code> / <code>stockOfferOsis</code> in your integration (as Studio preview does).</p>
+<p>See <a href="plans-v2.html#stock-toggle">Stock toggle in plans-v2</a> for a markup example.</p>
+<h3 id="secure-label" tabindex="-1">Secure transaction label (<code>secure-label</code>) <a class="header-anchor" href="#secure-label" href="#secure-label" title="Permalink to this heading">#</a></h3>
+<p>When set, variant layouts render a <code>.secure-transaction-label</code> span above footer CTAs via <code>VariantLayout.secureLabelFooter</code>.</p>
+<p>During hydration, <code>processSecureLabel()</code> sets the attribute when <strong>both</strong> the variant mapping includes <code>secureLabel: true</code> and the fragment <code>settings.secureLabel</code> string is present. Variants with this mapping include <code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>segment</code>, <code>commerce</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code>.</p>
+<p>On the <code>product</code> variant, when two checkout CTAs and a secure label are present, the footer switches to a column layout (<code>displayFooterElementsInColumn()</code>).</p>
+<h3 id="action-menu" tabindex="-1">Action menu (<code>action-menu</code>, <code>action-menu-label</code>) <a class="header-anchor" href="#action-menu" href="#action-menu" title="Permalink to this heading">#</a></h3>
+<p>When a fragment includes <code>shortDescription</code>, <code>processDescription()</code> in <code>hydrate.js</code> sets <code>action-menu=&quot;true&quot;</code> and defaults <code>action-menu-label</code> to <code>More options</code> unless <code>actionMenuLabel</code> is authored on the fragment.</p>
+<p>The interactive action-menu UI (toggle control plus <code>action-menu-content</code> slot) is implemented only on the <strong>catalog</strong> variant. On mobile and tablet, when <code>action-menu</code> is set, the menu icon stays visible instead of appearing only on hover.</p>
+<p>Opening the menu dispatches <code>merch-card:action-menu-toggle</code> with <code>{ card, type: 'action-menu' }</code> in the event detail. See <a href="catalog.html">catalog</a> for the AEM field mapping and slot layout.</p>
+<p>On <code>plans-v2</code>, hydration also sets <code>action-menu</code> when short description content is present, but that variant renders short description with its own accordion toggle rather than the catalog action-menu control.</p>
+<h3 id="plan-type" tabindex="-1">Plan type (<code>plan-type</code>) <a class="header-anchor" href="#plan-type" href="#plan-type" title="Permalink to this heading">#</a></h3>
+<p>Reflected attribute on <code>merch-card</code>. Variant AEM mappings may include <code>planType: true</code> to indicate plan-type-aware pricing, but <code>hydrate.js</code> does not copy a fragment field onto this attribute.</p>
+<p>After hydration, <code>product</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code> call <code>adjustAddon()</code> to copy the main price’s resolved <code>planType</code> onto the slotted <code>merch-addon</code>. If the price has not settled yet, <code>this.card.planType</code> is used as a fallback when authored on the element.</p>
+<p>For offer-picker flows, plan type is managed on <code>merch-offer-select</code> and <code>merch-offer</code> instead — see <a href="merch-offer-select.html">merch-offer-select</a>.</p>
+<h3 id="addon-checkout" tabindex="-1">Addon checkout mutation <a class="header-anchor" href="#addon-checkout" href="#addon-checkout" title="Permalink to this heading">#</a></h3>
+<p>When a slotted <code>merch-addon</code> fires a <code>change</code> event, <code>merch-card.changeHandler()</code> calls <code>toggleAddon()</code>. That method:</p>
+<ol>
+<li>Delegates to the variant layout’s <code>toggleAddon()</code> hook when defined (for example, <code>product</code> swaps the heading price between free and addon pricing).</li>
+<li>Updates every footer and description checkout link: reads <code>planType</code> and <code>offerType</code> from the settled link value, calls <code>merchAddon.getOsi(planType, offerType)</code>, and adds or removes that OSI from <code>data-wcs-osi</code> based on <code>merchAddon.checked</code>.</li>
+</ol>
+<p><code>handleAddonAndQuantityUpdate()</code> listens for <code>merch-addon-and-quantity:update</code> and can sync the addon checkbox state when a modal checkout returns updated line items.</p>
+<h3 id="addon-metadata" tabindex="-1"><code>addon-title</code> and <code>addon-offers</code> <a class="header-anchor" href="#addon-metadata" href="#addon-metadata" title="Permalink to this heading">#</a></h3>
+<p><code>addon-title</code> and <code>addon-offers</code> are declared Lit properties on <code>merch-card</code>, but no variant layout or hydration step reads them in the current codebase. Addon UI and pricing come from the slotted <code>merch-addon</code> element (hydrated from the fragment <code>addon</code> field or <code>settings.addon</code>).</p>
+<h3 id="storage" tabindex="-1">Storage option (<code>storage</code>) <a class="header-anchor" href="#storage" href="#storage" title="Permalink to this heading">#</a></h3>
+<p>Reflected string attribute. Studio preview maps the fragment field <code>storageOption</code> to <code>storage</code> on the preview card. No variant layout in <code>web-components/src/variants/</code> reads this attribute today; it is available for external styling or future storage-picker integration alongside <code>merch-offer-select</code>.</p>
+<h3 id="custom-hr" tabindex="-1">Custom horizontal rule (<code>custom-hr</code>) <a class="header-anchor" href="#custom-hr" href="#custom-hr" title="Permalink to this heading">#</a></h3>
+<p>Boolean attribute. When present, the <strong>inline-heading</strong> layout omits the default <code>&lt;hr /&gt;</code> between the body and footer (<code>inline-heading.js</code>). Other variants ignore this attribute.</p>
+<h3 id="detail-bg" tabindex="-1">Detail background (<code>detail-bg</code>) <a class="header-anchor" href="#detail-bg" href="#detail-bg" title="Permalink to this heading">#</a></h3>
+<p>CSS background value applied to <code>.detail-bg-container</code> on <strong>image</strong> and <strong>special-offers</strong> cards when the element also has the <code>intro-pricing</code> class (the <code>evergreen</code> layout branch in those variants). Content slotted to <code>detail-bg</code> renders inside that container.</p>
+<p>When <code>intro-pricing</code> is absent, those variants render a standard <code>&lt;hr /&gt;</code> and footer instead of the detail-background region.</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;image&quot;</span>
+  <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;intro-pricing&quot;</span>
+  <span class="hljs-attr">detail-bg</span>=<span class="hljs-string">&quot;linear-gradient(135deg, #fff 0%, #eee 100%)&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;detail-bg&quot;</span>&gt;</span>Detail background content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>

@@ -116,6 +116,16 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 | `filters` | Collection filter key and sort order (`key:order:size` comma-separated) | — | | mas.js |
 | `types` | Comma-separated card type tags used by collection layouts | — | | mas.js |
 | `stock-offer-osis` | Comma-separated PUF, ABM, and M2M offer selector IDs for stock UI | — | | mas.js |
+| `checkbox-label` | Label text for the stock trial checkbox in plans layouts | — | | mas.js |
+| `secure-label` | Secure-transaction text rendered above footer CTAs | — | | mas.js / hydrate.js |
+| `action-menu` | Enables catalog action-menu behavior; set during hydration when short description is present | — | | hydrate.js |
+| `action-menu-label` | Accessible label for the catalog action-menu control | `More options` (when set by hydration) | | hydrate.js |
+| `plan-type` | PUF, ABM, or M2M plan type hint; synced to child `merch-addon` after price settles | — | | mas.js |
+| `addon-title` | Declared attribute; not read by variant layouts or hydration in the current codebase | — | | mas.js |
+| `addon-offers` | Declared attribute; not read by variant layouts or hydration in the current codebase | — | | mas.js |
+| `storage` | Fragment storage option; reflected on the element (Studio preview maps `storageOption`) | — | | mas.js |
+| `custom-hr` | When present, suppresses the default `<hr />` before the footer in the inline-heading layout | — | | mas.js |
+| `detail-bg` | CSS background value for the `detail-bg` region on evergreen image/special-offers cards | — | | mas.js |
 | `height-sync` | When `true`, re-measures card height after layout for Express pricing variants | — | | mas.js |
 | `aria-selected` | Reflects selection state in segmented layouts (`selected` property) | `false` | | mas.js |
 | `loading` | Fragment loading strategy passed to nested `aem-fragment` (`lazy` default) | `lazy` | | mas.js |
@@ -156,6 +166,88 @@ Registered in `mas.js` (CCD / Adobe Home surfaces; not in the core variant regis
 | `gradient-border` | Enables gradient border on Express and Adobe Home variants (set from fragment hydration or authored markup) | — |
 
 `compatVersion` is assigned from fragment fields during hydration and controls promotion-code inheritance on child `inline-price` and checkout elements.
+
+## Commerce attributes {#commerce-attributes}
+
+These attributes control stock toggles, secure checkout labels, expandable menus, addon checkout mutation, and layout chrome. Variant-specific slot and hydration details live in [plans](plans.html), [plans-v2](plans-v2.html), [catalog](catalog.html), [product](product.html), and [image](image.html).
+
+### Stock toggle (`checkbox-label`, `stock-offer-osis`) {#stock-toggle}
+
+When `checkbox-label` is present, the `plans` and `plans-v2` layouts render a stock checkbox in the card body (`#stock-checkbox`). The label text comes from the attribute value.
+
+`toggleStockOffer()` in `merch-card.js` runs on checkbox `@change`. It requires both attributes:
+
+| Attribute | Format | Effect |
+| --- | --- | --- |
+| `checkbox-label` | Plain text | Checkbox label rendered in the body. |
+| `stock-offer-osis` | Comma-separated PUF, ABM, M2M offer IDs | Parsed into `{ PUF, ABM, M2M }`. The OSI matching each checkout link's resolved `planType` is appended to or removed from `data-wcs-osi` when the checkbox is toggled. |
+
+Neither attribute is set by `hydrate.js`. Set them on the element in markup, or map fragment fields such as `checkboxLabel` / `stockOfferOsis` in your integration (as Studio preview does).
+
+See [Stock toggle in plans-v2](plans-v2.html#stock-toggle) for a markup example.
+
+### Secure transaction label (`secure-label`) {#secure-label}
+
+When set, variant layouts render a `.secure-transaction-label` span above footer CTAs via `VariantLayout.secureLabelFooter`.
+
+During hydration, `processSecureLabel()` sets the attribute when **both** the variant mapping includes `secureLabel: true` and the fragment `settings.secureLabel` string is present. Variants with this mapping include `plans`, `plans-v2`, `product`, `segment`, `commerce`, `mini-compare-chart`, and `mini-compare-chart-mweb`.
+
+On the `product` variant, when two checkout CTAs and a secure label are present, the footer switches to a column layout (`displayFooterElementsInColumn()`).
+
+### Action menu (`action-menu`, `action-menu-label`) {#action-menu}
+
+When a fragment includes `shortDescription`, `processDescription()` in `hydrate.js` sets `action-menu="true"` and defaults `action-menu-label` to `More options` unless `actionMenuLabel` is authored on the fragment.
+
+The interactive action-menu UI (toggle control plus `action-menu-content` slot) is implemented only on the **catalog** variant. On mobile and tablet, when `action-menu` is set, the menu icon stays visible instead of appearing only on hover.
+
+Opening the menu dispatches `merch-card:action-menu-toggle` with `{ card, type: 'action-menu' }` in the event detail. See [catalog](catalog.html) for the AEM field mapping and slot layout.
+
+On `plans-v2`, hydration also sets `action-menu` when short description content is present, but that variant renders short description with its own accordion toggle rather than the catalog action-menu control.
+
+### Plan type (`plan-type`) {#plan-type}
+
+Reflected attribute on `merch-card`. Variant AEM mappings may include `planType: true` to indicate plan-type-aware pricing, but `hydrate.js` does not copy a fragment field onto this attribute.
+
+After hydration, `product`, `mini-compare-chart`, and `mini-compare-chart-mweb` call `adjustAddon()` to copy the main price's resolved `planType` onto the slotted `merch-addon`. If the price has not settled yet, `this.card.planType` is used as a fallback when authored on the element.
+
+For offer-picker flows, plan type is managed on `merch-offer-select` and `merch-offer` instead — see [merch-offer-select](merch-offer-select.html).
+
+### Addon checkout mutation {#addon-checkout}
+
+When a slotted `merch-addon` fires a `change` event, `merch-card.changeHandler()` calls `toggleAddon()`. That method:
+
+1. Delegates to the variant layout's `toggleAddon()` hook when defined (for example, `product` swaps the heading price between free and addon pricing).
+2. Updates every footer and description checkout link: reads `planType` and `offerType` from the settled link value, calls `merchAddon.getOsi(planType, offerType)`, and adds or removes that OSI from `data-wcs-osi` based on `merchAddon.checked`.
+
+`handleAddonAndQuantityUpdate()` listens for `merch-addon-and-quantity:update` and can sync the addon checkbox state when a modal checkout returns updated line items.
+
+### `addon-title` and `addon-offers` {#addon-metadata}
+
+`addon-title` and `addon-offers` are declared Lit properties on `merch-card`, but no variant layout or hydration step reads them in the current codebase. Addon UI and pricing come from the slotted `merch-addon` element (hydrated from the fragment `addon` field or `settings.addon`).
+
+### Storage option (`storage`) {#storage}
+
+Reflected string attribute. Studio preview maps the fragment field `storageOption` to `storage` on the preview card. No variant layout in `web-components/src/variants/` reads this attribute today; it is available for external styling or future storage-picker integration alongside `merch-offer-select`.
+
+### Custom horizontal rule (`custom-hr`) {#custom-hr}
+
+Boolean attribute. When present, the **inline-heading** layout omits the default `<hr />` between the body and footer (`inline-heading.js`). Other variants ignore this attribute.
+
+### Detail background (`detail-bg`) {#detail-bg}
+
+CSS background value applied to `.detail-bg-container` on **image** and **special-offers** cards when the element also has the `intro-pricing` class (the `evergreen` layout branch in those variants). Content slotted to `detail-bg` renders inside that container.
+
+When `intro-pricing` is absent, those variants render a standard `<hr />` and footer instead of the detail-background region.
+
+```html {.demo}
+<merch-card
+  variant="image"
+  class="intro-pricing"
+  detail-bg="linear-gradient(135deg, #fff 0%, #eee 100%)"
+>
+  <div slot="detail-bg">Detail background content</div>
+</merch-card>
+```
 
 ### Properties
 
