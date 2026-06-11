@@ -24,6 +24,142 @@
     <aside is="mas-sidenav"></aside>
 <main>
 <sp-theme color="light" scale="medium">
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>Catalog cards use <code>variant=&quot;catalog&quot;</code> (explicit in this gallery or inferred from the fragment <code>variant</code> field). Mapping: <code>CATALOG_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/catalog.js</code>.</p>
+<p>Catalog uses attribute-based badges (<code>badge: true</code> without a slot config) rather than the slotted <code>merch-badge</code> pattern used on plans cards.</p>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Must be <code>catalog</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Title; shares slot with prices.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Price HTML with <code>inline-price</code> elements.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>shortDescription</code></td>
+<td><code>action-menu-content</code></td>
+<td><code>div</code></td>
+<td>When present, sets <code>action-menu=&quot;true&quot;</code> and default <code>action-menu-label=&quot;More options&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>actionMenuLabel</code></td>
+<td><code>action-menu-label</code> attribute</td>
+<td>—</td>
+<td>Overrides default action-menu label.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>Badge attributes</td>
+<td>—</td>
+<td>Sets <code>badge-text</code>, <code>badge-color</code>, and <code>badge-background-color</code> (not a slotted badge).</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td>Card border styling</td>
+<td>—</td>
+<td>Via <code>processBorderColor</code> when authored.</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code> attribute</td>
+<td>—</td>
+<td><code>wide</code> or <code>super-wide</code>.</td>
+</tr>
+<tr>
+<td><code>mnemonicIcon</code>, <code>mnemonicAlt</code>, <code>mnemonicLink</code></td>
+<td><code>icons</code></td>
+<td><code>merch-icon</code></td>
+<td>Icon size <code>l</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer CTA links.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<p>Layout from <code>Catalog.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icons</code></td>
+<td>Body top</td>
+<td>Mnemonics beside badge.</td>
+</tr>
+<tr>
+<td><code>action-menu-content</code></td>
+<td>Body</td>
+<td>Expandable menu content; toggled by the action-menu control.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Body</td>
+<td>Title and/or prices.</td>
+</tr>
+<tr>
+<td><code>heading-m</code>, <code>body-xxs</code></td>
+<td>Body</td>
+<td>Optional authored slots (not in AEM mapping).</td>
+</tr>
+<tr>
+<td><code>promo-text</code>, <code>callout-content</code></td>
+<td>Body</td>
+<td>Order depends on <code>promo-bottom</code> class on the card.</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs.</td>
+</tr>
+</tbody>
+</table>
 <div class="catalog-gallery-content">
   <h1 id="catalog-gallery">Catalog Gallery</h1>
   <div class="three-merch-cards catalog">

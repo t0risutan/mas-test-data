@@ -1,3 +1,74 @@
+## Overview {#overview}
+
+Plans cards load from AEM fragments. The fragment `variant` field selects one of three mappings in `web-components/src/variants/plans.js`. Gallery examples omit an explicit `variant` attribute on `<merch-card>` — hydration sets it from the fragment.
+
+See [merch-card](merch-card.html) for shared attributes and events, and [merch-quantity-select](merch-quantity-select.html) for quantity UI referenced by the `quantitySelect` field.
+
+## Variants {#variants}
+
+| Variant | Mapping constant | Gallery section |
+| --- | --- | --- |
+| `plans` | `PLANS_AEM_FRAGMENT_MAPPING` | Individual and business cards |
+| `plans-education` | `PLANS_EDUCATION_AEM_FRAGMENT_MAPPING` | Education cards |
+| `plans-students` | `PLANS_STUDENTS_AEM_FRAGMENT_MAPPING` | Student pricing (not shown in this gallery) |
+
+Education omits `whatsIncluded`, `size`, and `secureLabel` from the base mapping and places the title in `heading-s` instead of `heading-xs`. Students omits `subtitle`, `whatsIncluded`, `size`, and `quantitySelect`.
+
+## AEM fragment fields {#aem-fields}
+
+During hydration (`hydrate.js`), each field below is mapped through `PLANS_*_AEM_FRAGMENT_MAPPING`:
+
+| AEM field | Slot / target | Tag | Notes |
+| --- | --- | --- | --- |
+| `variant` | `merch-card.variant` | — | Required. |
+| `cardName` | `name` attribute | — | Card identifier for analytics and collections. |
+| `cardTitle` | `heading-xs` (`heading-s` for education) | `h3` | Plan title. |
+| `subtitle` | `subtitle` | `p` | Not used by education or students variants. |
+| `prices` | `heading-m` | `p` | HTML with `inline-price` elements. |
+| `promoText` | `promo-text` | `p` | |
+| `description` | `body-xs` | `div` | Checkout links in description HTML are converted to buttons. |
+| `callout` | `callout-content` | `div` | |
+| `whatsIncluded` | `whats-included` | `div` | `merch-whats-included` markup. Not used by education or students. |
+| `quantitySelect` | `quantity-select` | `div` | Serialized `merch-quantity-select` HTML. Not used by students. |
+| `addon` | `addon` | — | Creates `merch-addon` from field HTML or `settings.addon`. |
+| `badge` | `badge` | `div` | Plain text is wrapped in `merch-badge`; HTML passthrough when already tagged. Default background `spectrum-yellow-300-plans`. |
+| `borderColor` | `border-color` attribute / CSS variable | — | Allowed values listed in `allowedBorderColors`. |
+| `size` | `size` attribute | — | `wide` or `super-wide`. Not used by education or students. |
+| `mnemonicIcon`, `mnemonicAlt`, `mnemonicLink` | `icons` | `merch-icon` | Parallel arrays; icon size `l`. |
+| `ctas` | `footer` | `div` | Footer links hydrated as Consonant buttons (`style: 'consonant'` sets the `consonant` attribute). |
+
+## Fragment settings {#fragment-settings}
+
+| Setting | Effect |
+| --- | --- |
+| `secureLabel` | Sets `secure-label` when the variant mapping includes `secureLabel: true` (not education). |
+| `displayPlanType` | Controls plan-type text in legal price clones. |
+| `addon` | Fallback HTML for `merch-addon` when `fields.addon` is absent. |
+| `quantitySelect` | Fallback markup when `fields.quantitySelect` is absent. |
+| `hideTrialCTAs` | Removes trial CTAs from the footer during hydration. |
+
+Stock checkbox UI (`checkbox-label`, `stock-offer-osis`) is rendered by the plans layout when those attributes are present on `merch-card`; they are not set in `hydrate.js` from fragment fields.
+
+## Slots {#slots}
+
+Layout from `Plans.renderLayout()`:
+
+| Slot | Region | Notes |
+| --- | --- | --- |
+| `icons` | Body | Product mnemonics. |
+| `heading-xs` / `heading-s` | Body | Title (`heading-s` for education). |
+| `subtitle` | Body | |
+| `heading-m` | Body | Main price. |
+| `promo-text` | Body | |
+| `body-xs` | Body | Description. |
+| `whats-included` | Body | |
+| `callout-content` | Body | |
+| `quantity-select` | Body | |
+| — | Body | Stock checkbox when `checkbox-label` is set. |
+| `addon` | Body or footer | Moves to footer on `super-wide` at desktop widths. |
+| `badge` | Body | |
+| `footer` | Footer | CTAs and secure-transaction label. |
+
 <div class="plans-gallery-content">
   <h1 id="plans-gallery">Plans Gallery</h1>
   <a class="plans-link" target="_blank" href="https://main--milo--adobecom.aem.page/drafts/nala/features/commerce/plans">Nala Test Plans collection page ↗</a>
