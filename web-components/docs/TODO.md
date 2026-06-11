@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] mini-compare-chart (+ mweb): Gallery-only — depends on undocumented merch-offer-select, merch-addon, merch-whats-included
 - [ ] Express variants (simplified-pricing-express, full-pricing-express): `express.html` gallery only — no slot map or collection setup docs
 - [ ] plans-modal: Shipped with attributes and slots but zero usage documentation
 - [ ] deeplink / URL hash contract: Shared by collection, search, and sidenav — no docs on supported hash keys
@@ -21,6 +20,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] mini-compare-chart (+ mweb): Gallery-only — depends on undocumented merch-offer-select, merch-addon, merch-whats-included (completed in minicompare.md, minicomparemweb.md)
 - [x] media + inline-heading variants: Name-only in merch-card.md — missing slot maps and layout rules (completed in merch-card.md)
 - [x] fries variant: `fries.html` gallery exists but absent from sidenav and build-docs.sh — no `FRIES_AEM_FRAGMENT_MAPPING` docs (completed in fries.md)
 - [x] headless variant: No slot guide for `HEADLESS_AEM_FRAGMENT_MAPPING` label/value rows (completed in headless.md)
