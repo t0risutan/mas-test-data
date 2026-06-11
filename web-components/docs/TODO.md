@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] merch-badge: No element page — only indirect mention via merch-card badge attributes
 - [ ] merch-icon: No element page beyond a single usage example — missing `size`, `href`, `loading`, tooltip fallback
 - [ ] headless variant: No slot guide for `HEADLESS_AEM_FRAGMENT_MAPPING` label/value rows
 - [ ] fries variant: `fries.html` gallery exists but absent from sidenav and build-docs.sh — no `FRIES_AEM_FRAGMENT_MAPPING` docs
@@ -26,6 +25,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] merch-badge: No element page — only indirect mention via merch-card badge attributes (completed in merch-badge.md)
 - [x] merch-whats-included: No docs for expandable feature list — missing slots, `has-bullets`, `mobileRows`, and `hide-see-more-elements` event (completed in merch-whats-included.md)
 - [x] merch-addon: No docs for addon checkbox used in plans, plans-v2, product, mini-compare — missing `plan-type`, `custom-checkbox`, `checked`, `change` event, and `getOsi()` checkout mutation (completed in merch-addon.md)
 - [x] merch-card commerce attributes (incomplete in merch-card.md): `checkbox-label`/`toggleStockOffer()`, `addon-offers`/`addon-title`, `secure-label`, `action-menu`, `plan-type`, `storage`, `custom-hr`, `detail-bg` documented in attributes table but without usage context (completed in merch-card.md)
