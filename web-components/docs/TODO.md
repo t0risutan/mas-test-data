@@ -5,7 +5,6 @@
 ### Medium
 
 ### Low
-- [ ] mini variant: One-line mention only — `MINI_AEM_FRAGMENT_MAPPING` slots undocumented
 - [ ] image + special-offers galleries: Gallery-only — missing slot reference tables
 - [ ] merch-secure-transaction: Small label/tooltip element with no page
 - [ ] mas-field: Headless AEM field renderer — no docs
@@ -14,6 +13,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] mini variant: One-line mention only — `MINI_AEM_FRAGMENT_MAPPING` slots undocumented (completed in ccd-mini.md)
 - [x] catalog collection pattern: `catalog.md` shows isolated cards only — no `merch-card-collection` example (completed in catalog.md)
 - [x] mas-mnemonic + merch-mnemonic-list: Used across express, fries, whats-included — no component pages (completed in mas-mnemonic.md, merch-mnemonic-list.md)
 - [x] deeplink / URL hash contract: Shared by collection, search, and sidenav — no docs on supported hash keys (completed in deeplink.md)

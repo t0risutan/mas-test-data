@@ -151,7 +151,7 @@ Registered in `variants/variants.js` (set `variant` on the element or let AEM fr
 - `special-offers`
 - `simplified-pricing-express`
 - `full-pricing-express`
-- `mini` (headless data for custom rendering in React, Vue, or vanilla JS)
+- `mini` (headless data for custom rendering in React, Vue, or vanilla JS — see [CCD Mini](ccd-mini.html))
 - `fries`
 
 Registered in `mas.js` (CCD / Adobe Home surfaces; not in the core variant registry):

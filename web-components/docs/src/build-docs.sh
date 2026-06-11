@@ -39,5 +39,6 @@ node ./docs/src/build-docs.mjs commerce.md ./docs/commerce.html
 node ./docs/src/build-docs.mjs fries.md ./docs/fries.html
 node ./docs/src/build-docs.mjs express.md ./docs/express.html
 node ./docs/src/build-docs.mjs ccd.md ./docs/ccd.html
+node ./docs/src/build-docs.mjs ccd-mini.md ./docs/ccd-mini.html
 node ./docs/src/build-docs.mjs json-ld.md ./docs/json-ld.html
 npx esbuild --bundle --external:*.css --outfile=./docs/spectrum.js ./docs/src/spectrum.mjs

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <title>M@S Web Components</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- <meta name="commerce.env" content="stage" /> -->
     <link rel="stylesheet" href="spectrum.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
     <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
   
   <!-- Include your custom element script as an ES6 module -->
   <script type="module">
@@ -22,7 +22,6 @@
     activeLocale ??= document.querySelector('a.locale-toggle');
     activeLocale.classList.add('active');
   </script>
-  <script type="module" src="./mas-sidenav.js"></script>
   <style>
     .cards {
       display: grid;
@@ -66,32 +65,272 @@
       font-weight: 400;
       vertical-align: super;
     }
-
   </style>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
 </head>
 <body class="spectrum spectrum--medium spectrum--light">
-  <aside is="mas-sidenav"></aside>
-  <main>
-  <aem-fragment fragment="3413c156-219f-43e6-89f6-3a65cae9fca3" title="Mini Cards collection to prewarm the cache"></aem-fragment>
-  <div class="gallery-content">
-    <h1 id="ccd-gallery" tabindex="-1">CCD Mini cards <a class="header-anchor" href="#ccd-gallery" href="#ccd-gallery" title="Permalink to this heading">#</a></h1>
-    Switch Theme: <a class="theme-toggle spectrum-Link spectrum-Link--secondary" value="darkest" href="#">Darkest</a> OR <a class="theme-toggle spectrum-Link spectrum-Link--secondary" value="light" href="#">Light</a>
-  <p class="locales">Select country/language: 
+    <aside is="mas-sidenav"></aside>
+<main>
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The <code>mini</code> card variant is registered in <code>web-components/src/variants/mini.js</code>. Set <code>variant=&quot;mini&quot;</code> on <code>&lt;merch-card&gt;</code> or let AEM hydration infer it from the fragment <code>variant</code> field.</p>
+<p>Mini cards are a <strong>headless data source</strong> for Creative Cloud Desktop (CCD) and other surfaces that render commerce data with a custom UI stack (React, Vue, or vanilla JS). The variant still hydrates AEM fragment fields into named slots and exposes parsed values through <code>merch-card</code> getters, but the default layout is a minimal reference card (title, price, legal line, description, CTAs) — not a production CCD surface.</p>
+<p>See <a href="merch-card.html">merch-card</a> for shared attributes and events, <a href="inline-price.html">inline-price</a> for price markup in the <code>prices</code> field, and <a href="headless.html">Headless variant</a> for the label/value debug layout. The <code>headless</code> variant lists all authorable fields; <code>mini</code> maps only the subset below.</p>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<p>During hydration (<code>hydrate.js</code>), each field below is mapped through <code>MINI_AEM_FRAGMENT_MAPPING</code>:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required. Must be <code>mini</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>title</code></td>
+<td><code>p</code></td>
+<td>Plan title. Slot config from mapping key <code>title</code>. <code>mas-mnemonic</code> elements in title HTML trigger lazy load of <code>mas-mnemonic.js</code>.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>prices</code></td>
+<td><code>p</code></td>
+<td>HTML with <code>inline-price</code> elements (<code>data-template=&quot;price&quot;</code>).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>description</code></td>
+<td><code>p</code></td>
+<td>Terms, renewal copy, promo duration, and <code>upt-link</code> elements. Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>ctas</code></td>
+<td><code>div</code></td>
+<td>Checkout links hydrated as Spectrum or Consonant buttons. CTA size <code>S</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>planType: true</code> is set on the mapping (shared with <code>plans</code>, <code>product</code>, and compare variants) but is not read by hydration or the mini layout. Plan-type copy is rendered on the cloned legal <code>inline-price</code> when <code>settings.displayPlanType</code> is enabled (see <a href="#legal-price-clone">Legal price clone</a>).</p>
+<h3 id="badge-border" tabindex="-1">Badge and border (not in mapping slots) <a class="header-anchor" href="#badge-border" href="#badge-border" title="Permalink to this heading">#</a></h3>
+<p><code>MINI_AEM_FRAGMENT_MAPPING</code> has no <code>badge</code> slot entry. When <code>fields.badge</code> is plain text, hydration sets <code>badge-text</code>, <code>badge-color</code>, <code>badge-background-color</code>, and <code>border-color</code> on the host; <code>Mini.renderLayout()</code> renders the badge via the shared <code>badge</code> getter as an absolutely positioned <code>#badge</code> div. <code>trialBadge</code>, <code>mnemonics</code>, <code>subtitle</code>, <code>promoText</code>, <code>shortDescription</code>, <code>callout</code>, <code>whatsIncluded</code>, <code>quantitySelect</code>, <code>addon</code>, <code>backgroundImage</code>, <code>backgroundColor</code>, <code>borderColor</code>, and <code>size</code> are not hydrated into named slots for this variant.</p>
+<h2 id="fragment-settings" tabindex="-1">Fragment settings <a class="header-anchor" href="#fragment-settings" href="#fragment-settings" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>displayPlanType</code></td>
+<td>Controls plan-type text on the cloned legal <code>inline-price</code>. Defaults to <code>true</code> when unset (<code>mini.js</code> <code>adjustLegal()</code>).</td>
+</tr>
+<tr>
+<td><code>displayAnnual</code></td>
+<td>Passed to <code>inline-price</code> via <code>priceOptionsProvider()</code>; defaults to <code>false</code> when unset.</td>
+</tr>
+<tr>
+<td><code>hideTrialCTAs</code></td>
+<td>Removes trial CTAs from the <code>ctas</code> slot during hydration.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="price-options" tabindex="-1">Price options <a class="header-anchor" href="#price-options" href="#price-options" title="Permalink to this heading">#</a></h2>
+<p><code>Mini.priceOptionsProvider()</code> runs for each <code>inline-price</code> on the card:</p>
+<ul>
+<li>Clears <code>strikethroughAriaLabel</code> and <code>alternativePriceAriaLabel</code> literals (accessibility text is omitted from visible price strings).</li>
+<li>Sets <code>options.space = true</code>.</li>
+<li>Sets <code>options.displayAnnual</code> from <code>settings.displayAnnual</code> (default <code>false</code>).</li>
+</ul>
+<h2 id="legal-price-clone" tabindex="-1">Legal price clone <a class="header-anchor" href="#legal-price-clone" href="#legal-price-clone" title="Permalink to this heading">#</a></h2>
+<p>After hydration and price settlement, <code>postCardUpdateHook()</code> calls <code>adjustLegal()</code> once per card:</p>
+<ol>
+<li>Finds the main price: <code>inline-price[data-template=&quot;price&quot;]</code>.</li>
+<li>Clones it, sets <code>data-template=&quot;legal&quot;</code>, <code>slot=&quot;legal&quot;</code>, and appends it to the card.</li>
+<li>On the original price, sets <code>data-display-tax=&quot;false&quot;</code> and <code>data-display-per-unit=&quot;false&quot;</code>.</li>
+<li>On the legal clone, sets <code>data-display-plan-type</code> from <code>settings.displayPlanType</code> (default <code>true</code>).</li>
+</ol>
+<p>Plan-type text is read by the <code>planTypeText</code> getter from <code>[is=&quot;inline-price&quot;][data-template=&quot;legal&quot;] span.price-plan-type</code>.</p>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<p>Layout from <code>Mini.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(badge)</td>
+<td>Overlay</td>
+<td>Rendered from host <code>badge-text</code> / <code>badge-color</code> / <code>badge-background-color</code> when hydrated; not a named slot.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Body</td>
+<td>Plan title (<code>p</code>). <code>headingSelector</code> for the <code>title</code> getter.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td>Body</td>
+<td>Main price <code>inline-price</code>.</td>
+</tr>
+<tr>
+<td><code>legal</code></td>
+<td>Body</td>
+<td>Injected at runtime by <code>adjustLegal()</code>; not authored directly.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Body</td>
+<td>Terms, <code>renewal-text</code>, <code>promo-duration-text</code>, and <code>upt-link</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td>Body</td>
+<td>Checkout buttons; flex row, end-aligned. Size <code>S</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Host CSS (<code>mini.css.js</code>) sets card width 400px and height 250px; <code>span.promo-duration-text</code> and <code>span.renewal-text</code> render as block elements.</p>
+<h2 id="consumer-getters" tabindex="-1">Consumer getters <a class="header-anchor" href="#consumer-getters" href="#consumer-getters" title="Permalink to this heading">#</a></h2>
+<p>CCD and other headless consumers typically call <code>await card.checkReady()</code> then read these <code>merch-card</code> getters (see <code>web-components/test/merch-card.mini.test.html.js</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Getter</th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td><code>[slot=&quot;title&quot;]</code> via <code>headingSelector</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>regularPrice</code></td>
+<td><code>inline-price[data-template=&quot;price&quot;]</code> inner text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>promoPrice</code></td>
+<td>Strikethrough price text when <code>data-display-old-price</code> is set</td>
+<td></td>
+</tr>
+<tr>
+<td><code>promotionCode</code></td>
+<td>First <code>data-promotion-code</code> on price or checkout elements, else <code>contextPromotionCode</code> from fragment <code>promoCode</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>annualPrice</code></td>
+<td><code>.price-annual</code> inside main price</td>
+<td></td>
+</tr>
+<tr>
+<td><code>taxText</code></td>
+<td><code>.price-tax-inclusivity</code> on legal or main price</td>
+<td></td>
+</tr>
+<tr>
+<td><code>recurrenceText</code></td>
+<td><code>.price-recurrence</code> on main price</td>
+<td></td>
+</tr>
+<tr>
+<td><code>unitText</code></td>
+<td><code>.price-unit-type</code> on legal, main price, or card</td>
+<td></td>
+</tr>
+<tr>
+<td><code>planTypeText</code></td>
+<td>Legal clone <code>.price-plan-type</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>renewalText</code></td>
+<td><code>span.renewal-text</code> in description</td>
+<td></td>
+</tr>
+<tr>
+<td><code>promoDurationText</code></td>
+<td><code>span.promo-duration-text</code> in description</td>
+<td></td>
+</tr>
+<tr>
+<td><code>seeTermsInfo</code></td>
+<td><code>a[is=&quot;upt-link&quot;]</code></td>
+<td><code>{ text, analyticsId, href }</code></td>
+</tr>
+<tr>
+<td><code>ctas</code>, <code>primaryCta</code>, <code>secondaryCta</code></td>
+<td><code>[slot=&quot;ctas&quot;]</code> checkout links/buttons</td>
+<td>Primary = accent / blue Consonant button</td>
+</tr>
+</tbody>
+</table>
+<p>The built-in <code>description</code> getter queries <code>[slot=&quot;body-xs&quot;]</code> and does <strong>not</strong> return mini description content. Read <code>[slot=&quot;description&quot;]</code> directly when needed.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Manual markup showing the mini slot layout. In production, use <code>&lt;aem-fragment&gt;</code> and set <code>variant: &quot;mini&quot;</code> on the fragment.</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;mini&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>CCD Apps: Photography<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;prices&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span> <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span> <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;example-osi&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;upt-link&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">data-analytics-id</span>=<span class="hljs-string">&quot;see-terms&quot;</span>&gt;</span>see terms<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;ctas&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;spectrum-Button spectrum-Button--accent spectrum-Button--sizeS&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;spectrum-Button-label&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+</code></pre>
+<p><aem-fragment fragment="3413c156-219f-43e6-89f6-3a65cae9fca3" title="Mini Cards collection to prewarm the cache"></aem-fragment></p>
+<div class="gallery-content">
+  <h1 id="ccd-gallery" tabindex="-1">CCD Mini cards</h1>
+  Switch Theme: <a class="theme-toggle spectrum-Link spectrum-Link--secondary" value="darkest" href="#">Darkest</a> OR <a class="theme-toggle spectrum-Link spectrum-Link--secondary" value="light" href="#">Light</a>
+  <p class="locales">Select country/language:
     <a class="locale-toggle spectrum-Link spectrum-Link--secondary" value="US,en" href="?country=US&language=en" title="en_US">🇺🇸</a>
     <a class="locale-toggle spectrum-Link spectrum-Link--secondary" value="AU,en" href="?country=AU&language=en" title="en_AU">🇦🇺</a>
     <a class="locale-toggle spectrum-Link spectrum-Link--secondary" value="CA,en" href="?country=CA&language=en" title="en_CA">🇨🇦</a>
     <a class="locale-toggle spectrum-Link spectrum-Link--secondary" value="CA,fr" href="?country=CA&language=fr" title="fr_CA">🇨🇦<span>fr</span></a>
     <a class="locale-toggle spectrum-Link spectrum-Link--secondary" value="FR,fr" href="?country=FR&language=fr" title="fr_FR">🇫🇷</a>
   </p>
-    <h2 id="ccd-mini-card" tabindex="-1">CCD Mini Cards <a class="header-anchor" href="#ccd-mini-card" title="Permalink to this heading">#</a></h2>
-    <div class="cards">
-      <merch-card><aem-fragment fragment="03a36f0f-3e5d-4881-ae6b-273c517c9d38" loading="cache"></aem-fragment></merch-card>  
-      <merch-card><aem-fragment fragment="df357350-95b2-47f2-844f-df2e491eecef" loading="cache"></aem-fragment></merch-card>
-      <merch-card><aem-fragment fragment="77e049ee-c611-437b-bbeb-c54cf72605b1"></aem-fragment></merch-card>
-      <merch-card><aem-fragment fragment="52b30904-c8b1-44d2-ada4-cbbdf87b7603"></aem-fragment></merch-card>
+  <h2 id="ccd-mini-card" tabindex="-1">CCD Mini Cards</h2>
+  <div class="cards">
+    <merch-card><aem-fragment fragment="03a36f0f-3e5d-4881-ae6b-273c517c9d38" loading="cache"></aem-fragment></merch-card>
+    <merch-card><aem-fragment fragment="df357350-95b2-47f2-844f-df2e491eecef" loading="cache"></aem-fragment></merch-card>
+    <merch-card><aem-fragment fragment="77e049ee-c611-437b-bbeb-c54cf72605b1"></aem-fragment></merch-card>
+    <merch-card><aem-fragment fragment="52b30904-c8b1-44d2-ada4-cbbdf87b7603"></aem-fragment></merch-card>
   </div>
+</div>
 
-  </main>
+</main>
 <script type="module">
   document.querySelectorAll('code.demo').forEach(el => {
       const targetContainer = document.createElement('div');

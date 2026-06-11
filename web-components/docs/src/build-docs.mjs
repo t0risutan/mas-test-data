@@ -59,9 +59,72 @@ const styleDependecy = ['plans.md', 'plans-v2.md', 'plans-collection.md'].includ
 // Render Markdown to HTML
 let htmlContent = md.render(inputContent);
 // wrap in sp-theme
-htmlContent = ['ccd.md'].includes(sourceFile)
+const galleryPages = ['ccd.md', 'ccd-mini.md'];
+htmlContent = galleryPages.includes(sourceFile)
     ? htmlContent
     : `<sp-theme color="light" scale="medium">\n${htmlContent}\n</sp-theme>`;
+
+const initScript =
+    sourceFile === 'ccd-mini.md'
+        ? `import { init } from './common.js';
+    const urlParams = new URLSearchParams(window.location.search);
+    init({ 'data-mas-ff-defaults': 'on'});
+    const country = urlParams.get('country');
+    const language = urlParams.get('language');
+    let activeLocale = document.querySelector(\`a[value="\${country},\${language}"]\`);
+    activeLocale ??= document.querySelector('a.locale-toggle');
+    activeLocale.classList.add('active');`
+        : `import { init } from './common.js';
+    init();`;
+
+const ccdMiniStyles =
+    sourceFile === 'ccd-mini.md'
+        ? `
+  <style>
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      align-items: baseline;
+    }
+
+    @media (min-width: 768px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .locales {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .locale-toggle {
+      font-size: 2.5em;
+      text-decoration: none;
+      padding: 0.5em;
+      border-radius: 0.5em;
+    }
+
+    .locale-toggle:hover,
+    .locale-toggle.active {
+        background-color: var(--spectrum-gray-300);
+    }
+
+    .locale-toggle span {
+      font-size: 0.5em;
+      font-weight: 400;
+      vertical-align: super;
+    }
+  </style>`
+        : '';
 
 // HTML template with your custom element script
 const htmlTemplate = `
@@ -79,9 +142,8 @@ const htmlTemplate = `
   
   <!-- Include your custom element script as an ES6 module -->
   <script type="module">
-    import { init } from './common.js';
-    init();
-  </script>
+    ${initScript}
+  </script>${ccdMiniStyles}
   <!-- Include Highlight.js stylesheet for syntax highlighting -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
   <script type="module" src="./mas-sidenav.js"></script>
