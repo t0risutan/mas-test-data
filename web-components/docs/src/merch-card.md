@@ -169,7 +169,7 @@ Registered in `mas.js` (CCD / Adobe Home surfaces; not in the core variant regis
 
 ## Commerce attributes {#commerce-attributes}
 
-These attributes control stock toggles, secure checkout labels, expandable menus, addon checkout mutation, and layout chrome. Variant-specific slot and hydration details live in [plans](plans.html), [plans-v2](plans-v2.html), [catalog](catalog.html), [product](product.html), and [image](image.html).
+These attributes control stock toggles, secure checkout labels, expandable menus, addon checkout mutation, and layout chrome. Variant-specific slot and hydration details live in [plans](plans.html), [plans-v2](plans-v2.html), [catalog](catalog.html), [product](product.html), [image](image.html), and [headless](headless.html).
 
 ### Stock toggle (`checkbox-label`, `stock-offer-osis`) {#stock-toggle}
 

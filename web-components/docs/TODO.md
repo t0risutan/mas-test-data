@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] headless variant: No slot guide for `HEADLESS_AEM_FRAGMENT_MAPPING` label/value rows
 - [ ] fries variant: `fries.html` gallery exists but absent from sidenav and build-docs.sh — no `FRIES_AEM_FRAGMENT_MAPPING` docs
 - [ ] media + inline-heading variants: Name-only in merch-card.md — missing slot maps and layout rules
 - [ ] mini-compare-chart (+ mweb): Gallery-only — depends on undocumented merch-offer-select, merch-addon, merch-whats-included
@@ -24,6 +23,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] headless variant: No slot guide for `HEADLESS_AEM_FRAGMENT_MAPPING` label/value rows (completed in headless.md)
 - [x] merch-icon: No element page beyond a single usage example — missing `size`, `href`, `loading`, tooltip fallback (completed in merch-icon.md)
 - [x] merch-badge: No element page — only indirect mention via merch-card badge attributes (completed in merch-badge.md)
 - [x] merch-whats-included: No docs for expandable feature list — missing slots, `has-bullets`, `mobileRows`, and `hide-see-more-elements` event (completed in merch-whats-included.md)

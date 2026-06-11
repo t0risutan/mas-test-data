@@ -1,0 +1,345 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="headless" tabindex="-1">Headless variant <a class="header-anchor" href="#headless" href="#headless" title="Permalink to this heading">#</a></h1>
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The <code>headless</code> card variant is registered in <code>web-components/src/variants/headless.js</code>. Set <code>variant=&quot;headless&quot;</code> on <code>&lt;merch-card&gt;</code> or let AEM hydration infer it from the fragment <code>variant</code> field.</p>
+<p>This variant renders fragment content as a vertical stack of <strong>label + value</strong> rows with no card chrome — border, background, and box-shadow are removed on <code>:host([variant='headless'])</code>. Row labels match the merch-card editor (<code>merch-card-editor.js</code>) and define render order.</p>
+<p>Use it to preview or debug all authorable fields from a merch-card AEM fragment without the visual layout of plans, product, or other surface variants.</p>
+<p>See <a href="merch-card.html">merch-card</a> for shared attributes and events.</p>
+<p><strong>Not to be confused with</strong> the <code>mini</code> variant, which is also described as a headless data source for custom rendering in React, Vue, or vanilla JS. The <code>mini</code> variant does not render label/value rows.</p>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<p>During hydration (<code>hydrate.js</code>), each field below is mapped through <code>HEADLESS_AEM_FRAGMENT_MAPPING</code>:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required. Must be <code>headless</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>p</code></td>
+<td>Title row. Slot config from mapping key <code>title</code>.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td><code>body-xxs</code></td>
+<td><code>p</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td>Product description. Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>promoText</code></td>
+<td><code>promo-text</code></td>
+<td><code>p</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>shortDescription</code></td>
+<td><code>short-description</code></td>
+<td><code>p</code></td>
+<td>Sets <code>action-menu=&quot;true&quot;</code> on the card during hydration when present; rendered as a label/value row only (no action-menu UI in this variant).</td>
+</tr>
+<tr>
+<td><code>callout</code></td>
+<td><code>callout-content</code></td>
+<td><code>div</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td><code>quantity-select</code></td>
+<td><code>div</code></td>
+<td>Serialized <code>merch-quantity-select</code> HTML.</td>
+</tr>
+<tr>
+<td><code>whatsIncluded</code></td>
+<td><code>whats-included</code></td>
+<td><code>div</code></td>
+<td><code>merch-whats-included</code> markup.</td>
+</tr>
+<tr>
+<td><code>addonConfirmation</code></td>
+<td><code>addon-confirmation</code></td>
+<td><code>div</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td><code>badge</code></td>
+<td><code>div</code></td>
+<td>Plain text is wrapped in <code>merch-badge</code>; HTML passthrough when already tagged.</td>
+</tr>
+<tr>
+<td><code>trialBadge</code></td>
+<td><code>trial-badge</code></td>
+<td><code>div</code></td>
+<td>Plain text is wrapped in <code>merch-badge</code>.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>prices</code></td>
+<td><code>p</code></td>
+<td>HTML with <code>inline-price</code> elements.</td>
+</tr>
+<tr>
+<td><code>backgroundImage</code></td>
+<td><code>bg-image</code></td>
+<td><code>div</code></td>
+<td>Wraps an <code>&lt;img&gt;</code> with <code>src</code> from the field.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td><code>addon</code></td>
+<td>—</td>
+<td>Creates <code>merch-addon</code> from field HTML or <code>settings.addon</code>.</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td><code>border-color</code> attribute</td>
+<td>—</td>
+<td>Hydrated onto the host; no visible border in this variant.</td>
+</tr>
+<tr>
+<td><code>backgroundColor</code></td>
+<td><code>background-color</code> attribute</td>
+<td>—</td>
+<td>Hydrated onto the host; host background is transparent.</td>
+</tr>
+<tr>
+<td><code>mnemonicIcon</code>, <code>mnemonicAlt</code>, <code>mnemonicLink</code></td>
+<td><code>icons</code></td>
+<td><code>merch-icon</code></td>
+<td>Parallel arrays; icon size <code>m</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer links hydrated as Spectrum or Consonant buttons. CTA size <code>m</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>size</code> is listed in the mapping as an empty array (<code>size: []</code>), so <code>processSize()</code> does not set a <code>size</code> attribute on headless cards.</p>
+<h2 id="fragment-settings" tabindex="-1">Fragment settings <a class="header-anchor" href="#fragment-settings" href="#fragment-settings" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secureLabel</code></td>
+<td>Sets <code>secure-label</code> on the card when the mapping includes <code>secureLabel: true</code>. Rendered as a separate “Secure label” row (not inside the <code>footer</code> slot).</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td>Fallback HTML for <code>merch-addon</code> when <code>fields.addon</code> is absent.</td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td>Fallback markup when <code>fields.quantitySelect</code> is absent.</td>
+</tr>
+<tr>
+<td><code>hideTrialCTAs</code></td>
+<td>Removes trial CTAs from the footer during hydration.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="label-value-rows" tabindex="-1">Label/value rows <a class="header-anchor" href="#label-value-rows" href="#label-value-rows" title="Permalink to this heading">#</a></h2>
+<p><code>Headless.renderLayout()</code> outputs one row per entry in <code>HEADLESS_FIELDS</code>. Each row has a fixed label (left) and a value column (right) with the named slot. Slotted children render inline in the value column (<code>::slotted(*) { display: inline; }</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Label (editor)</th>
+<th>Slot</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Background Image</td>
+<td><code>bg-image</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Badge</td>
+<td><code>badge</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Mnemonic icon</td>
+<td><code>icons</code></td>
+<td>Populated from <code>mnemonicIcon</code> / <code>mnemonicAlt</code> / <code>mnemonicLink</code> during hydration.</td>
+</tr>
+<tr>
+<td>Title</td>
+<td><code>heading-xs</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Subtitle</td>
+<td><code>body-xxs</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Product description</td>
+<td><code>body-xs</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Promo Text</td>
+<td><code>promo-text</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Callout text</td>
+<td><code>callout-content</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Short Description</td>
+<td><code>short-description</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Trial Badge</td>
+<td><code>trial-badge</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Product price</td>
+<td><code>prices</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Quantity select</td>
+<td><code>quantity-select</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Addon</td>
+<td><code>addon</code></td>
+<td><code>merch-addon</code> element.</td>
+</tr>
+<tr>
+<td>What’s included</td>
+<td><code>whats-included</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Addon confirmation</td>
+<td><code>addon-confirmation</code></td>
+<td></td>
+</tr>
+<tr>
+<td>CTAs</td>
+<td><code>footer</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>When <code>secure-label</code> is set on the card (from <code>settings.secureLabel</code> during hydration), an additional row is appended after the table above:</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Secure label</td>
+<td><code>secure-label</code> attribute</td>
+<td>Rendered via <code>secureLabel</code> getter as <code>&lt;span class=&quot;secure-transaction-label&quot;&gt;</code>; not a named slot.</td>
+</tr>
+</tbody>
+</table>
+<p>Empty slots still render their label row; the value column is blank when no content is hydrated or authored.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Manual markup showing the label/value layout. In production, use <code>&lt;aem-fragment&gt;</code> and set <code>variant: &quot;headless&quot;</code> on the fragment.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;headless&quot;</span> <span class="hljs-attr">secure-label</span>=<span class="hljs-string">&quot;Secure transaction&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icons&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/icons/acrobat.svg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Acrobat&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;m&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xxs&quot;</span>&gt;</span>PDF and e-sign tools<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Access advanced PDF tools on desktop and mobile.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;prices&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span> <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;example-osi&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;accent&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+</code></pre>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>
