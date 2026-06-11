@@ -10,7 +10,7 @@ Primary placements:
 
 1. **`slot="icons"` on [merch-card](merch-card.html)** — product mnemonics in the card header (plans, product, catalog, and related variants). AEM hydration creates these from parallel `mnemonicIcon`, `mnemonicAlt`, and `mnemonicLink` fragment fields.
 2. **`slot="icon"` inside [merch-mnemonic-list](merch-whats-included.html)** — row icons in [merch-whats-included](merch-whats-included.html) feature lists.
-3. **Child of [mas-mnemonic](mas.html)** — inline info icons in body copy (Express variants, fries, and similar).
+3. **Child of [mas-mnemonic](mas-mnemonic.html)** — inline info icons in body copy (Express variants, fries, and similar).
 
 Registered when [mas.js](mas.js.html) or [merch-card](merch-card.html) loads.
 

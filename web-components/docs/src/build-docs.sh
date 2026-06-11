@@ -17,6 +17,8 @@ node ./docs/src/build-docs.mjs merch-quantity-select.md ./docs/merch-quantity-se
 node ./docs/src/build-docs.mjs merch-addon.md ./docs/merch-addon.html
 node ./docs/src/build-docs.mjs merch-badge.md ./docs/merch-badge.html
 node ./docs/src/build-docs.mjs merch-icon.md ./docs/merch-icon.html
+node ./docs/src/build-docs.mjs mas-mnemonic.md ./docs/mas-mnemonic.html
+node ./docs/src/build-docs.mjs merch-mnemonic-list.md ./docs/merch-mnemonic-list.html
 node ./docs/src/build-docs.mjs merch-whats-included.md ./docs/merch-whats-included.html
 node ./docs/src/build-docs.mjs merch-sidenav.md ./docs/merch-sidenav.html
 node ./docs/src/build-docs.mjs deeplink.md ./docs/deeplink.html

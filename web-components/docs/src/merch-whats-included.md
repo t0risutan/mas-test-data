@@ -10,7 +10,7 @@ Used inside `merch-card` variants in the `whats-included` slot (`plans`, `plans-
 
 Registered when [mas.js](mas.js.html) or [merch-card](merch-card.html) loads.
 
-See also: [Plans Gallery](plans.html), [Product Gallery](product.html), [Mini Compare Gallery](minicompare.html), [Plans v2 Gallery](plans-v2.html).
+See also: [merch-mnemonic-list](merch-mnemonic-list.html), [merch-icon](merch-icon.html), [Plans Gallery](plans.html), [Product Gallery](product.html), [Mini Compare Gallery](minicompare.html), [Plans v2 Gallery](plans-v2.html).
 
 ## Example {#example}
 
