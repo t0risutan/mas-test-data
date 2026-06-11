@@ -424,6 +424,233 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
   <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;detail-bg&quot;</span>&gt;</span>Detail background content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
 </code></pre>
+<h2 id="media-variant" tabindex="-1">Media variant <a class="header-anchor" href="#media-variant" href="#media-variant" title="Permalink to this heading">#</a></h2>
+<p>Horizontal text-and-image layout for modal and marketing surfaces. Set <code>variant=&quot;media&quot;</code> on <code>&lt;merch-card&gt;</code> or let AEM hydration infer it from the fragment <code>variant</code> field.</p>
+<p>Mapping: <code>MEDIA_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/media.js</code>.</p>
+<p>Unlike most variants, the <code>footer</code> slot renders inside the text column (not a separate <code>&lt;footer&gt;</code> region). The layout does not use <code>secureLabelFooter</code>; <code>secure-label</code> is not rendered by this variant.</p>
+<h3 id="media-aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#media-aem-fields" href="#media-aem-fields" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required. Must be <code>media</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Main title.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td><code>body-xxs</code></td>
+<td><code>p</code></td>
+<td>Eyebrow label above the title (uppercase styling).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td>Body copy. Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>backgroundImage</code></td>
+<td><code>bg-image</code></td>
+<td><code>div</code></td>
+<td>Wraps an <code>&lt;img&gt;</code> with <code>src</code> from the field; <code>backgroundImageAltText</code> sets <code>alt</code>, otherwise <code>role=&quot;none&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer links hydrated as Consonant buttons (<code>style: 'consonant'</code> sets the <code>consonant</code> attribute). CTA size <code>m</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="media-slots" tabindex="-1">Slots <a class="header-anchor" href="#media-slots" href="#media-slots" title="Permalink to this heading">#</a></h3>
+<p>Layout from <code>Media.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>body-xxs</code></td>
+<td>Text column (top)</td>
+<td>Subtitle / eyebrow.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Text column</td>
+<td>Title.</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Text column</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Text column (bottom)</td>
+<td>CTAs. Rendered inside <code>.text</code>, not in a separate footer element.</td>
+</tr>
+<tr>
+<td><code>bg-image</code></td>
+<td>Image column</td>
+<td>Background or hero image (<code>div</code> wrapping <code>&lt;img&gt;</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="media-layout" tabindex="-1">Layout rules <a class="header-anchor" href="#media-layout" href="#media-layout" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><code>.media-row</code> is a flex container: text column on the left, image column on the right.</li>
+<li>At viewport widths <strong>≤ 600px</strong>, the row switches to <code>flex-direction: column-reverse</code> (image above text).</li>
+<li>Gap between columns: 24px (32px from 600px, 40px from 1200px).</li>
+<li>The card has no border and uses vertical padding (<code>24px 0</code>; wider padding inside <code>.dialog-modal</code>).</li>
+<li>At <strong>≥ 600px</strong>, card <code>max-width</code> is 1000px; the image column vertically centers its content.</li>
+<li>When the card is inside <code>.dialog-modal</code>, <code>postCardUpdateHook()</code> blurs the modal <code>.dialog-close</code> button so focus does not remain on the close control after the card updates.</li>
+</ul>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;media&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xxs&quot;</span>&gt;</span>Adobe Experience Cloud<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Real-Time CDP<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Unify B2C and B2B data into real-time profiles ready for activation across any channel.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Learn more<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;bg-image&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="inline-heading-variant" tabindex="-1">Inline-heading variant <a class="header-anchor" href="#inline-heading-variant" href="#inline-heading-variant" title="Permalink to this heading">#</a></h2>
+<p>Compact BACOM product cards with an inline icon and title row. Set <code>variant=&quot;inline-heading&quot;</code> on <code>&lt;merch-card&gt;</code>.</p>
+<p>There is <strong>no AEM fragment mapping</strong> registered for this variant in <code>variants.js</code>. Cards are authored with static markup (or slots assigned manually after hydration). See <a href="#custom-hr">custom horizontal rule</a> for the <code>custom-hr</code> attribute.</p>
+<h3 id="inline-heading-slots" tabindex="-1">Slots <a class="header-anchor" href="#inline-heading-slots" href="#inline-heading-slots" title="Permalink to this heading">#</a></h3>
+<p>Layout from <code>InlineHeading.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>Badge</td>
+<td>Attribute-based badge from <code>badge-text</code>, <code>badge-color</code>, and <code>badge-background-color</code> (not a slot). Rendered only when all three are set.</td>
+</tr>
+<tr>
+<td><code>icons</code></td>
+<td>Body top</td>
+<td>Product mnemonic; sits beside <code>heading-xs</code> in <code>.top-section</code>.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Body top</td>
+<td>Title. Links in this slot keep default link styling (other variants grey out heading links).</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs. Preceded by <code>&lt;hr /&gt;</code> unless <code>custom-hr</code> is set. Optional <code>secure-label</code> renders above footer CTAs via <code>secureLabelFooter</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inline-heading-grid" tabindex="-1">Collection grid <a class="header-anchor" href="#inline-heading-grid" href="#inline-heading-grid" title="Permalink to this heading">#</a></h3>
+<p>Place cards in a container with both a column-count class and the <code>inline-heading</code> modifier, for example <code>three-merch-cards inline-heading</code>. Global CSS from <code>inline-heading.css.js</code> sets fixed column widths via <code>--consonant-merch-card-inline-heading-width</code> (300px default, 378px at desktop):</p>
+<table>
+<thead>
+<tr>
+<th>Container class</th>
+<th>Columns (mobile)</th>
+<th>Columns (tablet)</th>
+<th>Columns (desktop)</th>
+<th>Columns (large desktop)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>one-merch-card.inline-heading</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>two-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>three-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>four-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;three-merch-cards inline-heading&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+    <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;inline-heading&quot;</span>
+    <span class="hljs-attr">badge-background-color</span>=<span class="hljs-string">&quot;#EDCC2D&quot;</span>
+    <span class="hljs-attr">badge-color</span>=<span class="hljs-string">&quot;#000000&quot;</span>
+    <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Best Value&quot;</span>
+  &gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+      <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icons&quot;</span>
+      <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;l&quot;</span>
+      <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span>
+      <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Creative Cloud All Apps&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Real-Time CDP<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Unify B2C and B2B data into real-time profiles ready for activation across any channel.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Learn more<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>

@@ -249,6 +249,117 @@ When `intro-pricing` is absent, those variants render a standard `<hr />` and fo
 </merch-card>
 ```
 
+## Media variant {#media-variant}
+
+Horizontal text-and-image layout for modal and marketing surfaces. Set `variant="media"` on `<merch-card>` or let AEM hydration infer it from the fragment `variant` field.
+
+Mapping: `MEDIA_AEM_FRAGMENT_MAPPING` in `web-components/src/variants/media.js`.
+
+Unlike most variants, the `footer` slot renders inside the text column (not a separate `<footer>` region). The layout does not use `secureLabelFooter`; `secure-label` is not rendered by this variant.
+
+### AEM fragment fields {#media-aem-fields}
+
+| AEM field | Slot / target | Tag | Notes |
+| --- | --- | --- | --- |
+| `variant` | `merch-card.variant` | — | Required. Must be `media`. |
+| `cardName` | `name` attribute | — | Card identifier for analytics and collections. |
+| `cardTitle` | `heading-xs` | `h3` | Main title. |
+| `subtitle` | `body-xxs` | `p` | Eyebrow label above the title (uppercase styling). |
+| `description` | `body-xs` | `div` | Body copy. Checkout links in description HTML are converted to buttons. |
+| `backgroundImage` | `bg-image` | `div` | Wraps an `<img>` with `src` from the field; `backgroundImageAltText` sets `alt`, otherwise `role="none"`. |
+| `ctas` | `footer` | `div` | Footer links hydrated as Consonant buttons (`style: 'consonant'` sets the `consonant` attribute). CTA size `m`. |
+
+### Slots {#media-slots}
+
+Layout from `Media.renderLayout()`:
+
+| Slot | Region | Notes |
+| --- | --- | --- |
+| `body-xxs` | Text column (top) | Subtitle / eyebrow. |
+| `heading-xs` | Text column | Title. |
+| `body-xs` | Text column | Description. |
+| `footer` | Text column (bottom) | CTAs. Rendered inside `.text`, not in a separate footer element. |
+| `bg-image` | Image column | Background or hero image (`div` wrapping `<img>`). |
+
+### Layout rules {#media-layout}
+
+- `.media-row` is a flex container: text column on the left, image column on the right.
+- At viewport widths **≤ 600px**, the row switches to `flex-direction: column-reverse` (image above text).
+- Gap between columns: 24px (32px from 600px, 40px from 1200px).
+- The card has no border and uses vertical padding (`24px 0`; wider padding inside `.dialog-modal`).
+- At **≥ 600px**, card `max-width` is 1000px; the image column vertically centers its content.
+- When the card is inside `.dialog-modal`, `postCardUpdateHook()` blurs the modal `.dialog-close` button so focus does not remain on the close control after the card updates.
+
+```html {.demo}
+<merch-card variant="media">
+  <p slot="body-xxs">Adobe Experience Cloud</p>
+  <h3 slot="heading-xs">Real-Time CDP</h3>
+  <div slot="body-xs">
+    <p>Unify B2C and B2B data into real-time profiles ready for activation across any channel.</p>
+  </div>
+  <div slot="footer">
+    <a href="#" class="con-button blue">Learn more</a>
+  </div>
+  <div slot="bg-image">
+    <img src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg" alt="" />
+  </div>
+</merch-card>
+```
+
+## Inline-heading variant {#inline-heading-variant}
+
+Compact BACOM product cards with an inline icon and title row. Set `variant="inline-heading"` on `<merch-card>`.
+
+There is **no AEM fragment mapping** registered for this variant in `variants.js`. Cards are authored with static markup (or slots assigned manually after hydration). See [custom horizontal rule](#custom-hr) for the `custom-hr` attribute.
+
+### Slots {#inline-heading-slots}
+
+Layout from `InlineHeading.renderLayout()`:
+
+| Slot | Region | Notes |
+| --- | --- | --- |
+| — | Badge | Attribute-based badge from `badge-text`, `badge-color`, and `badge-background-color` (not a slot). Rendered only when all three are set. |
+| `icons` | Body top | Product mnemonic; sits beside `heading-xs` in `.top-section`. |
+| `heading-xs` | Body top | Title. Links in this slot keep default link styling (other variants grey out heading links). |
+| `body-xs` | Body | Description. |
+| `footer` | Footer | CTAs. Preceded by `<hr />` unless `custom-hr` is set. Optional `secure-label` renders above footer CTAs via `secureLabelFooter`. |
+
+### Collection grid {#inline-heading-grid}
+
+Place cards in a container with both a column-count class and the `inline-heading` modifier, for example `three-merch-cards inline-heading`. Global CSS from `inline-heading.css.js` sets fixed column widths via `--consonant-merch-card-inline-heading-width` (300px default, 378px at desktop):
+
+| Container class | Columns (mobile) | Columns (tablet) | Columns (desktop) | Columns (large desktop) |
+| --- | --- | --- | --- | --- |
+| `one-merch-card.inline-heading` | 1 | 1 | 1 | 1 |
+| `two-merch-cards.inline-heading` | 1 | 2 | 2 | 2 |
+| `three-merch-cards.inline-heading` | 1 | 2 | 3 | 3 |
+| `four-merch-cards.inline-heading` | 1 | 2 | 3 | 4 |
+
+```html {.demo}
+<div class="three-merch-cards inline-heading">
+  <merch-card
+    variant="inline-heading"
+    badge-background-color="#EDCC2D"
+    badge-color="#000000"
+    badge-text="Best Value"
+  >
+    <merch-icon
+      slot="icons"
+      size="l"
+      src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg"
+      alt="Creative Cloud All Apps"
+    ></merch-icon>
+    <h3 slot="heading-xs">Real-Time CDP</h3>
+    <div slot="body-xs">
+      <p>Unify B2C and B2B data into real-time profiles ready for activation across any channel.</p>
+    </div>
+    <div slot="footer">
+      <a href="#" class="con-button blue">Learn more</a>
+    </div>
+  </merch-card>
+</div>
+```
+
 ### Properties
 
 | Name                | Description                                                                                                         | Type                                                |
