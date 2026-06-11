@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] fries variant: `fries.html` gallery exists but absent from sidenav and build-docs.sh — no `FRIES_AEM_FRAGMENT_MAPPING` docs
 - [ ] media + inline-heading variants: Name-only in merch-card.md — missing slot maps and layout rules
 - [ ] mini-compare-chart (+ mweb): Gallery-only — depends on undocumented merch-offer-select, merch-addon, merch-whats-included
 - [ ] Express variants (simplified-pricing-express, full-pricing-express): `express.html` gallery only — no slot map or collection setup docs
@@ -23,6 +22,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] fries variant: `fries.html` gallery exists but absent from sidenav and build-docs.sh — no `FRIES_AEM_FRAGMENT_MAPPING` docs (completed in fries.md)
 - [x] headless variant: No slot guide for `HEADLESS_AEM_FRAGMENT_MAPPING` label/value rows (completed in headless.md)
 - [x] merch-icon: No element page beyond a single usage example — missing `size`, `href`, `loading`, tooltip fallback (completed in merch-icon.md)
 - [x] merch-badge: No element page — only indirect mention via merch-card badge attributes (completed in merch-badge.md)
