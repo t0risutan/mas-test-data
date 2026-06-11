@@ -15,6 +15,7 @@ node ./docs/src/build-docs.mjs merch-card-collection.md ./docs/merch-card-collec
 node ./docs/src/build-docs.mjs merch-offer-select.md ./docs/merch-offer-select.html
 node ./docs/src/build-docs.mjs merch-quantity-select.md ./docs/merch-quantity-select.html
 node ./docs/src/build-docs.mjs merch-addon.md ./docs/merch-addon.html
+node ./docs/src/build-docs.mjs merch-stock.md ./docs/merch-stock.html
 node ./docs/src/build-docs.mjs merch-badge.md ./docs/merch-badge.html
 node ./docs/src/build-docs.mjs merch-icon.md ./docs/merch-icon.html
 node ./docs/src/build-docs.mjs mas-mnemonic.md ./docs/mas-mnemonic.html

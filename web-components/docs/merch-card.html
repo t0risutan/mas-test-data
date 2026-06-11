@@ -387,6 +387,7 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 </table>
 <p>Neither attribute is set by <code>hydrate.js</code>. Set them on the element in markup, or map fragment fields such as <code>checkboxLabel</code> / <code>stockOfferOsis</code> in your integration (as Studio preview does).</p>
 <p>See <a href="plans-v2.html#stock-toggle">Stock toggle in plans-v2</a> for a markup example.</p>
+<p>For a standalone Spectrum checkbox with plan-filtered slot content (not wired into card layouts), see <a href="merch-stock.html">merch-stock</a>.</p>
 <h3 id="secure-label" tabindex="-1">Secure transaction label (<code>secure-label</code>) <a class="header-anchor" href="#secure-label" href="#secure-label" title="Permalink to this heading">#</a></h3>
 <p>When set, variant layouts render a <code>.secure-transaction-label</code> span above footer CTAs via <code>VariantLayout.secureLabelFooter</code>.</p>
 <p>During hydration, <code>processSecureLabel()</code> sets the attribute when <strong>both</strong> the variant mapping includes <code>secureLabel: true</code> and the fragment <code>settings.secureLabel</code> string is present. Variants with this mapping include <code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>segment</code>, <code>commerce</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code>.</p>

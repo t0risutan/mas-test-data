@@ -186,6 +186,8 @@ Neither attribute is set by `hydrate.js`. Set them on the element in markup, or 
 
 See [Stock toggle in plans-v2](plans-v2.html#stock-toggle) for a markup example.
 
+For a standalone Spectrum checkbox with plan-filtered slot content (not wired into card layouts), see [merch-stock](merch-stock.html).
+
 ### Secure transaction label (`secure-label`) {#secure-label}
 
 When set, variant layouts render a `.secure-transaction-label` span above footer CTAs via `VariantLayout.secureLabelFooter`.

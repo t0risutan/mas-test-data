@@ -5,7 +5,6 @@
 ### Medium
 
 ### Low
-- [ ] merch-stock: Built and exported but plans stock UX uses merch-card `checkbox-label` instead — unclear when to use standalone element
 - [ ] mini variant: One-line mention only — `MINI_AEM_FRAGMENT_MAPPING` slots undocumented
 - [ ] image + special-offers galleries: Gallery-only — missing slot reference tables
 - [ ] merch-secure-transaction: Small label/tooltip element with no page
@@ -35,3 +34,4 @@
 - [x] merch-quantity-select: No docs for quantity UI used in product and plans cards — missing attributes, `merch-quantity-selector:change` event, and sync with `merch-card-quantity:change` (completed in merch-quantity-select.md)
 - [x] merch-offer-select + merch-offer: No docs for the multi-offer selection stack used in plans, product, and mini-compare variants — missing `container`, `variant`, slots, and the `merch-offer:ready` / `merch-offer-select:ready` / `merch-offer:selected` event chain (completed in merch-offer-select.md)
 - [x] merch-card-collection: No API page — only live examples in plans-collection.md; missing attributes, events, AEM hydration, deeplink hash params, header placeholders, and sidenav integration (completed in merch-card-collection.md)
+- [x] merch-stock: Built and exported but plans stock UX uses merch-card `checkbox-label` instead — unclear when to use standalone element (completed in merch-stock.md, merch-card.md)

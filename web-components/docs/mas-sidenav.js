@@ -21,6 +21,7 @@ class MasSidenav extends HTMLElement {
       <a href="/web-components/docs/merch-offer-select.html">Merch Offer Select</a>
       <a href="/web-components/docs/merch-quantity-select.html">Merch Quantity Select</a>
       <a href="/web-components/docs/merch-addon.html">Merch Addon</a>
+      <a href="/web-components/docs/merch-stock.html">Merch Stock</a>
       <a href="/web-components/docs/merch-badge.html">Merch Badge</a>
       <a href="/web-components/docs/merch-icon.html">Merch Icon</a>
       <a href="/web-components/docs/mas-mnemonic.html">MAS Mnemonic</a>
