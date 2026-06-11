@@ -14,6 +14,7 @@ node ./docs/src/build-docs.mjs merch-card.md ./docs/merch-card.html
 node ./docs/src/build-docs.mjs merch-card-collection.md ./docs/merch-card-collection.html
 node ./docs/src/build-docs.mjs merch-offer-select.md ./docs/merch-offer-select.html
 node ./docs/src/build-docs.mjs merch-quantity-select.md ./docs/merch-quantity-select.html
+node ./docs/src/build-docs.mjs merch-addon.md ./docs/merch-addon.html
 node ./docs/src/build-docs.mjs merch-sidenav.md ./docs/merch-sidenav.html
 node ./docs/src/build-docs.mjs plans.md ./docs/plans.html
 node ./docs/src/build-docs.mjs plans-v2.md ./docs/plans-v2.html

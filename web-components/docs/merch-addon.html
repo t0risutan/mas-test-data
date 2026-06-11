@@ -1,0 +1,360 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-addon" tabindex="-1">merch-addon <a class="header-anchor" href="#merch-addon" href="#merch-addon" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-addon</code> is a checkbox control for optional add-on offers. The default slot holds label copy and one or more <code>inline-price</code> elements — typically one <code>&lt;p data-plan-type&gt;</code> block per billing plan (PUF, ABM, M2M). Only the paragraph matching the active <code>plan-type</code> is visible.</p>
+<p>Used in <code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code> card variants in the <code>addon</code> slot. When the shopper toggles the checkbox, <code>merch-card</code> mutates checkout link OSIs via <code>getOsi()</code>.</p>
+<p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a> when slotted prices use <code>inline-price</code>.</p>
+<p>See also: <a href="merch-card.html#addon-checkout">merch-card</a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>, <a href="minicompare.html">Mini Compare Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Standalone add-on with plan-specific pricing. Set <code>plan-type</code> to switch which price paragraph is shown.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">merch-addon</span> <span class="hljs-attr">plan-type</span>=<span class="hljs-string">&quot;PUF&quot;</span> <span class="hljs-attr">custom-checkbox</span> <span class="hljs-attr">checked</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Acrobat AI Assistant<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    Add AI Assistant to your free Reader app for
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;puf-team&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    Add AI Assistant to your free Reader app for
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;abm&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    Add AI Assistant to your free Reader app for
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;m2m&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-addon</span>&gt;</span>
+</code></pre>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<p>On a <code>plans</code> card, the add-on sits in the <code>addon</code> slot. After hydration, the variant layout calls <code>adjustAddon()</code> to set <code>custom-checkbox</code> and copy the main price’s resolved <code>planType</code> onto the element. Toggling the checkbox fires <code>change</code>; <code>merch-card</code> adds or removes the add-on OSI from every checkout link.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Access advanced PDF tools.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+        <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+        <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+        <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-addon</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;addon&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Acrobat AI Assistant<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+      Add AI Assistant for
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+        <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+        <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+        <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;addon-abm-osi&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-addon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+      <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+      <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+      &gt;</span>Buy now&lt;/a
+    &gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="slot-content" tabindex="-1">Slot content <a class="header-anchor" href="#slot-content" href="#slot-content" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Content</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default slot</td>
+<td>Checkbox label. Any element; <code>&lt;p&gt;</code> nodes receive label styling via CSS custom properties.</td>
+</tr>
+<tr>
+<td><code>&lt;p data-plan-type&gt;</code></td>
+<td>Plan-specific copy and pricing. Hidden by default; shown when <code>plan-type</code> on the host matches <code>PUF</code>, <code>ABM</code>, or <code>M2M</code>.</td>
+</tr>
+<tr>
+<td><code>span[is=&quot;inline-price&quot;]</code> inside <code>&lt;p data-plan-type&gt;</code></td>
+<td>Add-on price for that plan. Used by <code>getOsi()</code> and by <code>updatePlanType()</code> when prices settle.</td>
+</tr>
+</tbody>
+</table>
+<p>During AEM hydration (<code>processAddon()</code> in <code>hydrate.js</code>), each <code>inline-price</code> inside the add-on field is wrapped in a <code>&lt;p data-plan-type=&quot;&quot;&gt;</code>. When the price resolves, <code>updatePlanType()</code> sets <code>data-offer-type</code> on the span and <code>data-plan-type</code> on the parent <code>&lt;p&gt;</code> from the settled offer.</p>
+<p><code>span[data-offer-type=&quot;TRIAL&quot;]</code> prices are hidden globally (<code>global.css.js</code>).</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plan-type</code></td>
+<td>Active billing plan (<code>PUF</code>, <code>ABM</code>, or <code>M2M</code>). Controls which <code>&lt;p data-plan-type&gt;</code> paragraph is visible. Set by variant <code>adjustAddon()</code> from the main card price, or authored directly.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>custom-checkbox</code></td>
+<td>When present, hides the native checkbox and shows a styled span (keyboard-accessible via Space). Set automatically by <code>plans</code>, <code>plans-v2</code>, and <code>plans-education</code> layouts after hydration.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>checked</code></td>
+<td>Whether the add-on is selected.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Target</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>change</code></td>
+<td><code>merch-addon</code></td>
+<td>yes</td>
+<td><code>{ checked: boolean }</code></td>
+<td>Fired when the shopper toggles the checkbox (native <code>change</code> or custom checkbox click/Space).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="merch-card-listeners" tabindex="-1">Listeners on parent merch-card <a class="header-anchor" href="#merch-card-listeners" href="#merch-card-listeners" title="Permalink to this heading">#</a></h3>
+<p><code>merch-card</code> listens for bubbling <code>change</code> events from slotted <code>merch-addon</code> and calls <code>toggleAddon()</code>. That method:</p>
+<ol>
+<li>Invokes the variant layout’s <code>toggleAddon()</code> hook when defined (<code>product</code> and <code>mini-compare-chart</code> swap heading price between free and add-on pricing when no main price is present).</li>
+<li>Reads <code>planType</code> and <code>offerType</code> from each settled checkout link, calls <code>merchAddon.getOsi(planType, offerType)</code>, and adds or removes that OSI from <code>data-wcs-osi</code> based on <code>checked</code>.</li>
+</ol>
+<p>See <a href="merch-card.html#addon-checkout">merch-card — Addon checkout mutation</a>.</p>
+<p><code>handleAddonAndQuantityUpdate()</code> can sync <code>checked</code> when a modal checkout returns updated line items (<code>merch-modal:addon-and-quantity-update</code>).</p>
+<h2 id="get-osi" tabindex="-1">getOsi(planType, offerType) <a class="header-anchor" href="#get-osi" href="#get-osi" title="Permalink to this heading">#</a></h2>
+<p>Public method used by <code>merch-card.toggleAddon()</code> to find the add-on WCS OSI for the shopper’s current offer.</p>
+<p>Given <code>planType</code> and <code>offerType</code> from a checkout link’s settled value, the method queries slotted <code>inline-price</code> elements inside <code>&lt;p data-plan-type=&quot;${planType}&quot;&gt;</code> and returns the first matching <code>data-wcs-osi</code>.</p>
+<p>Offer-type lookup uses a priority fallback:</p>
+<table>
+<thead>
+<tr>
+<th><code>offerType</code> argument</th>
+<th>Search order</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TRIAL</code></td>
+<td><code>TRIAL</code></td>
+</tr>
+<tr>
+<td><code>BASE</code></td>
+<td><code>BASE</code>, then <code>PROMOTION</code>, then <code>TRIAL</code></td>
+</tr>
+<tr>
+<td><code>PROMOTION</code></td>
+<td><code>PROMOTION</code>, then <code>BASE</code>, then <code>TRIAL</code></td>
+</tr>
+<tr>
+<td>Other</td>
+<td><code>[offerType]</code> only</td>
+</tr>
+</tbody>
+</table>
+<p>Each candidate selector is <code>p[data-plan-type=&quot;${planType}&quot;] span[is=&quot;inline-price&quot;][data-offer-type=&quot;${type}&quot;]</code>. Returns <code>undefined</code> when no match is found.</p>
+<h2 id="plan-type-sync" tabindex="-1">Plan type sync <a class="header-anchor" href="#plan-type-sync" href="#plan-type-sync" title="Permalink to this heading">#</a></h2>
+<p>On <code>mas:resolved</code> (from child <code>inline-price</code> elements), <code>updatePlanType()</code> runs when the event target is a <code>SPAN</code>. It copies <code>offer.offerType</code> onto the price span’s <code>data-offer-type</code> and <code>offer.planType</code> onto the parent <code>&lt;p&gt;</code>'s <code>data-plan-type</code>.</p>
+<p>After card hydration, variant layouts call <code>adjustAddon()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-v2</code>, <code>plans-education</code></td>
+<td>Sets <code>custom-checkbox</code>; copies <code>planType</code> from settled main price.</td>
+</tr>
+<tr>
+<td><code>product</code>, <code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td>Copies <code>planType</code> from settled main price, or falls back to <code>merch-card</code> <code>plan-type</code> when the price has not settled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="css-custom-properties" tabindex="-1">CSS custom properties <a class="header-anchor" href="#css-custom-properties" href="#css-custom-properties" title="Permalink to this heading">#</a></h2>
+<p>Variant styles set these on <code>merch-addon</code> (defaults shown from the component stylesheet):</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--merch-addon-gap</code></td>
+<td><code>9px</code></td>
+<td>Flex gap between checkbox and label</td>
+</tr>
+<tr>
+<td><code>--merch-addon-align</code></td>
+<td><code>start</code></td>
+<td>Flex cross-axis alignment</td>
+</tr>
+<tr>
+<td><code>--merch-addon-checkbox-size</code></td>
+<td><code>unset</code></td>
+<td>Custom checkbox dimensions</td>
+</tr>
+<tr>
+<td><code>--merch-addon-checkbox-border</code></td>
+<td><code>unset</code></td>
+<td>Custom checkbox border</td>
+</tr>
+<tr>
+<td><code>--merch-addon-checkbox-radius</code></td>
+<td><code>unset</code></td>
+<td>Custom checkbox border radius</td>
+</tr>
+<tr>
+<td><code>--merch-addon-checkbox-checked-bg</code></td>
+<td><code>unset</code></td>
+<td>Checked-state background (often a checkmark icon)</td>
+</tr>
+<tr>
+<td><code>--merch-addon-checkbox-checked-color</code></td>
+<td><code>unset</code></td>
+<td>Checked-state border/background color</td>
+</tr>
+<tr>
+<td><code>--merch-addon-label-size</code></td>
+<td><code>unset</code></td>
+<td>Slotted <code>&lt;p&gt;</code> font size</td>
+</tr>
+<tr>
+<td><code>--merch-addon-label-color</code></td>
+<td><code>unset</code></td>
+<td>Slotted <code>&lt;p&gt;</code> text color</td>
+</tr>
+<tr>
+<td><code>--merch-addon-label-line-height</code></td>
+<td><code>unset</code></td>
+<td>Slotted <code>&lt;p&gt;</code> line height</td>
+</tr>
+</tbody>
+</table>
+<h2 id="variant-placement" tabindex="-1">Variant placement <a class="header-anchor" href="#variant-placement" href="#variant-placement" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Slot</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-education</code>, <code>plans-students</code></td>
+<td><code>addon</code></td>
+<td>Moves to footer on <code>super-wide</code> cards at desktop widths</td>
+</tr>
+<tr>
+<td><code>plans-v2</code></td>
+<td><code>addon</code></td>
+<td>Rendered in body or footer depending on layout branch</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>addon</code></td>
+<td>Above footer; <code>toggleAddon()</code> can swap heading price</td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td><code>addon</code></td>
+<td>Below offer row; <code>toggleAddon()</code> can swap <code>heading-m-price</code></td>
+</tr>
+</tbody>
+</table>
+<p>AEM hydration creates the element from the fragment <code>addon</code> field (or <code>settings.addon</code> fallback) via <code>processAddon()</code>. The field value <code>&quot;disabled&quot;</code> skips add-on creation.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a> (recommended for <code>merch-card</code> pages). <code>merch-addon</code> is registered when <code>merch-card</code> or <code>mas.js</code> loads; there is no separate bundle entry.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>
