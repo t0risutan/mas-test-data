@@ -3,7 +3,6 @@
 ### High
 
 ### Medium
-- [ ] catalog collection pattern: `catalog.md` shows isolated cards only — no `merch-card-collection` example
 
 ### Low
 - [ ] merch-stock: Built and exported but plans stock UX uses merch-card `checkbox-label` instead — unclear when to use standalone element
@@ -16,6 +15,7 @@
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] catalog collection pattern: `catalog.md` shows isolated cards only — no `merch-card-collection` example (completed in catalog.md)
 - [x] mas-mnemonic + merch-mnemonic-list: Used across express, fries, whats-included — no component pages (completed in mas-mnemonic.md, merch-mnemonic-list.md)
 - [x] deeplink / URL hash contract: Shared by collection, search, and sidenav — no docs on supported hash keys (completed in deeplink.md)
 - [x] plans-modal: Shipped with attributes and slots but zero usage documentation (completed in plans-modal.md)
