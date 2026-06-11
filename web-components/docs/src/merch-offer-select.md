@@ -158,7 +158,7 @@ When `merch-offer-select` is a descendant of `merch-quantity-select`:
 - `findAppropriateOffer()` maps the quantity to an offer by comparing the `value` attribute on each `merch-offer`. If no exact match exists, the nearest lower `value` is used.
 - The container `cta` element receives `data-quantity` matching the selected quantity.
 
-See `merch-quantity-select` for the quantity-picker integration.
+See [merch-quantity-select](merch-quantity-select.html) for the quantity-picker integration.
 
 ## Variant placement {#variant-placement}
 

@@ -1,0 +1,288 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-quantity-select" tabindex="-1">merch-quantity-select <a class="header-anchor" href="#merch-quantity-select" href="#merch-quantity-select" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-quantity-select</code> is a combobox-style quantity picker: a labeled text field, dropdown list, and optional light-DOM children (typically <code>merch-offer-select</code>). Shoppers pick a license count from preset steps between <code>min</code> and <code>max</code>, type a custom value, or open the menu with the picker button.</p>
+<p>Used in <code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code> card variants inside the <code>quantity-select</code> slot (or <code>offers</code> on mini-compare). When nested <code>merch-offer-select</code> is present, quantity changes drive offer selection instead of radio clicks — see <a href="merch-offer-select.html#quantity-mode">merch-offer-select quantity mode</a>.</p>
+<p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a> when paired with priced offers.</p>
+<p>See also: <a href="merch-card.html">merch-card</a>, <a href="merch-offer-select.html">merch-offer-select</a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Standalone quantity picker on a <code>plans</code> card. <code>merch-card</code> copies the selected value onto checkout links when <code>merch-quantity-selector:change</code> fires.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Access advanced PDF.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;quantity-select&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-quantity-select</span>
+      <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Select a quantity&quot;</span>
+      <span class="hljs-attr">min</span>=<span class="hljs-string">&quot;1&quot;</span>
+      <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;10&quot;</span>
+      <span class="hljs-attr">step</span>=<span class="hljs-string">&quot;1&quot;</span>
+      <span class="hljs-attr">default-value</span>=<span class="hljs-string">&quot;2&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-quantity-select</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+      <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+      <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+      <span class="hljs-attr">data-quantity</span>=<span class="hljs-string">&quot;2&quot;</span>
+      &gt;</span>Buy now&lt;/a
+    &gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="with-offer-select" tabindex="-1">With merch-offer-select <a class="header-anchor" href="#with-offer-select" href="#with-offer-select" title="Permalink to this heading">#</a></h2>
+<p>Nest <code>merch-offer-select</code> as a child. Each <code>merch-offer</code> uses a <code>value</code> attribute as the quantity threshold. On quantity change, the select picks the matching offer (or the nearest lower threshold) and sets <code>data-quantity</code> on the active CTA.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Access advanced PDF.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;quantity-select&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-quantity-select</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Select a quantity&quot;</span> <span class="hljs-attr">min</span>=<span class="hljs-string">&quot;1&quot;</span> <span class="hljs-attr">max</span>=<span class="hljs-string">&quot;3&quot;</span> <span class="hljs-attr">step</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer-select</span> <span class="hljs-attr">container</span>=<span class="hljs-string">&quot;merch-card&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+            <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+            <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+            <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+            <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+          &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+            <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+            <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+            <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+            <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+            <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+            <span class="hljs-attr">data-quantity</span>=<span class="hljs-string">&quot;1&quot;</span>
+            &gt;</span>Buy now&lt;/a
+          &gt;
+        <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">merch-offer</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;3&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+            <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+            <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+            <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+            <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+          &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+            <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+            <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+            <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+            <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+            <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
+            <span class="hljs-attr">data-quantity</span>=<span class="hljs-string">&quot;3&quot;</span>
+            &gt;</span>Buy now&lt;/a
+          &gt;
+        <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">merch-offer-select</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-quantity-select</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<p>The element renders nothing until at least one of <code>title</code>, <code>min</code>, or <code>step</code> is set (<code>configured</code> getter).</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>Label shown above the input.</td>
+<td><code>''</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td>Lowest quantity in the preset list. Also used as the floor when the shopper types a value.</td>
+<td><code>0</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>Highest preset quantity. The list option for this value is labeled <code>max+</code> and focuses the text field so the shopper can type a higher count.</td>
+<td><code>0</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td>Increment between preset options. Must be <code>&gt; 0</code> for options to be generated.</td>
+<td><code>0</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>default-value</code></td>
+<td>Initial selection. Must appear on the <code>min</code>–<code>max</code> step ladder; otherwise the first option (<code>min</code>) is used.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>max-input</code></td>
+<td>Upper bound for typed quantities. Values above this are clamped on keyup (debounced 500 ms).</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>closed</code></td>
+<td>Whether the dropdown is closed. Toggled by the picker button and keyboard interaction.</td>
+<td><code>true</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>When <code>min</code>, <code>max</code>, <code>step</code>, or <code>default-value</code> change, the component rebuilds the options array (<code>min</code> to <code>max</code> by <code>step</code>) and re-applies the resolved default.</p>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Target</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-quantity-selector:change</code></td>
+<td><code>merch-quantity-select</code></td>
+<td>yes</td>
+<td><code>{ option: number }</code></td>
+<td>Fired when the shopper selects a preset option, confirms with Enter/Tab/Space, or finishes typing (keyup debounced 500 ms). <code>option</code> is the numeric quantity.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="merch-card-listeners" tabindex="-1">Listeners on parent merch-card <a class="header-anchor" href="#merch-card-listeners" href="#merch-card-listeners" title="Permalink to this heading">#</a></h3>
+<p><code>merch-card</code> listens for <code>merch-quantity-selector:change</code> and sets <code>data-quantity</code> on every checkout link in the card (footer CTAs and active description links).</p>
+<p>When <code>merch-offer-select</code> is nested inside <code>merch-quantity-select</code>, it also listens for this event to run quantity-based offer selection.</p>
+<h2 id="card-quantity-sync" tabindex="-1">merch-card-quantity:change sync <a class="header-anchor" href="#card-quantity-sync" href="#card-quantity-sync" title="Permalink to this heading">#</a></h2>
+<p><code>merch-quantity-select</code> listens for <code>merch-card-quantity:change</code> on itself (debounced 500 ms). When <code>detail.quantity</code> differs from the current value, it updates the input and re-dispatches <code>merch-quantity-selector:change</code>.</p>
+<p><code>merch-card</code> dispatches <code>merch-card-quantity:change</code> on its <code>merch-quantity-select</code> when it receives <code>merch-modal:addon-and-quantity-update</code> (<code>detail.id</code>, <code>detail.items</code>) and the main product quantity in the modal cart matches a checkout link on the card. This keeps the picker aligned when quantity is changed inside a checkout modal.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Direction</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-card-quantity:change</code></td>
+<td><code>merch-card</code> → <code>merch-quantity-select</code></td>
+<td><code>{ quantity: number }</code></td>
+<td>External quantity sync (modal cart).</td>
+</tr>
+<tr>
+<td><code>merch-quantity-selector:change</code></td>
+<td><code>merch-quantity-select</code> → descendants / <code>merch-card</code></td>
+<td><code>{ option: number }</code></td>
+<td>User-driven quantity change.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="keyboard" tabindex="-1">Keyboard and menu behavior <a class="header-anchor" href="#keyboard" href="#keyboard" title="Permalink to this heading">#</a></h2>
+<ul>
+<li>Arrow Down on the closed control opens the menu; Arrow Down/Up move the highlighted option while open.</li>
+<li>Enter, Space, or Tab confirm the highlighted option and close the menu.</li>
+<li>Escape closes the menu without changing the selection.</li>
+<li>Click outside closes the menu.</li>
+<li>The popover flips to <code>placement=&quot;top&quot;</code> when it would overflow the viewport bottom.</li>
+</ul>
+<p>Non-digit characters are stripped from typed input. Invalid or empty input reverts to the previous selection (or <code>min</code>, or <code>1</code>).</p>
+<h2 id="variant-placement" tabindex="-1">Variant placement <a class="header-anchor" href="#variant-placement" href="#variant-placement" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Slot</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-v2</code></td>
+<td><code>quantity-select</code></td>
+<td>Often wraps <code>merch-offer-select</code> for tiered pricing</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>quantity-select</code></td>
+<td>License count above footer CTA</td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td><code>offers</code> or <code>quantity-select</code></td>
+<td>Quantity above horizontal offer row</td>
+</tr>
+</tbody>
+</table>
+<p>AEM hydration appends the <code>quantity-select</code> slot wrapper when the fragment field <code>quantitySelect</code> is present (<code>PLANS_AEM_FRAGMENT_MAPPING</code>, <code>PLANS_V2_AEM_FRAGMENT_MAPPING</code>, <code>PRODUCT_AEM_FRAGMENT_MAPPING</code>). Fragment HTML is typically a serialized <code>&lt;merch-quantity-select&gt;</code> element with <code>min</code>, <code>max</code>, <code>step</code>, and <code>title</code>.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a> (recommended for <code>merch-card</code> pages) or the standalone bundle:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../dist/merch-quantity-select.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>Standalone bundle includes <code>merch-quantity-select</code> only. Use <code>mas.js</code> when the picker is on a full card with checkout links and offer selection.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

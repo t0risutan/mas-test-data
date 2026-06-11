@@ -16,6 +16,7 @@ class MasSidenav extends HTMLElement {
       <a href="/web-components/docs/merch-card.html">Merch Card</a>
       <a href="/web-components/docs/merch-card-collection.html">Merch Card Collection</a>
       <a href="/web-components/docs/merch-offer-select.html">Merch Offer Select</a>
+      <a href="/web-components/docs/merch-quantity-select.html">Merch Quantity Select</a>
       <a href="/web-components/docs/ccd.html">CCD Gallery</a>
       <a href="/web-components/docs/ccd-mini.html">CCD Mini</a>
       <a href="/web-components/docs/adobe-home.html">Adobe Home Gallery</a>
