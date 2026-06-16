@@ -5,13 +5,13 @@
 ### Medium
 
 ### Low
-- [ ] merch-secure-transaction: Small label/tooltip element with no page
 - [ ] mas-field: Headless AEM field renderer — no docs
 - [ ] merch-gradient: Internal gradient-border helper — no docs
 - [ ] CCD / Adobe Home variant galleries: Gallery-only for ccd-slice, ccd-suggested, ah-try-buy-widget, ah-promoted-plans
 - [ ] fries.html navigation gap: Page exists but not linked in mas-sidenav.js
 
 ## Done
+- [x] merch-secure-transaction: Small label/tooltip element with no page (completed in merch-secure-transaction.md)
 - [x] image + special-offers galleries: Gallery-only — missing slot reference tables (completed in image.md, specialoffer.md)
 - [x] mini variant: One-line mention only — `MINI_AEM_FRAGMENT_MAPPING` slots undocumented (completed in ccd-mini.md)
 - [x] catalog collection pattern: `catalog.md` shows isolated cards only — no `merch-card-collection` example (completed in catalog.md)
