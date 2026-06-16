@@ -1,0 +1,400 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/merch-sidenav.js"></script>
+<h1 id="merch-sidenav" tabindex="-1">merch-sidenav <a class="header-anchor" href="#merch-sidenav" href="#merch-sidenav" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-sidenav</code> is the filter sidebar for <a href="merch-card-collection.html">merch-card-collection</a>. It wraps Spectrum navigation (<code>sp-sidenav</code>), optional search (<code>merch-search</code>), and optional type tag checkboxes (<code>merch-sidenav-checkbox-group</code>). Selections update the URL hash; the collection reads the same hash keys to filter cards.</p>
+<p>On desktop, the sidenav renders as a static aside. On tablet and mobile (<code>TABLET_DOWN</code> media query), it switches to a modal dialog opened from the collection header filter button.</p>
+<p>See also: <a href="deeplink.html">URL hash deeplink</a>, <a href="merch-card-collection.html">merch-card-collection</a>, <a href="catalog.html">Catalog Gallery</a>, <a href="plans-collection.html">Plans Collection Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Catalog-style sidenav with category list, type checkboxes, and in-sidenav search (desktop only — search is hidden inside the modal and rendered in the collection header instead).</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container catalog&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;gap:30px;&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav</span> <span class="hljs-attr">sidenavTitle</span>=<span class="hljs-string">&quot;REFINE YOUR RESULTS&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-search</span> <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-search</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;Search all products&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">sp-search</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-search</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav-list</span> <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;filter&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;category&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;multilevel&quot;</span> <span class="hljs-attr">manageTabIndex</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;all&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;All&quot;</span> <span class="hljs-attr">selected</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Photo&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;photo&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Video&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;video&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav-list</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav-checkbox-group</span>
+      <span class="hljs-attr">sidenavCheckboxTitle</span>=<span class="hljs-string">&quot;Types&quot;</span>
+      <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;types&quot;</span>
+      <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;types&quot;</span>
+    &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-checkbox</span> <span class="hljs-attr">emphasized</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;desktop&quot;</span>&gt;</span>Desktop<span class="hljs-tag">&lt;/<span class="hljs-name">sp-checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-checkbox</span> <span class="hljs-attr">emphasized</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mobile&quot;</span>&gt;</span>Mobile<span class="hljs-tag">&lt;/<span class="hljs-name">sp-checkbox</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-checkbox</span> <span class="hljs-attr">emphasized</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;web&quot;</span>&gt;</span>Web<span class="hljs-tag">&lt;/<span class="hljs-name">sp-checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav-checkbox-group</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<h2 id="sidenav-attributes" tabindex="-1">merch-sidenav attributes <a class="header-anchor" href="#sidenav-attributes" href="#sidenav-attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute / property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sidenavTitle</code></td>
+<td>Heading shown above slotted content (desktop aside and modal).</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>close-text</code></td>
+<td>Label for the modal close link. Only shown when <code>autoclose</code> is not set.</td>
+<td><code>Close</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>modal</code></td>
+<td>Set automatically on tablet/mobile. When true, renders as <code>sp-overlay</code> dialog instead of aside; slotted <code>merch-search</code> is hidden.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>open</code></td>
+<td>Whether the modal is visible. Set by <code>showModal()</code> / <code>closeModal()</code>.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>autoclose</code></td>
+<td>When set, the modal closes automatically after a sidenav selection (<code>merch-sidenav:select</code>). No close link is shown. Set automatically for the <code>plans</code> variant by <code>attachSidenav()</code>.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sidenav-methods" tabindex="-1">Methods <a class="header-anchor" href="#sidenav-methods" href="#sidenav-methods" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>showModal()</code></td>
+<td>Opens the modal, sets <code>open</code>, adds <code>merch-modal</code> class to <code>&lt;body&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>closeModal()</code></td>
+<td>Closes the modal, removes <code>open</code>, removes <code>merch-modal</code> from <code>&lt;body&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="variant-styling" tabindex="-1">Variant styling <a class="header-anchor" href="#variant-styling" href="#variant-styling" title="Permalink to this heading">#</a></h3>
+<p>When wired through <code>merch-card-collection.attachSidenav()</code>, the collection sets <code>sidenav.variant</code> and adds a CSS class matching the collection variant (e.g. <code>catalog</code>, <code>plans</code>). Variant-specific tokens live in <code>variants/catalog.css.js</code> and <code>variants/plans.css.js</code>. The <code>catalog</code> variant enlarges search (<code>size=&quot;l&quot;</code>) and checkboxes (<code>size=&quot;xl&quot;</code>) in <code>firstUpdated()</code>.</p>
+<h2 id="sidenav-list" tabindex="-1">merch-sidenav-list <a class="header-anchor" href="#sidenav-list" href="#sidenav-list" title="Permalink to this heading">#</a></h2>
+<p>Wraps an <code>sp-sidenav</code> tree. Handles item selection, multilevel expand/collapse, icon swapping, and hash sync.</p>
+<h3 id="list-attributes" tabindex="-1">Attributes <a class="header-anchor" href="#list-attributes" href="#list-attributes" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Attribute / property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deeplink</code></td>
+<td>Hash key written on selection (typically <code>filter</code>). Required for hash sync.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>sidenavListTitle</code></td>
+<td>Optional uppercase section heading above the list.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td><code>aria-label</code> for the list container.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>selected-text</code></td>
+<td>Display text for the current selection. Populated from the selected item’s <code>.selection</code> element <code>data-selected-text</code> or the item <code>label</code>.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>selected-value</code></td>
+<td><code>value</code> of the currently selected <code>sp-sidenav-item</code>.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>toggle-icon-color</code></td>
+<td>When set, swaps the item icon <code>src</code> between <code>data-light</code> and <code>data-dark</code> on the nested <code>.selection</code> element when selected.</td>
+<td><code>false</code></td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="selection-markup" tabindex="-1">Selection markup <a class="header-anchor" href="#selection-markup" href="#selection-markup" title="Permalink to this heading">#</a></h3>
+<p>For custom selected text and icon toggling, nest a <code>&lt;var class=&quot;selection&quot;&gt;</code> inside <code>sp-sidenav-item</code>:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Creativity And Design&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;creativitydesign&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">var</span>
+    <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;selection&quot;</span>
+    <span class="hljs-attr">data-selected-text</span>=<span class="hljs-string">&quot;CREATE!&quot;</span>
+    <span class="hljs-attr">data-light</span>=<span class="hljs-string">&quot;https://example.com/icon-light.svg&quot;</span>
+    <span class="hljs-attr">data-dark</span>=<span class="hljs-string">&quot;https://example.com/icon-dark.svg&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">var</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://example.com/icon-dark.svg&quot;</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+</code></pre>
+<p>On connect, if <code>deeplink</code> is set, the list calls <code>paramsToHash(['filter', 'single_app'])</code> to migrate matching query params into the hash, then starts listening for hash changes. Invalid hash values fall back to the first item and rewrite the hash.</p>
+<h2 id="checkbox-group" tabindex="-1">merch-sidenav-checkbox-group <a class="header-anchor" href="#checkbox-group" href="#checkbox-group" title="Permalink to this heading">#</a></h2>
+<p>Multi-select checkbox filter. Checked values are stored as a comma-separated list in the URL hash.</p>
+<h3 id="checkbox-attributes" tabindex="-1">Attributes <a class="header-anchor" href="#checkbox-attributes" href="#checkbox-attributes" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Attribute / property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deeplink</code></td>
+<td>Hash key written on change. Must be <code>types</code> — the deeplink listener reads the <code>types</code> hash param.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>sidenavCheckboxTitle</code></td>
+<td>Group heading injected as an <code>&lt;h3&gt;</code> on connect.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td><code>aria-label</code> for the group container.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>selectedValues</code></td>
+<td>Array of checked checkbox <code>name</code> values. Synced from hash on load.</td>
+<td><code>[]</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Each <code>sp-checkbox</code> must have a <code>name</code> attribute matching a card <code>types</code> value (see <a href="merch-card-collection.html#filtering">merch-card-collection filtering</a>).</p>
+<h2 id="merch-search" tabindex="-1">merch-search <a class="header-anchor" href="#merch-search" href="#merch-search" title="Permalink to this heading">#</a></h2>
+<p>Light-DOM wrapper around <code>sp-search</code> that syncs input to the URL hash and notifies the collection.</p>
+<h3 id="search-attributes" tabindex="-1">Attributes <a class="header-anchor" href="#search-attributes" href="#search-attributes" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deeplink</code></td>
+<td>Hash key for the search term. Use <code>search</code> to drive <code>merch-card-collection</code> filtering.</td>
+<td>—</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search-events" tabindex="-1">Events <a class="header-anchor" href="#search-events" href="#search-events" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-search:change</code></td>
+<td>yes</td>
+<td><code>{ type: 'search', value }</code></td>
+<td>Dispatched on debounced input when the search value is non-empty.</td>
+</tr>
+</tbody>
+</table>
+<p>On connect, restores the input from the hash (<code>deeplink</code> key) and listens for subsequent hash changes. Form submit is prevented.</p>
+<p>Search can appear in two places:</p>
+<ul>
+<li><strong>Inside <code>merch-sidenav</code></strong> — visible on desktop; hidden when the sidenav is in modal mode.</li>
+<li><strong>Inside <code>merch-card-collection-header</code></strong> — rendered by the collection header on mobile/tablet when the variant’s <code>headerVisibility.search</code> allows it. Uses the same <code>deeplink=&quot;search&quot;</code> contract.</li>
+</ul>
+<h2 id="collection-integration" tabindex="-1">Collection integration <a class="header-anchor" href="#collection-integration" href="#collection-integration" title="Permalink to this heading">#</a></h2>
+<p><code>merch-card-collection</code> discovers a sibling <code>merch-sidenav</code> on its parent during <code>init()</code>. Call <code>attachSidenav(sidenav, append?)</code> to:</p>
+<ol>
+<li>Optionally prepend the sidenav to the parent container.</li>
+<li>Set <code>sidenav.variant</code> and apply the variant CSS class.</li>
+<li>Set <code>autoclose</code> for the <code>plans</code> variant (<code>SIDENAV_AUTOCLOSE</code>).</li>
+<li>Create and insert a <code>merch-card-collection-header</code>.</li>
+<li>Run the variant’s <code>onSidenavAttached</code> hook from <code>collectionOptions</code>.</li>
+</ol>
+<p>The header filter button calls <code>collection.openFilters()</code> → <code>sidenav.showModal()</code>.</p>
+<p>After filtering, the collection listens for <code>merch-sidenav:select</code> on the sidenav to refresh result-count placeholders via <code>merch-card-collection:literals-changed</code>. The <code>filter</code> detail value comes from <code>sidenav.filters.selectedText</code> (the first <code>merch-sidenav-list</code>).</p>
+<h2 id="deeplink" tabindex="-1">URL hash deeplink <a class="header-anchor" href="#deeplink" href="#deeplink" title="Permalink to this heading">#</a></h2>
+<p>Sidenav children write hash keys via <code>pushStateFromComponent()</code>; <a href="merch-card-collection.html">merch-card-collection</a> reads the same keys. See <a href="deeplink.html">URL hash deeplink</a> for the full contract, supported keys, query-param migration, and edge cases.</p>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-sidenav:select</code></td>
+<td>yes</td>
+<td><code>{ type: 'sidenav', value, elt }</code></td>
+<td>Dispatched by <code>merch-sidenav-list</code> when an item is selected. Closes the modal when <code>autoclose</code> is set.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<p>During collection hydration, <code>prepareSideNavSettings()</code> parses sidenav-related AEM fields into <code>collection.data.sidenavSettings</code>:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>searchText</code></td>
+<td>Search placeholder. Applied to the <code>searchText</code> collection placeholder when not authored separately.</td>
+</tr>
+<tr>
+<td><code>tagFilters</code> + <code>tagFiltersTitle</code></td>
+<td>Parsed into a checkbox group descriptor (see below).</td>
+</tr>
+<tr>
+<td><code>checkboxGroups</code></td>
+<td>Used directly as checkbox group descriptors when present (takes precedence over <code>tagFilters</code>).</td>
+</tr>
+<tr>
+<td><code>linksTitle</code>, <code>link</code>, <code>linkText</code>, <code>linkIcon</code></td>
+<td>Stored in <code>sidenavSettings</code> for resource-link sidenav sections.</td>
+</tr>
+</tbody>
+</table>
+<p>The sidenav DOM is not auto-generated by <code>merch-card-collection</code>. Author or block-code must build <code>merch-sidenav</code> markup (typically from the collection hierarchy and <code>sidenavSettings</code>) and call <code>attachSidenav()</code>.</p>
+<h3 id="tag-filters" tabindex="-1">tagFilters → checkbox group <a class="header-anchor" href="#tag-filters" href="#tag-filters" title="Permalink to this heading">#</a></h3>
+<p>When <code>checkboxGroups</code> is absent and <code>tagFilters</code> is present, hydration builds one checkbox group:</p>
+<pre><code class="hljs language-javascript">{
+  <span class="hljs-attr">title</span>: fragment.<span class="hljs-property">fields</span>.<span class="hljs-property">tagFiltersTitle</span>,
+  <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;types&#x27;</span>,
+  <span class="hljs-attr">deeplink</span>: <span class="hljs-string">&#x27;types&#x27;</span>,
+  <span class="hljs-attr">checkboxes</span>: fragment.<span class="hljs-property">fields</span>.<span class="hljs-property">tagFilters</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">tag</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> parsedTag = tag.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;/&#x27;</span>).<span class="hljs-title function_">pop</span>();           <span class="hljs-comment">// &quot;mas:types/desktop&quot; → &quot;desktop&quot;</span>
+    <span class="hljs-keyword">let</span> tagLabel = fragment.<span class="hljs-property">settings</span>?.<span class="hljs-property">tagLabels</span>?.[parsedTag] || parsedTag;
+    <span class="hljs-keyword">if</span> (tagLabel.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;coll-tag-filter&#x27;</span>)) {
+      tagLabel = parsedTag.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">toUpperCase</span>() + parsedTag.<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>);
+    }
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">name</span>: parsedTag, <span class="hljs-attr">label</span>: tagLabel };
+  }),
+}
+</code></pre>
+<p>Card <code>types</code> attributes are populated from <code>mas:types/*</code> tags on each card fragment during hydration. Checkbox <code>name</code> values must match those suffixes for type filtering to work.</p>
+<h3 id="checkbox-groups" tabindex="-1">checkboxGroups format <a class="header-anchor" href="#checkbox-groups" href="#checkbox-groups" title="Permalink to this heading">#</a></h3>
+<p>When <code>checkboxGroups</code> is authored on the collection fragment, it is passed through unchanged as <code>sidenavSettings.tagFilters</code>. Each group object supports:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>Checkbox group heading (<code>sidenavCheckboxTitle</code>).</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td><code>aria-label</code> for the group.</td>
+</tr>
+<tr>
+<td><code>deeplink</code></td>
+<td>Hash key (use <code>types</code>).</td>
+</tr>
+<tr>
+<td><code>checkboxes</code></td>
+<td>Array of <code>{ name, label }</code> objects mapping to <code>sp-checkbox</code> elements.</td>
+</tr>
+</tbody>
+</table>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

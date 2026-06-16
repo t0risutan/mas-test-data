@@ -1,0 +1,350 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-badge" tabindex="-1">merch-badge <a class="header-anchor" href="#merch-badge" href="#merch-badge" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-badge</code> is a small label element for plan highlights such as “Best value”, “Recommended”, or “Save 40%”. It supports Spectrum color tokens, optional icons, and dynamic pricing via <a href="inline-price.html">inline-price</a>.</p>
+<p>On <a href="merch-card.html">merch-card</a>, badges appear in two ways:</p>
+<ol>
+<li><strong>Attribute-based</strong> — set <code>badge-text</code>, <code>badge-color</code>, and <code>badge-background-color</code> on the card. The variant layout renders a shadow-DOM <code>#badge</code> div (no <code>merch-badge</code> element). Used in manual authoring and in <a href="merch-offer-select.html">merch-offer-select</a> offer switching.</li>
+<li><strong>Slot-based</strong> — place <code>&lt;merch-badge slot=&quot;badge&quot;&gt;</code> (or <code>slot=&quot;trial-badge&quot;</code>) on the card. AEM hydration wraps fragment <code>badge</code> / <code>trialBadge</code> fields in <code>&lt;merch-badge&gt;</code> automatically when the variant mapping defines a <code>badge.slot</code>.</li>
+</ol>
+<p>Registered when <a href="mas.js.html">mas.js</a> or <a href="merch-card.html">merch-card</a> loads.</p>
+<p>See also: <a href="merch-card.html">merch-card</a>, <a href="specialoffer.html">Special Offer Gallery</a>, <a href="plans.html">Plans Gallery</a>, <a href="merch-offer-select.html">merch-offer-select</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Standalone badge using a plans color token. The <code>background-color</code> value is a CSS custom property name (without the <code>--</code> prefix); the component resolves it as <code>var(--&lt;token&gt;)</code>.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-badge</span> <span class="hljs-attr">background-color</span>=<span class="hljs-string">&quot;spectrum-yellow-300-plans&quot;</span> <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;#000000&quot;</span>&gt;</span>
+  Best value
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-badge</span>&gt;</span>
+</code></pre>
+<p>Badge with a Spectrum icon. Values starting with <code>sp-icon-</code> render as custom elements; any other <code>icon</code> value is treated as an image URL.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-badge</span>
+  <span class="hljs-attr">background-color</span>=<span class="hljs-string">&quot;spectrum-green-900-plans&quot;</span>
+  <span class="hljs-attr">color</span>=<span class="hljs-string">&quot;#FFFFFF&quot;</span>
+  <span class="hljs-attr">icon</span>=<span class="hljs-string">&quot;sp-icon-checkmark-circle&quot;</span>
+&gt;</span>
+  Save 40%
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-badge</span>&gt;</span>
+</code></pre>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<h3 id="attribute-based" tabindex="-1">Attribute-based badge <a class="header-anchor" href="#attribute-based" href="#attribute-based" title="Permalink to this heading">#</a></h3>
+<p>Set badge attributes on <code>merch-card</code>. The variant layout’s <code>badge</code> getter renders a styled <code>&lt;div id=&quot;badge&quot;&gt;</code> in shadow DOM. <a href="merch-offer-select.html">merch-offer-select</a> copies the selected offer’s <code>badge-text</code> onto these attributes at runtime.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span>
+  <span class="hljs-attr">badge-color</span>=<span class="hljs-string">&quot;#000000&quot;</span>
+  <span class="hljs-attr">badge-background-color</span>=<span class="hljs-string">&quot;#EDCC2D&quot;</span>
+  <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Access advanced PDF tools.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h3 id="slot-based" tabindex="-1">Slot-based badge <a class="header-anchor" href="#slot-based" href="#slot-based" title="Permalink to this heading">#</a></h3>
+<p>Place <code>merch-badge</code> in the card’s <code>badge</code> slot. Match <code>background-color</code> to the card’s <code>border-color</code> token so the badge border aligns with the card outline.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;special-offers&quot;</span>
+  <span class="hljs-attr">border-color</span>=<span class="hljs-string">&quot;spectrum-green-900-special-offers&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-badge</span>
+    <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;badge&quot;</span>
+    <span class="hljs-attr">background-color</span>=<span class="hljs-string">&quot;spectrum-green-900-special-offers&quot;</span>
+  &gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>Save 40%<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-badge</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;detail-m&quot;</span>&gt;</span>INDIVIDUALS<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Green badge card<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Badge with green highlight.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h3 id="trial-badge" tabindex="-1">Trial badge <a class="header-anchor" href="#trial-badge" href="#trial-badge" title="Permalink to this heading">#</a></h3>
+<p>Some variants expose a separate <code>trial-badge</code> slot for secondary labels (for example “Free trial” under the title). AEM hydration wraps <code>trialBadge</code> fragment fields the same way as <code>badge</code>, using <code>border-color</code> instead of <code>background-color</code>.</p>
+<p>Variants with a <code>trial-badge</code> slot: <code>fries</code>, <code>full-pricing-express</code>, <code>simplified-pricing-express</code>, <code>headless</code>.</p>
+<h2 id="slot-content" tabindex="-1">Slot content <a class="header-anchor" href="#slot-content" href="#slot-content" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Content</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default slot</td>
+<td>Badge label text. Cleared on connect unless an <code>inline-price</code> span is present (see below).</td>
+</tr>
+<tr>
+<td><code>span[is=&quot;inline-price&quot;]</code></td>
+<td>Dynamic price inside the badge. When present, light-DOM text is preserved so the slot can render settled pricing. Styled in <code>mini-compare-chart</code> and <code>mini-compare-chart-mweb</code> variants.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>background-color</code></td>
+<td><code>backgroundColor</code></td>
+<td>CSS custom property name for fill (e.g. <code>spectrum-yellow-300-plans</code>, <code>gradient-purple-blue</code>). Resolved as <code>var(--&lt;value&gt;)</code>. Also used for the default border when <code>border-color</code> is absent or <code>transparent</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>border-color</code></td>
+<td><code>borderColor</code></td>
+<td>CSS custom property name for border. When set and not <code>transparent</code>, overrides the background-derived border. Trial badges from AEM hydration use this attribute.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>color</code></td>
+<td>Text color. Set as a literal value on <code>--merch-badge-color</code> (hex or any valid CSS color).</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td><code>icon</code></td>
+<td>Leading icon. <code>sp-icon-*</code> names render as Spectrum icon elements; other values render as <code>&lt;img src=&quot;...&quot;&gt;</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>variant</code></td>
+<td><code>variant</code></td>
+<td>Card variant string. Set by AEM hydration (<code>processBadge</code>, <code>processTrialBadge</code>); not read by the component stylesheet.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="background-color-tokens" tabindex="-1">background-color tokens <a class="header-anchor" href="#background-color-tokens" href="#background-color-tokens" title="Permalink to this heading">#</a></h2>
+<p>Token names must match CSS custom properties defined in <code>global.css.js</code>. Variant mappings restrict AEM authoring via <code>allowedBadgeColors</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Token family</th>
+<th>Example values</th>
+<th>White text override</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plans</td>
+<td><code>spectrum-yellow-300-plans</code>, <code>spectrum-gray-300-plans</code>, <code>spectrum-gray-700-plans</code>, <code>spectrum-green-900-plans</code>, <code>spectrum-red-700-plans</code></td>
+<td><code>spectrum-red-700-plans</code></td>
+</tr>
+<tr>
+<td>Special offers</td>
+<td><code>spectrum-yellow-300-special-offers</code>, <code>spectrum-gray-300-special-offers</code>, <code>spectrum-green-900-special-offers</code></td>
+<td><code>spectrum-green-900-special-offers</code></td>
+</tr>
+<tr>
+<td>Segment</td>
+<td><code>color-yellow-300-variation</code>, <code>color-green-900-variation</code>, <code>color-gray-300-variation</code>, <code>color-gray-700-variation</code>, <code>color-red-700-variation</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Express</td>
+<td><code>spectrum-blue-400</code>, <code>spectrum-gray-300</code>, <code>spectrum-yellow-300</code>, <code>gradient-purple-blue</code>, <code>gradient-firefly-spectrum</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Adobe Home</td>
+<td><code>fuchsia</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Gradient tokens (<code>gradient-*</code>) use slightly larger padding (<code>3px 11px 4px 11px</code> vs <code>2px 10px 3px 10px</code>) and skip the background-derived border.</p>
+<h2 id="aem-hydration" tabindex="-1">AEM hydration <a class="header-anchor" href="#aem-hydration" href="#aem-hydration" title="Permalink to this heading">#</a></h2>
+<p><code>processBadge()</code> in <code>hydrate.js</code> handles the fragment <code>badge</code> field:</p>
+<table>
+<thead>
+<tr>
+<th>Variant mapping</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>badge.slot</code> defined</td>
+<td>Plain-text badge values are wrapped in <code>&lt;merch-badge variant=&quot;…&quot; background-color=&quot;…&quot; border-color=&quot;…&quot;&gt;</code>. Default background is <code>#F8D904</code>; when the mapping <code>badge.default</code> is in <code>allowedBadgeColors</code> and no <code>borderColor</code> is set, the default token is also applied as <code>border-color</code>.</td>
+</tr>
+<tr>
+<td>No <code>badge.slot</code></td>
+<td>Sets <code>badge-text</code>, <code>badge-color</code> (default <code>#000000</code>), and <code>badge-background-color</code> on <code>merch-card</code>. Also mirrors background onto <code>border-color</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>processTrialBadge()</code> wraps <code>trialBadge</code> fields in <code>&lt;merch-badge&gt;</code> with <code>border-color</code> (default <code>#31A547</code>) and appends to the <code>trial-badge</code> slot.</p>
+<p>Pre-authored <code>&lt;merch-badge&gt;</code> markup in fragment fields is passed through unchanged.</p>
+<h2 id="css-custom-properties" tabindex="-1">CSS custom properties <a class="header-anchor" href="#css-custom-properties" href="#css-custom-properties" title="Permalink to this heading">#</a></h2>
+<p>Set on the host in <code>connectedCallback()</code> from attributes and parent card context:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--merch-badge-background-color</code></td>
+<td><code>background-color</code> attribute → <code>var(--&lt;token&gt;)</code></td>
+<td>Fill</td>
+</tr>
+<tr>
+<td><code>--merch-badge-color</code></td>
+<td><code>color</code> attribute</td>
+<td>Text color (fallback <code>#000</code>)</td>
+</tr>
+<tr>
+<td><code>--merch-badge-border</code></td>
+<td><code>border-color</code> or <code>background-color</code></td>
+<td><code>1px solid var(--&lt;token&gt;)</code></td>
+</tr>
+<tr>
+<td><code>--merch-badge-padding</code></td>
+<td>Gradient vs solid background</td>
+<td>Inner spacing</td>
+</tr>
+<tr>
+<td><code>--merch-badge-font-size</code></td>
+<td>Fixed</td>
+<td><code>var(--consonant-merch-card-body-xs-font-size)</code></td>
+</tr>
+<tr>
+<td><code>--merch-badge-border-radius</code></td>
+<td><code>global.css.js</code></td>
+<td><code>4px 0 0 4px</code> (LTR); flipped in RTL</td>
+</tr>
+<tr>
+<td><code>--merch-badge-offset</code></td>
+<td>Parent <code>merch-icon</code> count</td>
+<td>Icon spacing adjustment on plans cards</td>
+</tr>
+<tr>
+<td><code>--merch-badge-with-offset</code></td>
+<td><code>1</code> when offset &gt; 0, else <code>0</code></td>
+<td>Used in max-width calc</td>
+</tr>
+<tr>
+<td><code>--merch-badge-card-size</code></td>
+<td><code>2</code> when parent has <code>size</code> attribute, else <code>1</code></td>
+<td>Used in max-width calc</td>
+</tr>
+</tbody>
+</table>
+<p>Variant styles (for example <code>plans.css.js</code>) use the offset and card-size variables to cap badge width when icons are present.</p>
+<h2 id="variant-placement" tabindex="-1">Variant placement <a class="header-anchor" href="#variant-placement" href="#variant-placement" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Badge mechanism</th>
+<th>Slot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-v2</code>, <code>plans-education</code>, <code>plans-students</code></td>
+<td>Attribute-based shadow <code>#badge</code> and/or slotted <code>merch-badge</code></td>
+<td><code>badge</code></td>
+</tr>
+<tr>
+<td><code>product</code>, <code>segment</code>, <code>catalog</code>, <code>commerce</code>, <code>image</code></td>
+<td>Attribute-based and/or slotted</td>
+<td><code>badge</code></td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td>Attribute-based and/or slotted; supports <code>inline-price</code> in badge</td>
+<td><code>badge</code></td>
+</tr>
+<tr>
+<td><code>special-offers</code></td>
+<td>Slotted <code>merch-badge</code> on image overlay; attribute-based <code>#badge</code> in <code>cardImage</code></td>
+<td><code>badge</code></td>
+</tr>
+<tr>
+<td><code>simplified-pricing-express</code>, <code>full-pricing-express</code></td>
+<td>Slotted only (no attribute shadow badge)</td>
+<td><code>badge</code>, <code>trial-badge</code></td>
+</tr>
+<tr>
+<td><code>fries</code>, <code>headless</code></td>
+<td>Slotted only</td>
+<td><code>badge</code>, <code>trial-badge</code></td>
+</tr>
+<tr>
+<td><code>ah-try-buy-widget</code></td>
+<td>Slotted only</td>
+<td><code>badge</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a> (recommended for <code>merch-card</code> pages). <code>merch-badge</code> is registered when <code>merch-card</code> or <code>mas.js</code> loads; there is no separate bundle entry.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

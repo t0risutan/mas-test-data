@@ -3,6 +3,7 @@
 ## Introduction {#introduction}
 
 This custom element renders a checkout link supporting most of the features documented at https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide.<br>
+
 Sometimes a checkout-link can be also referred as placeholder, as it can be used as an inline link resolving at runtime.<br>
 The term placeholder will be deprecated and it is recommended to refer as **checkout-link custom element** going forward.
 
@@ -32,14 +33,21 @@ See [MAS](mas.html#terminology) to learn more.
 | `data-checkout-workflow-step` | [workflow step](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-RegularWorkflow) to land on the unified checkout page                                       | email         | `false`  | mas.js                  |
 | `data-extra-options`          | additional query params to append to the url, see: [Table of public query params](https://wiki.corp.adobe.com/pages/viewpage.action?spaceKey=businessservices&title=UCv3+Link+Creation+Guide#UCv3LinkCreationGuide-Tableofpublicqueryparams) | {}            | `false`  | mas.js                  |
 | `data-ims-country`            | the ims country to code of the user if signed in, overrides the locale country in the generated checkout url                                                                                                                                 |               | `false`  | mas.js or consumer code |
+| `data-checkout-market-segment`| Overrides market segment in the checkout URL when the resolved offer segment is not sufficient                                                                                                                                    |               | `false`  | mas.js or consumer code |
+| `data-ms`                     | Short market segment override passed to checkout URL building (`e` → `EDU`, `t` → `TEAM`; other values pass through)                                                                                                              |               | `false`  | mas.js or consumer code |
+| `data-cs`                     | Customer segment override for checkout URL building (e.g. `TEAM`)                                                                                                                                                                |               | `false`  | mas.js or consumer code |
 | `data-perpetual`              | whether this is a perpetual offer `true\|false`                                                                                                                                                                                              |               | `false`  | mas.js                  |
 | `data-promotion-code`         | Flex promotion code, if applicable                                                                                                                                                                                                           |               | `false`  | mas.js                  |
 | `data-quantity`               | Quantity of the offer to purchase                                                                                                                                                                                                            | 1             | `false`  | mas.js or consumer code |
 | `data-entitlement`            | `entitlement` flag for client side interpretation                                                                                                                                                                                            | `false`       | `false`  | mas.js                  |
 | `data-upgrade`                | `upgrade` flag for client side interpretation                                                                                                                                                                                                | `false`       | `false`  | mas.js                  |
-| `data-modal`                  | `modal` flag for client side interpretation                                                                                                                                                                                                  | `false`       | `false`  | mas.js                  |
-| `data-analytics-id`           | human-readable, non-translatable link id for analytics. Authored in Studio in Link Editor.                                                                                                                                                   | `false`       | `false`  | mas.js                  |
-| `daa-ll`                      | martech-compatible link id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the link within a card. E.g. : see-terms-1, buy-now-2                                                                              | `false`       | `false`  | mas.js                  |
+| `data-modal`                  | Modal checkout type. Values `twp`, `d2p`, or `crm` enable the [3-in-1 modal flow](feature-flags.html#mas-ff-3in1) when `mas-ff-3in1` is not `off`. Other truthy values set `href` to `#` for modal handling. | `false`       | `false`  | mas.js or consumer code |
+| `data-analytics-id`           | human-readable, non-translatable link id for analytics. Authored in Studio in Link Editor.                                                                                                                                                   |               | `false`  | mas.js                  |
+| `daa-ll`                      | martech-compatible link id for analytics. Format: '${data-analytics-id}-${#}', where # is the position of the link within a card. E.g. : see-terms-1, buy-now-2                                                                              |               | `false`  | mas.js                  |
+
+`data-analytics-id`, `daa-ll`, and `data-template` are read from `dataset` when present but are not listed in `observedAttributes`; changing them at runtime may not trigger a re-render unless you call `requestUpdate(true)`.
+
+Unlike `checkout-button`, the native `href` attribute holds the resolved checkout URL. The element does not navigate on its own in `clickHandler`; use default link behavior or call `window.location` from your listener.
 
 ### Examples {#examples}
 
@@ -98,9 +106,13 @@ Two photoshop and three acrobat pro single apps (TEAMS):
 | Property         | Description                                                                                                                                                     |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `isCheckoutLink` | on checkout link elements, it will return `true`                                                                                                                |
-| `onceSettled`    | promise that resolves when the custom-element either resolves or fails to resolve the offer                                                                     |
+| `onceSettled()`  | promise that resolves when the custom-element either resolves or fails to resolve the offer                                                                     |
 | `options`        | JSON object with the complete set of properties used to resolve the offer                                                                                       |
 | `value`          | The actual offer that is used to render the checkout link. In some cases WCS can return multiple offers but only one will be picked to render for a single app. |
+| `marketSegment`  | Resolved market segment from options or offer.                                                                                                                  |
+| `customerSegment`| Resolved customer segment from options or offer.                                                                                                                |
+| `is3in1Modal`    | `true` when `data-modal` is `twp`, `d2p`, or `crm`.                                                                                                             |
+| `isOpen3in1Modal`| `true` when `is3in1Modal` and no `meta[name=mas-ff-3in1]` with `content="off"`.                                                                               |
 
 ### Example
 
@@ -141,23 +153,31 @@ Two photoshop and three acrobat pro single apps (TEAMS):
 
 ```
 
+## Static factory {#static-factory}
+
+`CheckoutLink.createCheckoutLink(options, innerHTML)` returns a configured `<a is="checkout-link">` when `mas-commerce-service` is active, or `null` otherwise.
+
 ## Methods {#methods}
 
-| Property                       | Description                                                                                                    |
+| Method                         | Description                                                                                                    |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
 | `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
+| `updateOptions(options)`       | Updates `dataset` from collected checkout options.                                                           |
+
+When `registerCheckoutAction` on [mas-commerce-service](mas-commerce-service.html) returns a `handler`, the element sets `checkoutActionHandler` and `href` to `#`; the handler runs on click instead of navigation.
+
+Resolved download/upgrade CTAs add CSS classes `download` or `upgrade` and may leave `href` empty until the custom action applies.
 
 ## Events {#events}
 
 | Event          | Description                                        |
 | -------------- | -------------------------------------------------- |
-| `mas:pending`  | fires when checkout link starts loading            |
 | `mas:resolved` | fires when the offer is successfully resolved      |
 | `mas:failed`   | fires when the offer could not be found or fetched |
 
 <br>
 
-For each event, the following css classes are toggled on the element: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
+There is no `mas:pending` event in the current implementation. Loading state is reflected with CSS classes: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
 
 ### Example
 
@@ -183,9 +203,6 @@ For each event, the following css classes are toggled on the element: `placehold
     const logger = (...messages) =>
         (log.innerHTML = `${messages.join(' ')}<br>${log.innerHTML}`);
     const eventsDemo = document.getElementById('eventsDemo');
-    eventsDemo.addEventListener('mas:pending', () =>
-        logger('checkout-link pending'),
-    );
     eventsDemo.addEventListener('mas:resolved', (e) =>
         logger('checkout-link resolved'),
     );

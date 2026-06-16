@@ -24,14 +24,275 @@
     <aside is="mas-sidenav"></aside>
 <main>
 <sp-theme color="light" scale="medium">
+<script type="module" src="../dist/merch-card-collection.js"></script>
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>Catalog cards use <code>variant=&quot;catalog&quot;</code> (explicit in this gallery or inferred from the fragment <code>variant</code> field). Mapping: <code>CATALOG_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/catalog.js</code>.</p>
+<p>Catalog uses attribute-based badges (<code>badge: true</code> without a slot config) rather than the slotted <code>merch-badge</code> pattern used on plans cards.</p>
+<p>Production catalog pages (for example <a href="https://www.adobe.com/products/catalog.html">adobe.com/products/catalog.html</a>) render cards inside <code>&lt;merch-card-collection&gt;</code> with a sibling <code>&lt;merch-sidenav&gt;</code> for category navigation, search, and type-tag filtering.</p>
+<p>See <a href="merch-card-collection.html">merch-card-collection</a> for collection API details, <a href="merch-sidenav.html">merch-sidenav</a> for filter sidebar wiring, and <a href="deeplink.html">URL hash deeplink</a> for hash-driven filter state.</p>
+<h2 id="collection-setup" tabindex="-1">Collection setup <a class="header-anchor" href="#collection-setup" href="#collection-setup" title="Permalink to this heading">#</a></h2>
+<p>Wrap the collection and sidenav in a <code>.collection-container.catalog</code> element. Hydrate from a single collection <code>aem-fragment</code>; <code>merch-card-collection</code> creates one <code>merch-card</code> per referenced card fragment on <code>aem:load</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Catalog behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grid class</td>
+<td><code>four-merch-cards catalog</code> (from <code>VARIANT_CLASSES</code> in <code>merch-card-collection.js</code>)</td>
+</tr>
+<tr>
+<td>Card width</td>
+<td><code>var(--consonant-merch-card-catalog-width)</code> — 302px by default, 300px at desktop (<code>catalog.css.js</code>)</td>
+</tr>
+<tr>
+<td>Card min-height</td>
+<td>330px inside <code>.collection-container.catalog</code></td>
+</tr>
+<tr>
+<td>Wide cards</td>
+<td><code>size=&quot;wide&quot;</code> and <code>size=&quot;super-wide&quot;</code> cards use <code>width: auto</code> in collections</td>
+</tr>
+<tr>
+<td><code>collectionOptions</code></td>
+<td>Not registered for the catalog variant (unlike <code>plans</code> and <code>plans-v2</code>)</td>
+</tr>
+<tr>
+<td>Sidenav <code>autoclose</code></td>
+<td>Not set for catalog (<code>SIDENAV_AUTOCLOSE</code> only includes <code>plans</code>)</td>
+</tr>
+<tr>
+<td>Search size</td>
+<td><code>l</code> on <code>sp-search</code> inside <code>merch-sidenav</code> and the collection header</td>
+</tr>
+<tr>
+<td>Type checkboxes</td>
+<td><code>xl</code> on <code>sp-checkbox</code> elements in <code>merch-sidenav-checkbox-group</code></td>
+</tr>
+<tr>
+<td>Type filtering</td>
+<td>Card <code>types</code> attributes are populated from <code>mas:types/*</code> tags on each card fragment; checkbox <code>name</code> values must match those suffixes</td>
+</tr>
+<tr>
+<td>Pagination</td>
+<td><code>limit</code> is set to <code>27</code> during hydration; footer “Show more” increments <code>page</code></td>
+</tr>
+<tr>
+<td>Hash deeplink</td>
+<td>Enabled when the collection has a hierarchy and <code>filtered</code> is not set</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;collection-container catalog&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav</span> <span class="hljs-attr">sidenavTitle</span>=<span class="hljs-string">&quot;REFINE YOUR RESULTS&quot;</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- Category tree, search, and type checkboxes — see merch-sidenav --&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-card-collection</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">aem-fragment</span> <span class="hljs-attr">fragment</span>=<span class="hljs-string">&quot;1f0d1698-bfe6-4806-9fae-91e193950bc6&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">aem-fragment</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-card-collection</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>The sidenav DOM is not auto-generated. Author <code>merch-sidenav</code> markup from the collection hierarchy and <code>sidenavSettings</code>, then call <code>attachSidenav()</code> (or rely on a sibling sidenav discovered during <code>init()</code>). See <a href="merch-sidenav.html#collection-integration">merch-sidenav collection integration</a>.</p>
+<h2 id="collection-fields" tabindex="-1">Collection AEM fragment fields <a class="header-anchor" href="#collection-fields" href="#collection-fields" title="Permalink to this heading">#</a></h2>
+<p>During collection hydration (<code>merch-card-collection.js</code> → <code>normalizePayload()</code>), hierarchy nodes and sidenav settings are parsed from the collection fragment:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>label</code></td>
+<td>Display name for a hierarchy node</td>
+</tr>
+<tr>
+<td><code>queryLabel</code></td>
+<td>Filter key written to card <code>filters</code> objects (falls back to lowercased <code>label</code>)</td>
+</tr>
+<tr>
+<td><code>cards</code></td>
+<td>Card fragment IDs referenced at this hierarchy level</td>
+</tr>
+<tr>
+<td><code>collections</code></td>
+<td>Nested hierarchy nodes for category navigation</td>
+</tr>
+<tr>
+<td><code>defaultchild</code></td>
+<td>Default card fragment ID at the root when no nested hierarchy exists</td>
+</tr>
+<tr>
+<td><code>searchText</code></td>
+<td>Search field placeholder; also applied to the <code>searchText</code> collection placeholder when not authored separately</td>
+</tr>
+<tr>
+<td><code>tagFilters</code> + <code>tagFiltersTitle</code></td>
+<td>Parsed into a type checkbox group (<code>label: 'types'</code>, <code>deeplink: 'types'</code>) when <code>checkboxGroups</code> is absent</td>
+</tr>
+<tr>
+<td><code>checkboxGroups</code></td>
+<td>Used directly as checkbox group descriptors (takes precedence over <code>tagFilters</code>)</td>
+</tr>
+<tr>
+<td><code>linksTitle</code>, <code>link</code>, <code>linkText</code>, <code>linkIcon</code></td>
+<td>Resource link section in the sidenav (<code>sidenavSettings</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Fragment <code>placeholders</code> (for example <code>searchText</code>, <code>filtersText</code>, <code>sortText</code>, <code>catalogSidenavTitle</code>) are injected as slotted elements on the collection and header. See <a href="merch-card-collection.html#placeholder-slots">merch-card-collection placeholder slots</a>.</p>
+<h2 id="aem-fields" tabindex="-1">Card AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Must be <code>catalog</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Title; shares slot with prices.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Price HTML with <code>inline-price</code> elements.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>shortDescription</code></td>
+<td><code>action-menu-content</code></td>
+<td><code>div</code></td>
+<td>When present, sets <code>action-menu=&quot;true&quot;</code> and default <code>action-menu-label=&quot;More options&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>actionMenuLabel</code></td>
+<td><code>action-menu-label</code> attribute</td>
+<td>—</td>
+<td>Overrides default action-menu label.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>Badge attributes</td>
+<td>—</td>
+<td>Sets <code>badge-text</code>, <code>badge-color</code>, and <code>badge-background-color</code> (not a slotted badge).</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td>Card border styling</td>
+<td>—</td>
+<td>Via <code>processBorderColor</code> when authored.</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code> attribute</td>
+<td>—</td>
+<td><code>wide</code> or <code>super-wide</code>.</td>
+</tr>
+<tr>
+<td><code>mnemonicIcon</code>, <code>mnemonicAlt</code>, <code>mnemonicLink</code></td>
+<td><code>icons</code></td>
+<td><code>merch-icon</code></td>
+<td>Icon size <code>l</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer CTA links.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<p>Layout from <code>Catalog.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icons</code></td>
+<td>Body top</td>
+<td>Mnemonics beside badge.</td>
+</tr>
+<tr>
+<td><code>action-menu-content</code></td>
+<td>Body</td>
+<td>Expandable menu content; toggled by the action-menu control.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Body</td>
+<td>Title and/or prices.</td>
+</tr>
+<tr>
+<td><code>heading-m</code>, <code>body-xxs</code></td>
+<td>Body</td>
+<td>Optional authored slots (not in AEM mapping).</td>
+</tr>
+<tr>
+<td><code>promo-text</code>, <code>callout-content</code></td>
+<td>Body</td>
+<td>Order depends on <code>promo-bottom</code> class on the card.</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs.</td>
+</tr>
+</tbody>
+</table>
 <div class="catalog-gallery-content">
   <h1 id="catalog-gallery">Catalog Gallery</h1>
+  <h2 id="catalog-individual-cards">Individual Catalog Cards <a class="header-anchor" href="#catalog-individual-cards" title="Permalink to this heading">#</a></h2>
   <div class="three-merch-cards catalog">
     <merch-card variant="catalog"><aem-fragment fragment="60d6f47c-8fd7-485d-a4ac-2b7baa492ab1"></aem-fragment></merch-card>
     <merch-card variant="catalog"><aem-fragment fragment="c44bcc8c-4cfc-4514-96eb-2ccfaf15ebe8"></aem-fragment></merch-card>
     <merch-card variant="catalog"><aem-fragment fragment="7286e63a-253e-42e3-86a8-a29f9bc72fb9"></aem-fragment></merch-card>
     <merch-card variant="catalog"><aem-fragment fragment="d8f4315b-ecf5-47c9-a416-adf3390a4ec6"></aem-fragment></merch-card>
     <merch-card variant="catalog"><aem-fragment fragment="9a1fd4db-54c2-47d0-9ddc-06cc6725b7bf"></aem-fragment></merch-card>
+  </div>
+  <h2 id="catalog-collection">Catalog Collection <a class="header-anchor" href="#catalog-collection" title="Permalink to this heading">#</a></h2>
+  <a class="plans-link" target="_blank" href="https://main--mas--adobecom.aem.live/studio.html?#path=acom&query=1f0d1698-bfe6-4806-9fae-91e193950bc6"> Open in Studio</a>
+  <a class="plans-link" target="_blank" href="https://www.adobe.com/products/catalog.html"> Live catalog page ↗</a>
+  <div class="collection-container catalog">
+    <merch-card-collection><aem-fragment fragment="1f0d1698-bfe6-4806-9fae-91e193950bc6"></aem-fragment></merch-card-collection>
   </div>
 </div>
 

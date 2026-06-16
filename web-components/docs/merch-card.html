@@ -150,23 +150,508 @@ Adobe Home Gallery provides a comprehensive list of all supported card variants 
 <td></td>
 <td>mas.js</td>
 </tr>
+<tr>
+<td><code>badge-color</code></td>
+<td>Badge text color (static or hydrated cards)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>badge-background-color</code></td>
+<td>Badge background color</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>badge-text</code></td>
+<td>Badge label text</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>border-color</code></td>
+<td>Card border color</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>background-color</code></td>
+<td>Card background color or treatment</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>Background image URL</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>filters</code></td>
+<td>Collection filter key and sort order (<code>key:order:size</code> comma-separated)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td>Comma-separated card type tags used by collection layouts</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated PUF, ABM, and M2M offer selector IDs for stock UI</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>checkbox-label</code></td>
+<td>Label text for the stock trial checkbox in plans layouts</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>secure-label</code></td>
+<td>Secure-transaction text rendered above footer CTAs</td>
+<td>—</td>
+<td></td>
+<td>mas.js / hydrate.js</td>
+</tr>
+<tr>
+<td><code>action-menu</code></td>
+<td>Enables catalog action-menu behavior; set during hydration when short description is present</td>
+<td>—</td>
+<td></td>
+<td>hydrate.js</td>
+</tr>
+<tr>
+<td><code>action-menu-label</code></td>
+<td>Accessible label for the catalog action-menu control</td>
+<td><code>More options</code> (when set by hydration)</td>
+<td></td>
+<td>hydrate.js</td>
+</tr>
+<tr>
+<td><code>plan-type</code></td>
+<td>PUF, ABM, or M2M plan type hint; synced to child <code>merch-addon</code> after price settles</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>addon-title</code></td>
+<td>Declared attribute; not read by variant layouts or hydration in the current codebase</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>addon-offers</code></td>
+<td>Declared attribute; not read by variant layouts or hydration in the current codebase</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>storage</code></td>
+<td>Fragment storage option; reflected on the element (Studio preview maps <code>storageOption</code>)</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>custom-hr</code></td>
+<td>When present, suppresses the default <code>&lt;hr /&gt;</code> before the footer in the inline-heading layout</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>detail-bg</code></td>
+<td>CSS background value for the <code>detail-bg</code> region on evergreen image/special-offers cards</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>height-sync</code></td>
+<td>When <code>true</code>, re-measures card height after layout for Express pricing variants</td>
+<td>—</td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>aria-selected</code></td>
+<td>Reflects selection state in segmented layouts (<code>selected</code> property)</td>
+<td><code>false</code></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>loading</code></td>
+<td>Fragment loading strategy passed to nested <code>aem-fragment</code> (<code>lazy</code> default)</td>
+<td><code>lazy</code></td>
+<td></td>
+<td>mas.js</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>Set when the card errors; reflected to the attribute</td>
+<td><code>false</code></td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<h4 id="active-variants%3A" tabindex="-1">Active variants: <a class="header-anchor" href="#active-variants%3A" href="#active-variants%3A" title="Permalink to this heading">#</a></h4>
+<h4 id="active-variants" tabindex="-1">Active variants <a class="header-anchor" href="#active-variants" href="#active-variants" title="Permalink to this heading">#</a></h4>
+<p>Registered in <code>variants/variants.js</code> (set <code>variant</code> on the element or let AEM fragment mapping infer it):</p>
 <ul>
 <li><code>catalog</code></li>
 <li><code>image</code></li>
 <li><code>inline-heading</code></li>
 <li><code>mini-compare-chart</code></li>
+<li><code>mini-compare-chart-mweb</code></li>
 <li><code>plans</code></li>
+<li><code>plans-students</code></li>
+<li><code>plans-education</code></li>
+<li><code>plans-v2</code></li>
 <li><code>product</code></li>
 <li><code>segment</code></li>
+<li><code>media</code></li>
+<li><code>headless</code></li>
 <li><code>special-offers</code></li>
+<li><code>simplified-pricing-express</code></li>
+<li><code>full-pricing-express</code></li>
+<li><code>mini</code> (headless data for custom rendering in React, Vue, or vanilla JS — see <a href="ccd-mini.html">CCD Mini</a>)</li>
+<li><code>fries</code></li>
+</ul>
+<p>Registered in <code>mas.js</code> (CCD / Adobe Home surfaces; not in the core variant registry):</p>
+<ul>
 <li><code>ccd-slice</code></li>
 <li><code>ccd-suggested</code></li>
 <li><code>ah-try-buy-widget</code></li>
-<li><code>mini</code> (a headless card variant that provides merch data for custom rendering with frameworks like React, Vue, or vanilla JavaScript)</li>
+<li><code>ah-promoted-plans</code></li>
 </ul>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gradient-border</code></td>
+<td>Enables gradient border on Express and Adobe Home variants (set from fragment hydration or authored markup)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><code>compatVersion</code> is assigned from fragment fields during hydration and controls promotion-code inheritance on child <code>inline-price</code> and checkout elements.</p>
+<h2 id="commerce-attributes" tabindex="-1">Commerce attributes <a class="header-anchor" href="#commerce-attributes" href="#commerce-attributes" title="Permalink to this heading">#</a></h2>
+<p>These attributes control stock toggles, secure checkout labels, expandable menus, addon checkout mutation, and layout chrome. Variant-specific slot and hydration details live in <a href="plans.html">plans</a>, <a href="plans-v2.html">plans-v2</a>, <a href="catalog.html">catalog</a>, <a href="product.html">product</a>, <a href="image.html">image</a>, and <a href="headless.html">headless</a>.</p>
+<h3 id="stock-toggle" tabindex="-1">Stock toggle (<code>checkbox-label</code>, <code>stock-offer-osis</code>) <a class="header-anchor" href="#stock-toggle" href="#stock-toggle" title="Permalink to this heading">#</a></h3>
+<p>When <code>checkbox-label</code> is present, the <code>plans</code> and <code>plans-v2</code> layouts render a stock checkbox in the card body (<code>#stock-checkbox</code>). The label text comes from the attribute value.</p>
+<p><code>toggleStockOffer()</code> in <code>merch-card.js</code> runs on checkbox <code>@change</code>. It requires both attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Format</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkbox-label</code></td>
+<td>Plain text</td>
+<td>Checkbox label rendered in the body.</td>
+</tr>
+<tr>
+<td><code>stock-offer-osis</code></td>
+<td>Comma-separated PUF, ABM, M2M offer IDs</td>
+<td>Parsed into <code>{ PUF, ABM, M2M }</code>. The OSI matching each checkout link’s resolved <code>planType</code> is appended to or removed from <code>data-wcs-osi</code> when the checkbox is toggled.</td>
+</tr>
+</tbody>
+</table>
+<p>Neither attribute is set by <code>hydrate.js</code>. Set them on the element in markup, or map fragment fields such as <code>checkboxLabel</code> / <code>stockOfferOsis</code> in your integration (as Studio preview does).</p>
+<p>See <a href="plans-v2.html#stock-toggle">Stock toggle in plans-v2</a> for a markup example.</p>
+<p>For a standalone Spectrum checkbox with plan-filtered slot content (not wired into card layouts), see <a href="merch-stock.html">merch-stock</a>.</p>
+<h3 id="secure-label" tabindex="-1">Secure transaction label (<code>secure-label</code>) <a class="header-anchor" href="#secure-label" href="#secure-label" title="Permalink to this heading">#</a></h3>
+<p>When set, variant layouts render a <code>.secure-transaction-label</code> span above footer CTAs via <code>VariantLayout.secureLabelFooter</code>.</p>
+<p>During hydration, <code>processSecureLabel()</code> sets the attribute when <strong>both</strong> the variant mapping includes <code>secureLabel: true</code> and the fragment <code>settings.secureLabel</code> string is present. Variants with this mapping include <code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>segment</code>, <code>commerce</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code>.</p>
+<p>On the <code>product</code> variant, when two checkout CTAs and a secure label are present, the footer switches to a column layout (<code>displayFooterElementsInColumn()</code>).</p>
+<h3 id="action-menu" tabindex="-1">Action menu (<code>action-menu</code>, <code>action-menu-label</code>) <a class="header-anchor" href="#action-menu" href="#action-menu" title="Permalink to this heading">#</a></h3>
+<p>When a fragment includes <code>shortDescription</code>, <code>processDescription()</code> in <code>hydrate.js</code> sets <code>action-menu=&quot;true&quot;</code> and defaults <code>action-menu-label</code> to <code>More options</code> unless <code>actionMenuLabel</code> is authored on the fragment.</p>
+<p>The interactive action-menu UI (toggle control plus <code>action-menu-content</code> slot) is implemented only on the <strong>catalog</strong> variant. On mobile and tablet, when <code>action-menu</code> is set, the menu icon stays visible instead of appearing only on hover.</p>
+<p>Opening the menu dispatches <code>merch-card:action-menu-toggle</code> with <code>{ card, type: 'action-menu' }</code> in the event detail. See <a href="catalog.html">catalog</a> for the AEM field mapping and slot layout.</p>
+<p>On <code>plans-v2</code>, hydration also sets <code>action-menu</code> when short description content is present, but that variant renders short description with its own accordion toggle rather than the catalog action-menu control.</p>
+<h3 id="plan-type" tabindex="-1">Plan type (<code>plan-type</code>) <a class="header-anchor" href="#plan-type" href="#plan-type" title="Permalink to this heading">#</a></h3>
+<p>Reflected attribute on <code>merch-card</code>. Variant AEM mappings may include <code>planType: true</code> to indicate plan-type-aware pricing, but <code>hydrate.js</code> does not copy a fragment field onto this attribute.</p>
+<p>After hydration, <code>product</code>, <code>mini-compare-chart</code>, and <code>mini-compare-chart-mweb</code> call <code>adjustAddon()</code> to copy the main price’s resolved <code>planType</code> onto the slotted <code>merch-addon</code>. If the price has not settled yet, <code>this.card.planType</code> is used as a fallback when authored on the element.</p>
+<p>For offer-picker flows, plan type is managed on <code>merch-offer-select</code> and <code>merch-offer</code> instead — see <a href="merch-offer-select.html">merch-offer-select</a>.</p>
+<h3 id="addon-checkout" tabindex="-1">Addon checkout mutation <a class="header-anchor" href="#addon-checkout" href="#addon-checkout" title="Permalink to this heading">#</a></h3>
+<p>When a slotted <code>merch-addon</code> fires a <code>change</code> event, <code>merch-card.changeHandler()</code> calls <code>toggleAddon()</code>. That method:</p>
+<ol>
+<li>Delegates to the variant layout’s <code>toggleAddon()</code> hook when defined (for example, <code>product</code> swaps the heading price between free and addon pricing).</li>
+<li>Updates every footer and description checkout link: reads <code>planType</code> and <code>offerType</code> from the settled link value, calls <code>merchAddon.getOsi(planType, offerType)</code>, and adds or removes that OSI from <code>data-wcs-osi</code> based on <code>merchAddon.checked</code>.</li>
+</ol>
+<p><code>handleAddonAndQuantityUpdate()</code> listens for <code>merch-addon-and-quantity:update</code> and can sync the addon checkbox state when a modal checkout returns updated line items.</p>
+<h3 id="addon-metadata" tabindex="-1"><code>addon-title</code> and <code>addon-offers</code> <a class="header-anchor" href="#addon-metadata" href="#addon-metadata" title="Permalink to this heading">#</a></h3>
+<p><code>addon-title</code> and <code>addon-offers</code> are declared Lit properties on <code>merch-card</code>, but no variant layout or hydration step reads them in the current codebase. Addon UI and pricing come from the slotted <code>merch-addon</code> element (hydrated from the fragment <code>addon</code> field or <code>settings.addon</code>).</p>
+<h3 id="storage" tabindex="-1">Storage option (<code>storage</code>) <a class="header-anchor" href="#storage" href="#storage" title="Permalink to this heading">#</a></h3>
+<p>Reflected string attribute. Studio preview maps the fragment field <code>storageOption</code> to <code>storage</code> on the preview card. No variant layout in <code>web-components/src/variants/</code> reads this attribute today; it is available for external styling or future storage-picker integration alongside <code>merch-offer-select</code>.</p>
+<h3 id="custom-hr" tabindex="-1">Custom horizontal rule (<code>custom-hr</code>) <a class="header-anchor" href="#custom-hr" href="#custom-hr" title="Permalink to this heading">#</a></h3>
+<p>Boolean attribute. When present, the <strong>inline-heading</strong> layout omits the default <code>&lt;hr /&gt;</code> between the body and footer (<code>inline-heading.js</code>). Other variants ignore this attribute.</p>
+<h3 id="detail-bg" tabindex="-1">Detail background (<code>detail-bg</code>) <a class="header-anchor" href="#detail-bg" href="#detail-bg" title="Permalink to this heading">#</a></h3>
+<p>CSS background value applied to <code>.detail-bg-container</code> on <strong>image</strong> and <strong>special-offers</strong> cards when the element also has the <code>intro-pricing</code> class (the <code>evergreen</code> layout branch in those variants). Content slotted to <code>detail-bg</code> renders inside that container.</p>
+<p>When <code>intro-pricing</code> is absent, those variants render a standard <code>&lt;hr /&gt;</code> and footer instead of the detail-background region.</p>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;image&quot;</span>
+  <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;intro-pricing&quot;</span>
+  <span class="hljs-attr">detail-bg</span>=<span class="hljs-string">&quot;linear-gradient(135deg, #fff 0%, #eee 100%)&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;detail-bg&quot;</span>&gt;</span>Detail background content<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="media-variant" tabindex="-1">Media variant <a class="header-anchor" href="#media-variant" href="#media-variant" title="Permalink to this heading">#</a></h2>
+<p>Horizontal text-and-image layout for modal and marketing surfaces. Set <code>variant=&quot;media&quot;</code> on <code>&lt;merch-card&gt;</code> or let AEM hydration infer it from the fragment <code>variant</code> field.</p>
+<p>Mapping: <code>MEDIA_AEM_FRAGMENT_MAPPING</code> in <code>web-components/src/variants/media.js</code>.</p>
+<p>Unlike most variants, the <code>footer</code> slot renders inside the text column (not a separate <code>&lt;footer&gt;</code> region). The layout does not use <code>secureLabelFooter</code>; <code>secure-label</code> is not rendered by this variant.</p>
+<h3 id="media-aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#media-aem-fields" href="#media-aem-fields" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required. Must be <code>media</code>.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code></td>
+<td><code>h3</code></td>
+<td>Main title.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td><code>body-xxs</code></td>
+<td><code>p</code></td>
+<td>Eyebrow label above the title (uppercase styling).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td>Body copy. Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>backgroundImage</code></td>
+<td><code>bg-image</code></td>
+<td><code>div</code></td>
+<td>Wraps an <code>&lt;img&gt;</code> with <code>src</code> from the field; <code>backgroundImageAltText</code> sets <code>alt</code>, otherwise <code>role=&quot;none&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer links hydrated as Consonant buttons (<code>style: 'consonant'</code> sets the <code>consonant</code> attribute). CTA size <code>m</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="media-slots" tabindex="-1">Slots <a class="header-anchor" href="#media-slots" href="#media-slots" title="Permalink to this heading">#</a></h3>
+<p>Layout from <code>Media.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>body-xxs</code></td>
+<td>Text column (top)</td>
+<td>Subtitle / eyebrow.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Text column</td>
+<td>Title.</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Text column</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Text column (bottom)</td>
+<td>CTAs. Rendered inside <code>.text</code>, not in a separate footer element.</td>
+</tr>
+<tr>
+<td><code>bg-image</code></td>
+<td>Image column</td>
+<td>Background or hero image (<code>div</code> wrapping <code>&lt;img&gt;</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="media-layout" tabindex="-1">Layout rules <a class="header-anchor" href="#media-layout" href="#media-layout" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><code>.media-row</code> is a flex container: text column on the left, image column on the right.</li>
+<li>At viewport widths <strong>≤ 600px</strong>, the row switches to <code>flex-direction: column-reverse</code> (image above text).</li>
+<li>Gap between columns: 24px (32px from 600px, 40px from 1200px).</li>
+<li>The card has no border and uses vertical padding (<code>24px 0</code>; wider padding inside <code>.dialog-modal</code>).</li>
+<li>At <strong>≥ 600px</strong>, card <code>max-width</code> is 1000px; the image column vertically centers its content.</li>
+<li>When the card is inside <code>.dialog-modal</code>, <code>postCardUpdateHook()</code> blurs the modal <code>.dialog-close</code> button so focus does not remain on the close control after the card updates.</li>
+</ul>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;media&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xxs&quot;</span>&gt;</span>Adobe Experience Cloud<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Real-Time CDP<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Unify B2C and B2B data into real-time profiles ready for activation across any channel.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Learn more<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;bg-image&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="inline-heading-variant" tabindex="-1">Inline-heading variant <a class="header-anchor" href="#inline-heading-variant" href="#inline-heading-variant" title="Permalink to this heading">#</a></h2>
+<p>Compact BACOM product cards with an inline icon and title row. Set <code>variant=&quot;inline-heading&quot;</code> on <code>&lt;merch-card&gt;</code>.</p>
+<p>There is <strong>no AEM fragment mapping</strong> registered for this variant in <code>variants.js</code>. Cards are authored with static markup (or slots assigned manually after hydration). See <a href="#custom-hr">custom horizontal rule</a> for the <code>custom-hr</code> attribute.</p>
+<h3 id="inline-heading-slots" tabindex="-1">Slots <a class="header-anchor" href="#inline-heading-slots" href="#inline-heading-slots" title="Permalink to this heading">#</a></h3>
+<p>Layout from <code>InlineHeading.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>—</td>
+<td>Badge</td>
+<td>Attribute-based badge from <code>badge-text</code>, <code>badge-color</code>, and <code>badge-background-color</code> (not a slot). Rendered only when all three are set.</td>
+</tr>
+<tr>
+<td><code>icons</code></td>
+<td>Body top</td>
+<td>Product mnemonic; sits beside <code>heading-xs</code> in <code>.top-section</code>.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code></td>
+<td>Body top</td>
+<td>Title. Links in this slot keep default link styling (other variants grey out heading links).</td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs. Preceded by <code>&lt;hr /&gt;</code> unless <code>custom-hr</code> is set. Optional <code>secure-label</code> renders above footer CTAs via <code>secureLabelFooter</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inline-heading-grid" tabindex="-1">Collection grid <a class="header-anchor" href="#inline-heading-grid" href="#inline-heading-grid" title="Permalink to this heading">#</a></h3>
+<p>Place cards in a container with both a column-count class and the <code>inline-heading</code> modifier, for example <code>three-merch-cards inline-heading</code>. Global CSS from <code>inline-heading.css.js</code> sets fixed column widths via <code>--consonant-merch-card-inline-heading-width</code> (300px default, 378px at desktop):</p>
+<table>
+<thead>
+<tr>
+<th>Container class</th>
+<th>Columns (mobile)</th>
+<th>Columns (tablet)</th>
+<th>Columns (desktop)</th>
+<th>Columns (large desktop)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>one-merch-card.inline-heading</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>two-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>three-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>four-merch-cards.inline-heading</code></td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;three-merch-cards inline-heading&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+    <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;inline-heading&quot;</span>
+    <span class="hljs-attr">badge-background-color</span>=<span class="hljs-string">&quot;#EDCC2D&quot;</span>
+    <span class="hljs-attr">badge-color</span>=<span class="hljs-string">&quot;#000000&quot;</span>
+    <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Best Value&quot;</span>
+  &gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+      <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icons&quot;</span>
+      <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;l&quot;</span>
+      <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span>
+      <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Creative Cloud All Apps&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Real-Time CDP<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Unify B2C and B2B data into real-time profiles ready for activation across any channel.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Learn more<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
 <h3 id="properties" tabindex="-1">Properties <a class="header-anchor" href="#properties" href="#properties" title="Permalink to this heading">#</a></h3>
 <table>
 <thead>

@@ -76,6 +76,18 @@
 <td><code>false</code></td>
 </tr>
 <tr>
+<td><code>data-display-plan-type</code></td>
+<td>Whether to display plan type text (e.g. Annual, paid monthly)</td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>data-display-annual</code></td>
+<td>When <a href="feature-flags.html#mas-ff-annual-price">mas-ff-annual-price</a> is on, show annual price for ABM offers unless set to <code>false</code></td>
+<td>(flag-driven)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
 <td><code>data-perpetual</code></td>
 <td>Whether this is a perpetual offer</td>
 <td><code>false</code></td>
@@ -95,7 +107,7 @@
 </tr>
 <tr>
 <td><code>data-template</code></td>
-<td>One of price, discount, optical, strikethrough, priceAnnual</td>
+<td>Price template (see table below)</td>
 <td>price</td>
 <td><code>false</code></td>
 </tr>
@@ -103,6 +115,12 @@
 <td><code>data-quantity</code></td>
 <td>Quantity of the offer, used with volume promotion codes to display either regular or promotional price.</td>
 <td>1</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>data-alternative-price</code></td>
+<td>When paired strikethrough prices are present in the parent, adds screen-reader “Alternatively at” labeling on the non-strikethrough price</td>
+<td><code>false</code></td>
 <td><code>false</code></td>
 </tr>
 </tbody>
@@ -126,7 +144,7 @@
 </tr>
 <tr>
 <td><code>optical</code></td>
-<td>For <strong>paid upfront offers</strong>(PUF), renders the monthly price</td>
+<td>For <strong>paid upfront offers</strong> (PUF), renders the monthly price</td>
 </tr>
 <tr>
 <td><code>annual</code></td>
@@ -134,10 +152,19 @@
 </tr>
 <tr>
 <td><code>strikethrough</code></td>
-<td>render the price as strikethrough.</td>
+<td>Render the price as strikethrough</td>
+</tr>
+<tr>
+<td><code>promo-strikethrough</code></td>
+<td>Promo price with strikethrough styling</td>
+</tr>
+<tr>
+<td><code>legal</code></td>
+<td>Legal price line (used on cards; may set <code>displayDot</code> from variant layout)</td>
 </tr>
 </tbody>
 </table>
+<p>With exactly two comma-separated OSIs and <code>data-template=&quot;discount&quot;</code>, the percentage is computed from the first offer against the second offer’s price as reference.</p>
 <h3 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" href="#examples" title="Permalink to this heading">#</a></h3>
 <h4 id="soft-bundle-(multiple-osis)" tabindex="-1">Soft Bundle (Multiple OSIs) <a class="header-anchor" href="#soft-bundle-(multiple-osis)" href="#soft-bundle-(multiple-osis)" title="Permalink to this heading">#</a></h4>
 <p>When multiple Offer Selector IDs are provided (comma-separated), the prices are summed together. This is useful for displaying the total price of a soft bundle containing multiple products.</p>
@@ -203,7 +230,11 @@ vs
 <td>on inline price elements, it will return <code>true</code></td>
 </tr>
 <tr>
-<td><code>onceSettled</code></td>
+<td><code>isFailed</code></td>
+<td><code>true</code> when the element is in failed state</td>
+</tr>
+<tr>
+<td><code>onceSettled()</code></td>
 <td>Promise that resolves when the custom-element either resolves or fails to retrieve the price</td>
 </tr>
 <tr>
@@ -246,11 +277,14 @@ vs
 <h5 id="options-property" tabindex="-1">options property <a class="header-anchor" href="#options-property" href="#options-property" title="Permalink to this heading">#</a></h5>
 <pre><code id="ipOptions" class="language-json">
 </code></pre>
+<h2 id="static-factory" tabindex="-1">Static factory <a class="header-anchor" href="#static-factory" href="#static-factory" title="Permalink to this heading">#</a></h2>
+<p><code>InlinePrice.createInlinePrice(options)</code> returns a configured <code>&lt;span is=&quot;inline-price&quot;&gt;</code> when <code>mas-commerce-service</code> is active, or <code>null</code> otherwise.</p>
+<p>When <a href="feature-flags.html#mas-ff-defaults">mas-ff-defaults</a> is enabled (on the service or via options inside a <code>merch-card</code> with an <code>aem-fragment</code>), unset <code>data-display-per-unit</code>, <code>data-display-tax</code>, and <code>data-force-tax-exclusive</code> are resolved from geo and customer segment via <code>resolvePriceTaxFlags</code>.</p>
 <h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
 <tr>
-<th>Property</th>
+<th>Method</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -261,6 +295,7 @@ vs
 </tr>
 </tbody>
 </table>
+<p>Clicks on child price markup are re-dispatched on the <code>inline-price</code> element so parent card listeners receive price clicks.</p>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
@@ -271,10 +306,6 @@ vs
 </thead>
 <tbody>
 <tr>
-<td><code>mas:pending</code></td>
-<td>Fires when inline price starts loading</td>
-</tr>
-<tr>
 <td><code>mas:resolved</code></td>
 <td>Fires when the price is successfully resolved</td>
 </tr>
@@ -284,10 +315,7 @@ vs
 </tr>
 </tbody>
 </table>
-<p>For each event, the following CSS classes are toggled on the element: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
-<div class="warning">
-<p><strong>Note</strong>: Event names with <code>wcms:placeholder</code> prefix may be subject to change.</p>
-</div>
+<p>There is no <code>mas:pending</code> event in the current implementation. Loading state is reflected with CSS classes: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
 <h3 id="example-2" tabindex="-1">Example <a class="header-anchor" href="#example-2" href="#example-2" title="Permalink to this heading">#</a></h3>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>
     <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ip2&quot;</span>
@@ -300,7 +328,6 @@ vs
     <span class="hljs-keyword">const</span> <span class="hljs-title function_">logger</span> = (<span class="hljs-params">...messages</span>) =&gt;
         (log.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`<span class="hljs-subst">${messages.join(<span class="hljs-string">&#x27; &#x27;</span>)}</span>&lt;br&gt;<span class="hljs-subst">${log.innerHTML}</span>`</span>);
     <span class="hljs-keyword">const</span> span = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ip2&#x27;</span>);
-    span.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:pending&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;inline-price pending&#x27;</span>));
     span.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">() =&gt;</span>
         <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;inline-price resolved&#x27;</span>),
     );

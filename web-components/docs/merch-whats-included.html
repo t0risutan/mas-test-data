@@ -1,0 +1,332 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-whats-included" tabindex="-1">merch-whats-included <a class="header-anchor" href="#merch-whats-included" href="#merch-whats-included" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-whats-included</code> is a compact feature list for plan and product cards. It groups one or more <code>merch-mnemonic-list</code> rows under an optional heading. On mobile viewports (max-width 767px), rows in the <code>content</code> slot can collapse behind a “+ See more” / “- See less” toggle.</p>
+<p>Used inside <code>merch-card</code> variants in the <code>whats-included</code> slot (<code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>fries</code>, <code>headless</code>) or the <code>footer-rows</code> slot (<code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code>). AEM hydration injects markup from the fragment <code>whatsIncluded</code> field via <code>appendSlot('whatsIncluded', ...)</code>.</p>
+<p>Registered when <a href="mas.js.html">mas.js</a> or <a href="merch-card.html">merch-card</a> loads.</p>
+<p>See also: <a href="merch-mnemonic-list.html">merch-mnemonic-list</a>, <a href="merch-icon.html">merch-icon</a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>, <a href="minicompare.html">Mini Compare Gallery</a>, <a href="plans-v2.html">Plans v2 Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Two feature blocks: a heading plus horizontal mnemonic rows. Resize the viewport below 768px to see the mobile see-more control when more than <code>mobileRows</code> rows are present (default 5).</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-whats-included</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading&quot;</span>&gt;</span>Apps<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+        <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Photoshop&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Photoshop<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+        <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/illustrator.svg&quot;</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Illustrator&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Illustrator<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+        <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/premiere.svg&quot;</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Premiere Pro&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Premiere Pro<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-whats-included</span>&gt;</span>
+</code></pre>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<p>On a <code>product</code> card, place the element in the <code>whats-included</code> slot. Each <code>merch-mnemonic-list</code> is one feature row (icon + description).</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;product&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h3</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;title&quot;</span>&gt;</span>Photography plan<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-m&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Everything you need for photo editing.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-whats-included</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;whats-included&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading&quot;</span>&gt;</span>What&#x27;s included:<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;contentBullets&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+          <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+          <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/lightroom.svg&quot;</span>
+          <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Lightroom&quot;</span>
+        &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Lightroom<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+          <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+          <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+          <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+          <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Photoshop&quot;</span>
+        &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Photoshop<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-whats-included</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>heading</code></td>
+<td>Section label (for example “Apps” or “What’s included:”). Empty assigned nodes are hidden via <code>::slotted([slot='heading']:empty) { display: none }</code>.</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>Primary row container. Wrap <code>merch-mnemonic-list</code> elements in a single assigned element (typically <code>&lt;div slot=&quot;content&quot;&gt;</code>). Slotted content uses <code>display: contents</code>, so rows participate in the host flex layout.</td>
+</tr>
+<tr>
+<td><code>contentBullets</code></td>
+<td>Optional bullet-style rows, also using <code>merch-mnemonic-list</code>. Used with the <code>has-bullets</code> attribute for mini-compare layouts that split bullet icons from application icons. Slotted wrapper uses a vertical flex column with 10px gap.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="row-structure" tabindex="-1">Row structure <a class="header-anchor" href="#row-structure" href="#row-structure" title="Permalink to this heading">#</a></h3>
+<p>Each feature is a <code>merch-mnemonic-list</code> with:</p>
+<table>
+<thead>
+<tr>
+<th>Child slot</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icon</code></td>
+<td>Product icon (<code>merch-icon</code>, <code>img</code>, or <code>.sp-icon</code>).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Feature label copy (typically <code>&lt;p slot=&quot;description&quot;&gt;</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>On <code>merch-card</code>, <code>global.css.js</code> hides empty <code>icon</code> slots when no row in the block uses an icon, and applies extra spacing for <code>contentBullets</code> icons.</p>
+<h2 id="has-bullets" tabindex="-1">has-bullets mode <a class="header-anchor" href="#has-bullets" href="#has-bullets" title="Permalink to this heading">#</a></h2>
+<p>Set the boolean <code>has-bullets</code> attribute when bullet rows live in <code>contentBullets</code> and application rows live in <code>content</code> (common in <code>mini-compare-chart</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Behavior</th>
+<th>Without <code>has-bullets</code></th>
+<th>With <code>has-bullets</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host layout</td>
+<td>Horizontal flex, wrap</td>
+<td>Column flex, align start</td>
+</tr>
+<tr>
+<td><code>content</code> on mobile</td>
+<td>Rendered; see-more may appear</td>
+<td>Not rendered when <code>contentBullets</code> contains a <code>merch-mnemonic-list</code></td>
+</tr>
+<tr>
+<td>See-more toggle</td>
+<td>Available on mobile when <code>content</code> row count exceeds <code>mobileRows</code></td>
+<td>Disabled (<code>bulletsAdded</code> is true)</td>
+</tr>
+<tr>
+<td><code>content</code> on desktop</td>
+<td>Horizontal mnemonic rows</td>
+<td>Flex wrap via <code>merch-card</code> global styles</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-whats-included</span> <span class="hljs-attr">has-bullets</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;contentBullets&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span>
+      /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Bullet feature<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Application row (no icon)<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-whats-included</span>&gt;</span>
+</code></pre>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mobileRows</code></td>
+<td>On mobile, show the see-more control when the number of <code>merch-mnemonic-list</code> elements in <code>[slot=&quot;content&quot;]</code> exceeds this value.</td>
+<td><code>5</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>has-bullets</code></td>
+<td>Enables bullet + application row split layout. Presence-only boolean.</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><code>hideSeeMoreEls()</code> toggles <code>display</code> on <code>content</code> rows at index <code>&gt;= 5</code> (0-based). With the default <code>mobileRows</code> of <code>5</code>, the first five rows stay visible and the toggle appears when a sixth row exists.</p>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Target</th>
+<th>Bubbles</th>
+<th>Composed</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hide-see-more-elements</code></td>
+<td><code>merch-whats-included</code></td>
+<td>yes</td>
+<td>yes</td>
+<td>—</td>
+<td>Fired when the shopper clicks the see-more / see-less control (<code>toggle()</code>). No listeners ship in M@S; parent pages or analytics scripts can use it to react to expand/collapse.</td>
+</tr>
+</tbody>
+</table>
+<p>The see-more label reads “+ See more” when collapsed and “- See less” when expanded. Clicking toggles internal <code>showAll</code> and re-renders.</p>
+<h2 id="mobile-see-more" tabindex="-1">Mobile see-more <a class="header-anchor" href="#mobile-see-more" href="#mobile-see-more" title="Permalink to this heading">#</a></h2>
+<p>See-more is shown only when all of the following are true:</p>
+<ol>
+<li><code>window.matchMedia('(max-width: 767px)')</code> matches</li>
+<li><code>[slot=&quot;content&quot;] merch-mnemonic-list</code> count is greater than <code>mobileRows</code></li>
+<li><code>contentBullets</code> does not contain a <code>merch-mnemonic-list</code> (<code>bulletsAdded</code> is false)</li>
+</ol>
+<p><code>updated()</code> calls <code>hideSeeMoreEls()</code> to sync row visibility after each render.</p>
+<h2 id="variant-placement" tabindex="-1">Variant placement <a class="header-anchor" href="#variant-placement" href="#variant-placement" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Parent slot</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-education</code>, <code>plans-students</code></td>
+<td><code>whats-included</code></td>
+<td>Education/students omit <code>whatsIncluded</code> from AEM mapping</td>
+</tr>
+<tr>
+<td><code>plans-v2</code></td>
+<td><code>whats-included</code></td>
+<td>Hydrated slot; not placed by <code>renderLayout()</code></td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td><code>whats-included</code></td>
+<td>Body area below description</td>
+</tr>
+<tr>
+<td><code>fries</code></td>
+<td><code>whats-included</code></td>
+<td>Fries-specific typography and spacing</td>
+</tr>
+<tr>
+<td><code>headless</code></td>
+<td><code>whats-included</code></td>
+<td>Label “What’s included” in variant slot map</td>
+</tr>
+<tr>
+<td><code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code></td>
+<td><code>footer-rows</code></td>
+<td>Compare-column footer rows; variant calls <code>removeEmptyRows()</code>, <code>padFooterRows()</code>, and <code>adjustMiniCompareFooterRows()</code> on <code>content</code> mnemonic lists. Divider color is applied to <code>merch-card</code> via <code>whatsIncludedDividerColor</code> / <code>whats-included-divider-color</code> (see <a href="minicompare.html">Mini Compare Gallery</a>).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="aem-hydration" tabindex="-1">AEM hydration <a class="header-anchor" href="#aem-hydration" href="#aem-hydration" title="Permalink to this heading">#</a></h2>
+<p>The fragment field <code>whatsIncluded</code> is appended to the slot named in the variant mapping (<code>whats-included</code> or <code>footer-rows</code>). Typical authored markup includes all three slots:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-whats-included</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading&quot;</span>&gt;</span>What&#x27;s included :<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;contentBullets&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">merch-mnemonic-list</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-whats-included</span>&gt;</span>
+</code></pre>
+<p>An empty <code>contentBullets</code> wrapper is common in product fragments so authors can add bullet rows later without restructuring.</p>
+<p>For <code>mini-compare-chart</code>, optional <code>whatsIncludedDividerColor</code> on the fragment (or <code>whats-included-divider-color</code> on the element) is read during hydration and copied to the parent <code>merch-card</code>.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a>. <code>merch-whats-included</code> is also registered when <code>merch-card</code> loads (<code>merch-card.js</code> imports it). <code>merch-mnemonic-list</code> and <code>merch-icon</code> are separate registrations — include them in markup or rely on <code>mas.js</code> for the full bundle.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

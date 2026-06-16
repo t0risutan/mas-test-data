@@ -1,0 +1,313 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-icon" tabindex="-1">merch-icon <a class="header-anchor" href="#merch-icon" href="#merch-icon" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-icon</code> renders a product or app icon from an image URL. It supports preset sizes, optional link wrapping, lazy loading, and a light-DOM tooltip fallback when Spectrum Web Components are not on the page.</p>
+<p>Primary placements:</p>
+<ol>
+<li><strong><code>slot=&quot;icons&quot;</code> on <a href="merch-card.html">merch-card</a></strong> — product mnemonics in the card header (plans, product, catalog, and related variants). AEM hydration creates these from parallel <code>mnemonicIcon</code>, <code>mnemonicAlt</code>, and <code>mnemonicLink</code> fragment fields.</li>
+<li><strong><code>slot=&quot;icon&quot;</code> inside <a href="merch-whats-included.html">merch-mnemonic-list</a></strong> — row icons in <a href="merch-whats-included.html">merch-whats-included</a> feature lists.</li>
+<li><strong>Child of <a href="mas-mnemonic.html">mas-mnemonic</a></strong> — inline info icons in body copy (Express variants, fries, and similar).</li>
+</ol>
+<p>Registered when <a href="mas.js.html">mas.js</a> or <a href="merch-card.html">merch-card</a> loads.</p>
+<p>See also: <a href="merch-card.html">merch-card</a>, <a href="merch-whats-included.html">merch-whats-included</a>, <a href="merch-badge.html">merch-badge</a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Product icon on a <code>plans</code> card. Variant layouts target the <code>icons</code> slot in the card body.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">badge-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icons&quot;</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;l&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Creative Cloud All Apps&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Creative Cloud All Apps<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Get 20+ Creative Cloud apps.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<p>Linked icon. When <code>href</code> is set, the image is wrapped in an anchor.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+  <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;l&quot;</span>
+  <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://www.adobe.com/creativecloud.html&quot;</span>
+  <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span>
+  <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Creative Cloud&quot;</span>
+&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+</code></pre>
+<p>Size comparison. Default size is <code>m</code> (30×30 px).</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display: flex; gap: 16px; align-items: center;&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;xxs&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;xxs&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;xs&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;xs&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;s&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;m&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;m&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;l&quot;</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;l&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src</code></td>
+<td><code>src</code></td>
+<td>Image URL rendered as <code>&lt;img src=&quot;…&quot;&gt;</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>alt</code></td>
+<td><code>alt</code></td>
+<td><code>alt</code> text on the image.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code></td>
+<td>Preset dimensions via host attribute selectors (see <a href="#sizes">Sizes</a>).</td>
+<td><code>m</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>href</code></td>
+<td><code>href</code></td>
+<td>When set, wraps the image in <code>&lt;a href=&quot;…&quot;&gt;</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>loading</code></td>
+<td><code>loading</code></td>
+<td>Native <code>loading</code> attribute on the <code>&lt;img&gt;</code> (<code>lazy</code>, <code>eager</code>, etc.).</td>
+<td><code>lazy</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sizes" tabindex="-1">Sizes <a class="header-anchor" href="#sizes" href="#sizes" title="Permalink to this heading">#</a></h2>
+<p>Host <code>size</code> sets <code>--img-width</code> and <code>--img-height</code> on the component. Override with <code>--mod-img-width</code> / <code>--mod-img-height</code> on the host.</p>
+<table>
+<thead>
+<tr>
+<th><code>size</code></th>
+<th>Dimensions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xxs</code></td>
+<td>13×13 px</td>
+</tr>
+<tr>
+<td><code>xs</code></td>
+<td>20×20 px</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>24×24 px</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>30×30 px (default)</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>40×40 px</td>
+</tr>
+</tbody>
+</table>
+<p>Variant AEM mappings set a default mnemonic size in <code>mapping.mnemonics.size</code> during hydration. When absent, hydration falls back to <code>l</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Card variant</th>
+<th>Hydrated mnemonic <code>size</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code>, <code>plans-v2</code>, <code>product</code>, <code>catalog</code>, <code>image</code>, <code>mini-compare-chart</code>, <code>mini-compare-chart-mweb</code>, <code>ccd-suggested</code></td>
+<td><code>l</code></td>
+</tr>
+<tr>
+<td><code>headless</code>, <code>ccd-slice</code></td>
+<td><code>m</code></td>
+</tr>
+<tr>
+<td><code>fries</code>, <code>ah-try-buy-widget</code>, <code>ah-promoted-plans</code></td>
+<td><code>s</code></td>
+</tr>
+<tr>
+<td><code>full-pricing-express</code>, <code>simplified-pricing-express</code></td>
+<td><code>xs</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<h3 id="icons-slot" tabindex="-1">icons slot <a class="header-anchor" href="#icons-slot" href="#icons-slot" title="Permalink to this heading">#</a></h3>
+<p>Place one or more <code>merch-icon</code> elements in <code>slot=&quot;icons&quot;</code>. Plans-style layouts render this slot in the card body beside the title. When no icons are present after AEM hydration, the icons slot is hidden (<code>display: none</code>).</p>
+<p>Direct children of <code>merch-card</code> (outside named slots) are counted by <a href="merch-badge.html">merch-badge</a> to set <code>--merch-badge-offset</code> for badge width on plans cards.</p>
+<h3 id="whats-included-rows" tabindex="-1">whats-included rows <a class="header-anchor" href="#whats-included-rows" href="#whats-included-rows" title="Permalink to this heading">#</a></h3>
+<p>Inside <a href="merch-whats-included.html">merch-whats-included</a>, nest <code>merch-icon</code> in <code>merch-mnemonic-list</code> with <code>slot=&quot;icon&quot;</code>. Fries and mini-compare variants typically use <code>size=&quot;s&quot;</code>.</p>
+<h2 id="tooltip-fallback" tabindex="-1">Tooltip fallback <a class="header-anchor" href="#tooltip-fallback" href="#tooltip-fallback" title="Permalink to this heading">#</a></h2>
+<p>On connect, <code>handleTooltips()</code> runs after a <code>setTimeout(0)</code> tick.</p>
+<p><strong>Spectrum detection:</strong> If <code>sp-tooltip</code> is registered as a custom element <strong>or</strong> an <code>sp-theme</code> element exists on the page, the fallback is skipped and light-DOM tooltip markup is left unchanged.</p>
+<p><strong>Fallback path:</strong> When Spectrum is not detected, the component scans its light DOM for <code>sp-tooltip</code> or <code>overlay-trigger</code> children:</p>
+<table>
+<thead>
+<tr>
+<th>Child element</th>
+<th>Content source</th>
+<th>Placement source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sp-tooltip</code></td>
+<td><code>textContent</code></td>
+<td><code>placement</code> attribute (default <code>top</code>)</td>
+</tr>
+<tr>
+<td><code>overlay-trigger</code></td>
+<td>Nested <code>sp-tooltip</code> <code>textContent</code></td>
+<td>Nested <code>sp-tooltip</code> <code>placement</code>, then <code>overlay-trigger</code> <code>placement</code>, then <code>top</code></td>
+</tr>
+</tbody>
+</table>
+<p>When tooltip content is found, the component:</p>
+<ol>
+<li>Creates <code>&lt;mas-mnemonic&gt;</code> with <code>content</code> and <code>placement</code> attributes.</li>
+<li>Moves a light-DOM <code>&lt;a&gt;</code> (when it wraps an <code>&lt;img&gt;</code>) or a light-DOM <code>&lt;img&gt;</code> into the mnemonic.</li>
+<li>Clears remaining light-DOM children, appends the mnemonic, and dynamically imports <code>mas-mnemonic.js</code>.</li>
+</ol>
+<p>For new authoring, prefer wrapping <code>merch-icon</code> in <code>mas-mnemonic</code> directly (see Express variant tests) rather than nesting Spectrum tooltip elements inside <code>merch-icon</code>.</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-mnemonic</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;Including Photoshop, Illustrator, and more&quot;</span> <span class="hljs-attr">placement</span>=<span class="hljs-string">&quot;right&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./img/info-icon.svg&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">mas-mnemonic</span>&gt;</span>
+</code></pre>
+<h2 id="aem-hydration" tabindex="-1">AEM hydration <a class="header-anchor" href="#aem-hydration" href="#aem-hydration" title="Permalink to this heading">#</a></h2>
+<p><code>processMnemonics()</code> in <code>hydrate.js</code> maps fragment fields to slotted icons:</p>
+<table>
+<thead>
+<tr>
+<th>Fragment field</th>
+<th>Attribute on <code>merch-icon</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mnemonicIcon[]</code></td>
+<td><code>src</code> (empty strings filtered out)</td>
+</tr>
+<tr>
+<td><code>mnemonicAlt[]</code></td>
+<td><code>alt</code> (parallel index)</td>
+</tr>
+<tr>
+<td><code>mnemonicLink[]</code></td>
+<td><code>href</code> (parallel index; non-<code>http(s)</code> values prefixed with <code>https://</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Each icon is appended with <code>slot=&quot;icons&quot;</code>, <code>loading</code> copied from the parent <code>merch-card</code>, and <code>size</code> from <code>mapping.mnemonics.size</code> (default <code>l</code>).</p>
+<p>Pre-authored <code>&lt;merch-icon&gt;</code> markup inside fragment HTML (for example in <code>whatsIncluded</code>) is passed through unchanged.</p>
+<h2 id="css-custom-properties" tabindex="-1">CSS custom properties <a class="header-anchor" href="#css-custom-properties" href="#css-custom-properties" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--img-width</code> / <code>--img-height</code></td>
+<td><code>size</code> attribute selectors</td>
+<td>Host and image dimensions</td>
+</tr>
+<tr>
+<td><code>--mod-img-width</code> / <code>--mod-img-height</code></td>
+<td>Author override on <code>:host</code></td>
+<td>Overrides preset size</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a>. <code>merch-icon</code> is also registered when <a href="merch-card.html">merch-card</a> loads (<code>merch-card.js</code> imports it). There is no separate bundle entry.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

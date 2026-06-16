@@ -1,0 +1,219 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="merch-stock" tabindex="-1">merch-stock <a class="header-anchor" href="#merch-stock" href="#merch-stock" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-stock</code> is a Spectrum checkbox for optional Adobe Stock trial offers. The default slot holds label copy; slotted <code>&lt;div data-plan-type&gt;</code> blocks carry plan-specific pricing via <code>inline-price</code>. Only the block matching the host <code>plan-type</code> (<code>PUF</code>, <code>ABM</code>, or <code>M2M</code>) is visible.</p>
+<p>The element is built and exported as a standalone bundle, but <strong>no <code>merch-card</code> variant uses it today</strong>. <code>plans</code> and <code>plans-v2</code> render stock UI from <code>merch-card</code> attributes <code>checkbox-label</code> and <code>stock-offer-osis</code> instead — a native checkbox in <code>#stock-checkbox</code> wired to <code>toggleStockOffer()</code>. See <a href="merch-card.html#stock-toggle">Stock toggle on merch-card</a>.</p>
+<p>Use <code>merch-stock</code> when you need a Spectrum checkbox with plan-filtered slot content <strong>outside</strong> the built-in plans card stock row. Use the <code>merch-card</code> attributes when authoring standard plans or plans-v2 cards.</p>
+<p>Requires an active <a href="mas-commerce-service.html">mas-commerce-service</a> when slotted prices use <code>inline-price</code>.</p>
+<p>See also: <a href="merch-card.html#stock-toggle">merch-card — Stock toggle</a>, <a href="plans-v2.html#stock-toggle">Plans v2 — Stock toggle</a>, <a href="merch-addon.html">merch-addon</a> (similar plan-type slot filtering).</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Standalone stock checkbox with plan-specific pricing. Set <code>plan-type</code> to switch which <code>&lt;div data-plan-type&gt;</code> block is shown.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">merch-stock</span> <span class="hljs-attr">plan-type</span>=<span class="hljs-string">&quot;PUF&quot;</span>&gt;</span>
+  Add a 30-day free trial of Adobe Stock for
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;stock-puf-osi&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;stock-abm-osi&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-plan-type</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+      <span class="hljs-attr">data-template</span>=<span class="hljs-string">&quot;price&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;stock-m2m-osi&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-stock</span>&gt;</span>
+</code></pre>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<p>Stock trial UI on <code>plans</code> and <code>plans-v2</code> cards does <strong>not</strong> use <code>merch-stock</code>. When <code>checkbox-label</code> is set on <code>merch-card</code>, the variant layout renders <code>#stock-checkbox</code> in the card body and calls <code>toggleStockOffer()</code> to append or remove OSIs from footer checkout links via <code>stock-offer-osis</code>.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">mas-commerce-service</span> <span class="hljs-attr">env</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-commerce-service</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span>
+  <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans-v2&quot;</span>
+  <span class="hljs-attr">checkbox-label</span>=<span class="hljs-string">&quot;Add a 30-day free trial of Adobe Stock.*&quot;</span>
+  <span class="hljs-attr">stock-offer-osis</span>=<span class="hljs-string">&quot;stock-puf,stock-abm,stock-m2m&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Creative Cloud Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;description&quot;</span>&gt;</span>Apps for photography, design, and video.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h4</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span>
+        <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;price&quot;</span>
+        <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;inline-price&quot;</span>
+        <span class="hljs-attr">data-display-recurrence</span>=<span class="hljs-string">&quot;true&quot;</span>
+        <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+      &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span>
+      <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;cta&quot;</span>
+      <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-link&quot;</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span>
+      <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>
+      <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;r_JXAnlFI7xD6FxWKl2ODvZriLYBoSL701Kd1hRyhe8&quot;</span>
+      &gt;</span>Buy now&lt;/a
+    &gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<p><code>toggleStockOffer()</code> does not listen for <code>merch-stock:change</code>. Integrations that place <code>merch-stock</code> in custom markup must wire checkout OSI updates themselves (for example by reading the <code>osi</code> getter on toggle).</p>
+<h2 id="slot-content" tabindex="-1">Slot content <a class="header-anchor" href="#slot-content" href="#slot-content" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Content</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default slot</td>
+<td>Checkbox label text and elements outside plan-specific blocks.</td>
+</tr>
+<tr>
+<td><code>&lt;div data-plan-type&gt;</code></td>
+<td>Plan-specific copy and pricing. Hidden by default; shown when host <code>plan-type</code> matches <code>PUF</code>, <code>ABM</code>, or <code>M2M</code>.</td>
+</tr>
+<tr>
+<td><code>span[is=&quot;inline-price&quot;]</code> inside <code>&lt;div data-plan-type&gt;</code></td>
+<td>Stock offer price for that plan. Used by the <code>osi</code> getter and by <code>connectedCallback</code> to set <code>data-plan-type</code> on the parent <code>&lt;div&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>On connect, after <code>updateComplete</code>, the component finds each slotted <code>inline-price</code>, awaits <code>onceSettled()</code>, and copies <code>value[0].planType</code> onto the parent element’s <code>data-plan-type</code> attribute.</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plan-type</code></td>
+<td>Active billing plan (<code>PUF</code>, <code>ABM</code>, or <code>M2M</code>). Required — the host is <code>display: none</code> without it, and only the matching slotted <code>&lt;div data-plan-type&gt;</code> is shown.</td>
+<td>—</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>checked</code></td>
+<td>Whether the stock trial is selected.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Target</th>
+<th>Bubbles</th>
+<th><code>detail</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-stock:change</code></td>
+<td><code>merch-stock</code></td>
+<td>yes</td>
+<td><code>{ checked: boolean, planType: string }</code></td>
+<td>Fired when the shopper toggles the Spectrum checkbox (<code>sp-checkbox</code> <code>@change</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>No <code>merch-card</code> listener handles this event in the current codebase.</p>
+<h2 id="osi-getter" tabindex="-1">osi getter <a class="header-anchor" href="#osi-getter" href="#osi-getter" title="Permalink to this heading">#</a></h2>
+<p>When <code>checked</code> is <code>true</code>, returns the first <code>offerSelectorIds[0]</code> from the slotted <code>inline-price</code> inside <code>div[data-plan-type=&quot;${planType}&quot;]</code> matching the host <code>plan-type</code>. Returns <code>undefined</code> when unchecked or when no matching price is found.</p>
+<p>Unlike <code>merch-card.toggleStockOffer()</code>, this getter does not mutate checkout link <code>data-wcs-osi</code> attributes.</p>
+<h2 id="visibility" tabindex="-1">Visibility <a class="header-anchor" href="#visibility" href="#visibility" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plan-type</code> not set</td>
+<td>Host hidden (<code>display: none</code>).</td>
+</tr>
+<tr>
+<td>Viewport <code>max-width: 767px</code> (<code>MOBILE_LANDSCAPE</code>)</td>
+<td><code>render()</code> returns nothing — no checkbox is shown.</td>
+</tr>
+<tr>
+<td><code>plan-type</code> set, desktop viewport</td>
+<td>Renders <code>sp-checkbox</code> (size <code>s</code>) with default slot content.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p><code>merch-stock</code> is <strong>not</strong> registered by <a href="mas.js.html">mas.js</a>. Load the standalone bundle:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../dist/merch-stock.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>Import <code>mas.js</code> (or <code>inline-price</code> dependencies) when slotted prices need WCS resolution.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

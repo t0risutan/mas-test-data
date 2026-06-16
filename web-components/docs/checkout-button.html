@@ -88,6 +88,27 @@
 <td>mas.js or consumer code</td>
 </tr>
 <tr>
+<td><code>data-checkout-market-segment</code></td>
+<td>Overrides market segment in the checkout URL when the resolved offer segment is not sufficient</td>
+<td></td>
+<td><code>false</code></td>
+<td>mas.js or consumer code</td>
+</tr>
+<tr>
+<td><code>data-ms</code></td>
+<td>Short market segment override passed to checkout URL building (<code>e</code> → <code>EDU</code>, <code>t</code> → <code>TEAM</code>; other values pass through)</td>
+<td></td>
+<td><code>false</code></td>
+<td>mas.js or consumer code</td>
+</tr>
+<tr>
+<td><code>data-cs</code></td>
+<td>Customer segment override for checkout URL building (e.g. <code>TEAM</code>)</td>
+<td></td>
+<td><code>false</code></td>
+<td>mas.js or consumer code</td>
+</tr>
+<tr>
 <td><code>data-perpetual</code></td>
 <td>whether this is a perpetual offer <code>true|false</code></td>
 <td></td>
@@ -124,27 +145,28 @@
 </tr>
 <tr>
 <td><code>data-modal</code></td>
-<td><code>modal</code> flag for client side interpretation</td>
+<td>Modal checkout type. Values <code>twp</code>, <code>d2p</code>, or <code>crm</code> enable the <a href="feature-flags.html#mas-ff-3in1">3-in-1 modal flow</a> when <code>mas-ff-3in1</code> is not <code>off</code>. Other truthy values set <code>href</code> to <code>#</code> for modal handling.</td>
 <td><code>false</code></td>
 <td><code>false</code></td>
-<td>mas.js</td>
+<td>mas.js or consumer code</td>
 </tr>
 <tr>
 <td><code>data-analytics-id</code></td>
 <td>human-readable, non-translatable button id for analytics. Authored in Studio in button Editor.</td>
-<td><code>false</code></td>
+<td></td>
 <td><code>false</code></td>
 <td>mas.js</td>
 </tr>
 <tr>
 <td><code>daa-ll</code></td>
 <td>martech-compatible button id for analytics. Format: ‘${data-analytics-id}-${#}’, where # is the position of the button within a card. E.g. : see-terms-1, buy-now-2</td>
-<td><code>false</code></td>
+<td></td>
 <td><code>false</code></td>
 <td>mas.js</td>
 </tr>
 </tbody>
 </table>
+<p><code>data-analytics-id</code>, <code>daa-ll</code>, and <code>data-template</code> are read from <code>dataset</code> when present but are not listed in <code>observedAttributes</code>; changing them at runtime may not trigger a re-render unless you call <code>requestUpdate(true)</code>.</p>
 <h3 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" href="#examples" title="Permalink to this heading">#</a></h3>
 <h4 id="custom-workflow-step" tabindex="-1">Custom Workflow Step <a class="header-anchor" href="#custom-workflow-step" href="#custom-workflow-step" title="Permalink to this heading">#</a></h4>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span>
@@ -197,7 +219,11 @@
 <td>on checkout button elements, it will return <code>true</code></td>
 </tr>
 <tr>
-<td><code>onceSettled</code></td>
+<td><code>href</code></td>
+<td>Resolved checkout URL (stored on <code>data-href</code>). On click, navigates via <code>window.location.href</code> unless a custom handler is set.</td>
+</tr>
+<tr>
+<td><code>onceSettled()</code></td>
 <td>promise that resolves when the custom-element either resolves or fails to resolve the offer</td>
 </tr>
 <tr>
@@ -207,6 +233,22 @@
 <tr>
 <td><code>value</code></td>
 <td>The actual offer that is used to render the checkout button. In some cases WCS can return multiple offers but only one will be picked to render for a single app.</td>
+</tr>
+<tr>
+<td><code>marketSegment</code></td>
+<td>Resolved market segment from options or offer (<code>EDU</code> / <code>TEAM</code> mapping applied for short codes <code>e</code> / <code>t</code>).</td>
+</tr>
+<tr>
+<td><code>customerSegment</code></td>
+<td>Resolved customer segment from options or offer.</td>
+</tr>
+<tr>
+<td><code>is3in1Modal</code></td>
+<td><code>true</code> when <code>data-modal</code> is <code>twp</code>, <code>d2p</code>, or <code>crm</code>.</td>
+</tr>
+<tr>
+<td><code>isOpen3in1Modal</code></td>
+<td><code>true</code> when <code>is3in1Modal</code> and no <code>meta[name=mas-ff-3in1]</code> with <code>content=&quot;off&quot;</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -240,11 +282,13 @@
 <h4 id="options-property" tabindex="-1">options property <a class="header-anchor" href="#options-property" href="#options-property" title="Permalink to this heading">#</a></h4>
 <pre><code id="coOptions" class="language-json">
 </code></pre>
+<h2 id="static-factory" tabindex="-1">Static factory <a class="header-anchor" href="#static-factory" href="#static-factory" title="Permalink to this heading">#</a></h2>
+<p><code>CheckoutButton.createCheckoutButton(options, innerHTML)</code> returns a configured <code>&lt;button is=&quot;checkout-button&quot;&gt;</code> when <code>mas-commerce-service</code> is active, or <code>null</code> otherwise. Inner HTML is wrapped in a <code>pointer-events: none</code> span (same as runtime hydration).</p>
 <h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
 <tr>
-<th>Property</th>
+<th>Method</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -253,8 +297,14 @@
 <td><code>requestUpdate(true | false)</code></td>
 <td>Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip</td>
 </tr>
+<tr>
+<td><code>updateOptions(options)</code></td>
+<td>Updates <code>dataset</code> from collected checkout options (via service defaults and providers).</td>
+</tr>
 </tbody>
 </table>
+<p>When <code>registerCheckoutAction</code> on <a href="mas-commerce-service.html">mas-commerce-service</a> returns a <code>handler</code>, the element sets <code>checkoutActionHandler</code> and <code>href</code> to <code>#</code>; the handler runs on click instead of navigation.</p>
+<p>Resolved download/upgrade CTAs add CSS classes <code>download</code> or <code>upgrade</code> and may leave <code>href</code> empty until the custom action applies.</p>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
 <table>
 <thead>
@@ -264,10 +314,6 @@
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><code>mas:pending</code></td>
-<td>fires when checkout button starts loading</td>
-</tr>
 <tr>
 <td><code>mas:resolved</code></td>
 <td>fires when the offer is successfully resolved</td>
@@ -279,19 +325,19 @@
 </tbody>
 </table>
 <br>
-<p>For each event, the following css classes are toggled on the element: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
+<p>There is no <code>mas:pending</code> event in the current implementation. Loading state is reflected with CSS classes: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
 <h3 id="example-2" tabindex="-1">Example <a class="header-anchor" href="#example-2" href="#example-2" title="Permalink to this heading">#</a></h3>
 <pre><code class="hljs demo language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;eventsDemo&quot;</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
         <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
         <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-        &gt;</span>Buy now (click me)&lt;/a
+        &gt;</span>Buy now (click me)&lt;/button
     &gt;
     <span class="hljs-tag">&lt;<span class="hljs-name">br</span> /&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span>
         <span class="hljs-attr">is</span>=<span class="hljs-string">&quot;checkout-button&quot;</span>
         <span class="hljs-attr">data-wcs-osi</span>=<span class="hljs-string">&quot;A1xn6EL4pK93bWjM8flffQpfEL-bnvtoQKQAvkx574M&quot;</span>
-        &gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;pointer-events: none;&quot;</span>&gt;</span>Span + <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Strong + Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>&lt;/a
+        &gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;pointer-events: none;&quot;</span>&gt;</span>Span + <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>Strong + Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>&lt;/button
     &gt;
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;btnRefresh&quot;</span>&gt;</span>Refresh<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
@@ -300,9 +346,6 @@
     <span class="hljs-keyword">const</span> <span class="hljs-title function_">logger</span> = (<span class="hljs-params">...messages</span>) =&gt;
         (log.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">`<span class="hljs-subst">${messages.join(<span class="hljs-string">&#x27; &#x27;</span>)}</span>&lt;br&gt;<span class="hljs-subst">${log.innerHTML}</span>`</span>);
     <span class="hljs-keyword">const</span> eventsDemo = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;eventsDemo&#x27;</span>);
-    eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:pending&#x27;</span>, <span class="hljs-function">() =&gt;</span>
-        <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button pending&#x27;</span>),
-    );
     eventsDemo.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mas:resolved&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span>
         <span class="hljs-title function_">logger</span>(<span class="hljs-string">&#x27;checkout-button resolved&#x27;</span>),
     );
@@ -319,8 +362,8 @@
         }
     }, {<span class="hljs-attr">capture</span>: <span class="hljs-literal">true</span>});
     <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;btnRefresh&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-        [...eventsDemo.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;a&#x27;</span>)].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">a</span>) =&gt;</span>
-            a.<span class="hljs-title function_">requestUpdate</span>(<span class="hljs-literal">true</span>),
+        [...eventsDemo.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&#x27;button[is=&quot;checkout-button&quot;]&#x27;</span>)].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">btn</span>) =&gt;</span>
+            btn.<span class="hljs-title function_">requestUpdate</span>(<span class="hljs-literal">true</span>),
         );
     });
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>

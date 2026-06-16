@@ -1,0 +1,233 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<h1 id="deeplink" tabindex="-1">URL hash deeplink <a class="header-anchor" href="#deeplink" href="#deeplink" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>Collection filtering, sidenav navigation, and search share a single URL hash contract. User interactions write <code>key=value</code> pairs into <code>window.location.hash</code>; <code>merch-card-collection</code> reads the same keys to filter, sort, and paginate cards.</p>
+<p>The contract is implemented in <code>web-components/src/deeplink.js</code> and used by:</p>
+<ul>
+<li><a href="merch-card-collection.html">merch-card-collection</a> — reads all supported keys</li>
+<li><a href="merch-sidenav.html#sidenav-list">merch-sidenav-list</a> — writes <code>filter</code> (via <code>deeplink=&quot;filter&quot;</code>)</li>
+<li><a href="merch-sidenav.html#checkbox-group">merch-sidenav-checkbox-group</a> — writes <code>types</code> (via <code>deeplink=&quot;types&quot;</code>)</li>
+<li><a href="merch-sidenav.html#merch-search">merch-search</a> — writes <code>search</code> (via <code>deeplink=&quot;search&quot;</code>)</li>
+</ul>
+<p>See also: <a href="merch-card-collection.html#filtering">merch-card-collection filtering</a>, <a href="merch-sidenav.html">merch-sidenav</a>, <a href="catalog.html">Catalog Gallery</a>, <a href="plans-collection.html">Plans Collection Gallery</a>.</p>
+<h2 id="format" tabindex="-1">Hash format <a class="header-anchor" href="#format" href="#format" title="Permalink to this heading">#</a></h2>
+<p>Hashes use ampersand-separated <code>key=value</code> pairs, similar to a query string:</p>
+<pre><code class="hljs">#filter=photo<span class="hljs-variable">&amp;types</span>=web,desktop<span class="hljs-variable">&amp;search</span>=acrobat<span class="hljs-variable">&amp;sort</span>=alphabetical<span class="hljs-variable">&amp;page</span>=2
+</code></pre>
+<ul>
+<li>Values are URL-encoded. <code>pushState()</code> and <code>parseState()</code> decode <code>+</code> as space and apply <code>decodeURIComponent</code>.</li>
+<li><code>pushState()</code> merges partial updates into the existing hash, sorts keys alphabetically, and skips the write when the result is unchanged.</li>
+<li>Empty or falsy values remove a key from the hash.</li>
+<li>Hash updates preserve scroll position (<code>window.scrollY</code> is restored after <code>location.hash</code> changes).</li>
+</ul>
+<p>The <code>deeplink()</code> listener ignores hashes that do not contain <code>=</code> (plain fragment anchors like <code>#section</code> are not treated as collection state).</p>
+<h2 id="hash-keys" tabindex="-1">Supported hash keys <a class="header-anchor" href="#hash-keys" href="#hash-keys" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Hash key</th>
+<th>Written by</th>
+<th>Read by collection as</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter</code></td>
+<td><code>merch-sidenav-list</code> (<code>deeplink=&quot;filter&quot;</code>)</td>
+<td><code>filter</code></td>
+<td>Category filter. Cards must define the key on their <code>filters</code> object. Changing <code>filter</code> resets <code>page</code> to <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>Legacy / external links</td>
+<td><code>filter</code></td>
+<td>Alias for <code>filter</code>. The collection resolves <code>filter = filter || category</code>.</td>
+</tr>
+<tr>
+<td><code>types</code></td>
+<td><code>merch-sidenav-checkbox-group</code> (<code>deeplink=&quot;types&quot;</code>)</td>
+<td><code>types</code></td>
+<td>Comma-separated checkbox <code>name</code> values. Cards must list matching values in their <code>types</code> attribute.</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td><code>merch-search</code> (<code>deeplink=&quot;search&quot;</code>) or collection header search</td>
+<td><code>search</code></td>
+<td>Case-insensitive substring match against each card’s <code>title</code>.</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>Collection header sort menu (<code>merch-card-collection-header</code>)</td>
+<td><code>sort</code></td>
+<td><code>alphabetical</code> sorts by card title. Any other value (including absent) uses authored order from <code>card.filters[filter].order</code>. Selecting authored order removes the <code>sort</code> key from the hash.</td>
+</tr>
+<tr>
+<td><code>single_app</code></td>
+<td>External links, or migrated from query params</td>
+<td><code>single-app</code></td>
+<td>When set, the matching card (<code>card.name === single_app</code>) is promoted to second position via <code>card.updateFilters(true)</code>.</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>Collection “Show more” (<code>showMore()</code>)</td>
+<td><code>page</code></td>
+<td>Pagination multiplier: visible cards = first <code>page × limit</code> results. Filter changes reset <code>page</code> to <code>1</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sort-values" tabindex="-1">Valid <code>sort</code> values <a class="header-anchor" href="#sort-values" href="#sort-values" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Hash value</th>
+<th>Collection <code>sort</code> attribute</th>
+<th>Sorter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(absent)</em> or <code>authored</code></td>
+<td><code>authored</code> (default)</td>
+<td>Authored order from <code>card.filters[filter].order</code></td>
+</tr>
+<tr>
+<td><code>alphabetical</code></td>
+<td><code>alphabetical</code></td>
+<td>Locale-aware title sort (<code>en</code>, <code>sensitivity: 'base'</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deeplink-attribute" tabindex="-1">Component <code>deeplink</code> attribute <a class="header-anchor" href="#deeplink-attribute" href="#deeplink-attribute" title="Permalink to this heading">#</a></h2>
+<p>Interactive components accept a <code>deeplink</code> property that names their hash key. On user interaction they call <code>pushStateFromComponent(this, value)</code>, which writes <code>state[component.deeplink] = value</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Typical <code>deeplink</code> value</th>
+<th>Value written</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-sidenav-list</code></td>
+<td><code>filter</code></td>
+<td>Selected <code>sp-sidenav-item</code> <code>value</code></td>
+</tr>
+<tr>
+<td><code>merch-sidenav-checkbox-group</code></td>
+<td><code>types</code></td>
+<td>Comma-separated checked checkbox <code>name</code> values</td>
+</tr>
+<tr>
+<td><code>merch-search</code></td>
+<td><code>search</code></td>
+<td><code>sp-search</code> input value</td>
+</tr>
+</tbody>
+</table>
+<p><code>merch-search</code> restores and listens for the <code>search</code> hash key specifically in <code>startDeeplink()</code> — use <code>deeplink=&quot;search&quot;</code> so writes and reads stay in sync.</p>
+<h3 id="example-markup" tabindex="-1">Example markup <a class="header-anchor" href="#example-markup" href="#example-markup" title="Permalink to this heading">#</a></h3>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav</span> <span class="hljs-attr">sidenavTitle</span>=<span class="hljs-string">&quot;REFINE YOUR RESULTS&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-search</span> <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">sp-search</span> <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;Search all products&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">sp-search</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-search</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav-list</span> <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;filter&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;category&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;multilevel&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;all&quot;</span>&gt;</span>All<span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">sp-sidenav-item</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;photo&quot;</span>&gt;</span>Photo<span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav-item</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">sp-sidenav</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav-list</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-sidenav-checkbox-group</span> <span class="hljs-attr">deeplink</span>=<span class="hljs-string">&quot;types&quot;</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;types&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">sp-checkbox</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;desktop&quot;</span>&gt;</span>Desktop<span class="hljs-tag">&lt;/<span class="hljs-name">sp-checkbox</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">sp-checkbox</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mobile&quot;</span>&gt;</span>Mobile<span class="hljs-tag">&lt;/<span class="hljs-name">sp-checkbox</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav-checkbox-group</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-sidenav</span>&gt;</span>
+</code></pre>
+<p>A shareable filtered view might produce:</p>
+<pre><code class="hljs">#filter=photo<span class="hljs-variable">&amp;search</span>=lightroom<span class="hljs-variable">&amp;types</span>=desktop,mobile<span class="hljs-variable">&amp;sort</span>=alphabetical<span class="hljs-variable">&amp;page</span>=1
+</code></pre>
+<h2 id="query-migration" tabindex="-1">Query param migration <a class="header-anchor" href="#query-migration" href="#query-migration" title="Permalink to this heading">#</a></h2>
+<p>On connect, <code>merch-sidenav-list</code> calls <code>paramsToHash(['filter', 'single_app'])</code> before starting its deeplink listener. Matching query-string values are moved into the hash and removed from <code>window.location.search</code>:</p>
+<pre><code class="hljs">?<span class="hljs-attribute">filter</span>=photo&amp;single_app=illustrator  →  #<span class="hljs-attribute">filter</span>=photo&amp;single_app=illustrator
+</code></pre>
+<p>If a key already exists in the hash, <code>updateHash()</code> overwrites it with the query param value.</p>
+<h2 id="filtered-mode" tabindex="-1">Filtered (frozen) collections <a class="header-anchor" href="#filtered-mode" href="#filtered-mode" title="Permalink to this heading">#</a></h2>
+<p>When <code>merch-card-collection</code> has a <code>filtered</code> attribute (set from AEM when the collection has no hierarchy, or authored explicitly), <code>startDeeplink()</code> is not called. The collection freezes <code>filter</code> to the <code>filtered</code> value and ignores hash-driven filter changes. Pagination footer is also hidden.</p>
+<h2 id="edge-cases" tabindex="-1">Sidenav edge cases <a class="header-anchor" href="#edge-cases" href="#edge-cases" title="Permalink to this heading">#</a></h2>
+<p><strong>Invalid filter value.</strong> If the hash <code>filter</code> (or <code>category</code>) does not match any <code>sp-sidenav-item</code>, <code>merch-sidenav-list</code> selects the first item and rewrites the hash to that item’s <code>value</code>.</p>
+<p><strong>Legacy <code>category</code> hash.</strong> When the hash contains <code>category=</code> (without <code>filter=</code>), <code>merch-sidenav-list</code> applies the selection without rewriting the hash on the initial sync.</p>
+<h2 id="api" tabindex="-1"><code>deeplink.js</code> API <a class="header-anchor" href="#api" href="#api" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parseState(hash?)</code></td>
+<td>Parse a hash string (default: <code>window.location.hash</code>) into a plain object of decoded key/value pairs.</td>
+</tr>
+<tr>
+<td><code>pushState(state)</code></td>
+<td>Merge <code>state</code> into the current hash. Truthy values are set; falsy values delete the key. Preserves scroll.</td>
+</tr>
+<tr>
+<td><code>pushStateFromComponent(component, value)</code></td>
+<td><code>pushState({ [component.deeplink]: value })</code> when <code>component.deeplink</code> is set.</td>
+</tr>
+<tr>
+<td><code>deeplink(callback)</code></td>
+<td>Invoke <code>callback(state)</code> immediately and on every <code>hashchange</code>. Returns a disposer that removes the listener.</td>
+</tr>
+</tbody>
+</table>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

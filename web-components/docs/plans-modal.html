@@ -1,0 +1,409 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<h1 id="plans-modal" tabindex="-1">plans-modal <a class="header-anchor" href="#plans-modal" href="#plans-modal" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>plans-modal</code> is a Lit overlay dialog for presenting plan comparison content: title, description, three feature lists (includes, extra, recommended), and a subscription actions panel. It uses Spectrum Web Components (<code>sp-theme</code>, <code>sp-dialog-wrapper</code>, <code>sp-button</code>) and opens automatically when the element connects.</p>
+<p>The component is <strong>not</strong> registered by <a href="mas.js.html">mas.js</a> or included in <code>build.mjs</code> bundle output. Import <code>web-components/src/plans-modal.js</code> directly in the hosting page (or add a dedicated bundle entry).</p>
+<p><code>openModal()</code> calls <code>Overlay.open()</code> from <code>@spectrum-web-components/overlay</code>, but the source file does not import <code>Overlay</code>. The hosting integration must provide <code>Overlay</code> in scope (for example by importing it on the page before loading <code>plans-modal.js</code>).</p>
+<p>There are no AEM hydration mappings or variant registrations for this element in the M@S codebase. No production usage references were found in <code>web-components/</code>.</p>
+<h2 id="markup" tabindex="-1">Markup structure <a class="header-anchor" href="#markup" href="#markup" title="Permalink to this heading">#</a></h2>
+<p>Author the modal in the light DOM, then append it to the document when the shopper opens the comparison. Set <code>trigger</code> to the element that opened the overlay (passed through to <code>Overlay.open()</code>). On connect, the modal parses list items from slotted containers and opens immediately.</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">plans-modal</span>
+  <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;compare-modal&quot;</span>
+  <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Creative Cloud All Apps&quot;</span>
+  <span class="hljs-attr">description</span>=<span class="hljs-string">&quot;Get 20+ creative desktop and mobile apps.&quot;</span>
+  <span class="hljs-attr">includes-limit</span>=<span class="hljs-string">&quot;5&quot;</span>
+  <span class="hljs-attr">back-text</span>=<span class="hljs-string">&quot;Back&quot;</span>
+  <span class="hljs-attr">cta-text</span>=<span class="hljs-string">&quot;Continue&quot;</span>
+  <span class="hljs-attr">includes-text</span>=<span class="hljs-string">&quot;Includes&quot;</span>
+  <span class="hljs-attr">extra-text</span>=<span class="hljs-string">&quot;Extra&quot;</span>
+  <span class="hljs-attr">recommended-text</span>=<span class="hljs-string">&quot;Recommended&quot;</span>
+  <span class="hljs-attr">see-more-text</span>=<span class="hljs-string">&quot; + See more&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;icon&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/creative-cloud.svg&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> /&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;includes&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Photoshop&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span> Photoshop<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;Illustrator&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span> Illustrator<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- additional &lt;li&gt; rows --&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;extra&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>100GB cloud storage<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Adobe Fonts<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;recommended&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-subscription-panel</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- subscription / checkout UI provided by the host integration --&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">merch-subscription-panel</span>&gt;</span>
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">offer</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- optional; queried on connect but not rendered by plans-modal --&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">offer</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plans-modal</span>&gt;</span>
+</code></pre>
+<p>Remove the element from the DOM when the shopper dismisses the dialog (<code>@close</code> / <code>@cancel</code> call <code>this.remove()</code> on the host element).</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute / property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Reflects</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>String</td>
+<td>—</td>
+<td>no</td>
+<td>Dialog and heading text. Bound to <code>sp-dialog-wrapper</code> <code>title</code>, and rendered in the <code>#title</code> <code>&lt;h2&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>String</td>
+<td>—</td>
+<td>no</td>
+<td>Body copy rendered in the <code>#description</code> <code>&lt;p&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>includes-limit</code></td>
+<td>Number</td>
+<td><code>5</code></td>
+<td>yes</td>
+<td>Maximum includes rows visible before the see-more control. Sets CSS variable <code>--consonant-plan-modal-includes-limit</code>.</td>
+</tr>
+<tr>
+<td><code>back-text</code></td>
+<td>String</td>
+<td>—</td>
+<td>no</td>
+<td>Cancel button label on <code>sp-dialog-wrapper</code> (<code>cancel-label</code>).</td>
+</tr>
+<tr>
+<td><code>cta-text</code></td>
+<td>String</td>
+<td>—</td>
+<td>no</td>
+<td>Confirm button label on <code>sp-dialog-wrapper</code> (<code>confirm-label</code>).</td>
+</tr>
+<tr>
+<td><code>includes-text</code></td>
+<td>String</td>
+<td><code>Includes</code></td>
+<td>no</td>
+<td>Heading above the includes list.</td>
+</tr>
+<tr>
+<td><code>extra-text</code></td>
+<td>String</td>
+<td><code>Extra</code></td>
+<td>no</td>
+<td>Heading above the extra list.</td>
+</tr>
+<tr>
+<td><code>recommended-text</code></td>
+<td>String</td>
+<td><code>Recommended</code></td>
+<td>no</td>
+<td>Heading above the recommended list.</td>
+</tr>
+<tr>
+<td><code>see-more-text</code></td>
+<td>String</td>
+<td><code> + See more</code></td>
+<td>no</td>
+<td>Label on the includes see-more button.</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td>Object</td>
+<td>—</td>
+<td>no</td>
+<td>Overlay trigger element. Passed to <code>Overlay.open()</code> as <code>trigger</code>. Not reflected as an HTML attribute — set as a property in script.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="runtime-properties" tabindex="-1">Runtime-populated properties <a class="header-anchor" href="#runtime-properties" href="#runtime-properties" title="Permalink to this heading">#</a></h3>
+<p><code>prepareSlots()</code> runs after first update and assigns these from light-DOM queries. They are not authorable as attributes.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Source</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>includes</code></td>
+<td><code>[slot=&quot;includes&quot;] &gt; li</code></td>
+<td>Rendered in the includes <code>&lt;ul&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>extra</code></td>
+<td><code>[slot=&quot;extra&quot;] &gt; li</code></td>
+<td>Rendered in the extra <code>&lt;ul&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>recommended</code></td>
+<td><code>[slot=&quot;recommended&quot;] &gt; li</code></td>
+<td>Rendered in the recommended <code>&lt;ul&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>subscriptionPanel</code></td>
+<td><code>merch-subscription-panel</code> child</td>
+<td>Moved into the <code>#actions</code> region.</td>
+</tr>
+<tr>
+<td><code>offers</code></td>
+<td><code>offer</code> child</td>
+<td>Queried on connect; not referenced in the render template.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Required</th>
+<th>Content</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icon</code></td>
+<td>no</td>
+<td>Image or icon markup</td>
+<td>Rendered in both <code>#title</code> and <code>#description</code> (same slot reused).</td>
+</tr>
+<tr>
+<td><code>includes</code></td>
+<td>no</td>
+<td>Wrapper with <code>&lt;li&gt;</code> children</td>
+<td>Each <code>&lt;li&gt;</code> becomes one includes row. See <a href="#includes-list">Includes list</a>.</td>
+</tr>
+<tr>
+<td><code>extra</code></td>
+<td>no</td>
+<td>Wrapper with <code>&lt;li&gt;</code> children</td>
+<td>Bulleted via CSS <code>::before</code> content.</td>
+</tr>
+<tr>
+<td><code>recommended</code></td>
+<td>no</td>
+<td>Wrapper with <code>&lt;li&gt;</code> children</td>
+<td>Bulleted via CSS <code>::before</code> content.</td>
+</tr>
+</tbody>
+</table>
+<p><code>merch-subscription-panel</code> and <code>offer</code> are <strong>not</strong> named slots. Place them as direct children of <code>&lt;plans-modal&gt;</code>.</p>
+<h2 id="includes-list" tabindex="-1">Includes list <a class="header-anchor" href="#includes-list" href="#includes-list" title="Permalink to this heading">#</a></h2>
+<p>On connect, <code>prepareSlots()</code> counts <code>[slot=&quot;includes&quot;] &gt; li</code> elements:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>includes.length &lt;= includesLimit</code></td>
+<td>See-more button hidden.</td>
+</tr>
+<tr>
+<td><code>includes.length &gt; includesLimit</code></td>
+<td>Outline <code>sp-button</code> shown (<code>#seeMore</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>Clicking see-more sets <code>hideSeeMoreButton = true</code>, sets <code>includesLimit</code> to the full list length, and sets <code>--consonant-plan-modal-includes</code> to <code>auto</code> so the list scrolls instead of clipping.</p>
+<p>Default overflow is controlled by host CSS variable <code>--consonant-plan-modal-includes</code> (<code>hidden</code> until expanded).</p>
+<h2 id="dialog-behavior" tabindex="-1">Dialog behavior <a class="header-anchor" href="#dialog-behavior" href="#dialog-behavior" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Event / phase</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connectedCallback</code></td>
+<td>After <code>updateComplete</code>, runs <code>prepareSlots()</code> then <code>openModal()</code>.</td>
+</tr>
+<tr>
+<td><code>openModal()</code></td>
+<td>Opens <code>sp-dialog-wrapper</code> via <code>Overlay.open()</code> with <code>placement: 'none'</code>, <code>type: 'auto'</code>, and <code>trigger: this.trigger</code>. Appends the overlay to <code>sp-theme</code> in the shadow root.</td>
+</tr>
+<tr>
+<td><code>sp-dialog-wrapper</code> <code>@close</code> / <code>@cancel</code></td>
+<td>Calls <code>this.remove()</code> — removes the <code>&lt;plans-modal&gt;</code> element from the document.</td>
+</tr>
+<tr>
+<td>Mobile (<code>MOBILE_LANDSCAPE</code>, max-width 767px)</td>
+<td>Dialog <code>mode</code> set to <code>fullscreenTakeover</code>.</td>
+</tr>
+<tr>
+<td>Desktop</td>
+<td><code>mode</code> unset; fixed grid layout (see <a href="#layout">Layout</a>).</td>
+</tr>
+</tbody>
+</table>
+<p><code>sp-dialog-wrapper</code> is configured with <code>dismissable</code>, <code>underlay</code>, and <code>no-divider</code>.</p>
+<h2 id="layout" tabindex="-1">Layout <a class="header-anchor" href="#layout" href="#layout" title="Permalink to this heading">#</a></h2>
+<h3 id="mobile-(max-width-767px)" tabindex="-1">Mobile (max-width 767px) <a class="header-anchor" href="#mobile-(max-width-767px)" href="#mobile-(max-width-767px)" title="Permalink to this heading">#</a></h3>
+<p>Single-column flex stack inside <code>#container</code> (part <code>container</code>): title → description → actions → includes → extra → recommended.</p>
+<h3 id="desktop-(min-width-901px)" tabindex="-1">Desktop (min-width 901px) <a class="header-anchor" href="#desktop-(min-width-901px)" href="#desktop-(min-width-901px)" title="Permalink to this heading">#</a></h3>
+<p><code>#container</code> becomes a 3-column grid (max-width 1000px, height 637px):</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Grid placement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#title</code></td>
+<td>Columns 1–2, row 1</td>
+</tr>
+<tr>
+<td><code>#description</code></td>
+<td>Columns 1–2, row 2</td>
+</tr>
+<tr>
+<td><code>#includes</code></td>
+<td>Column 1, rows 3–7</td>
+</tr>
+<tr>
+<td><code>#extra</code></td>
+<td>Column 2, rows 3–4</td>
+</tr>
+<tr>
+<td><code>#recommended</code></td>
+<td>Column 2, rows 5–6</td>
+</tr>
+<tr>
+<td><code>merch-subscription-panel</code></td>
+<td>Column 3, rows 1–5 (gray background)</td>
+</tr>
+</tbody>
+</table>
+<p>Includes list height is <code>calc(min(max(includes-limit, 5), 12) * 36px)</code> on desktop; <code>calc(includes-limit * 36px)</code> below 901px.</p>
+<h2 id="css" tabindex="-1">CSS <a class="header-anchor" href="#css" href="#css" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Set by</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--consonant-plan-modal-includes-limit</code></td>
+<td><code>includes-limit</code> attribute / <code>updated()</code></td>
+<td>Clipped height of the includes <code>&lt;ul&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>--consonant-plan-modal-includes</code></td>
+<td><code>:host</code> default <code>hidden</code>; see-more sets <code>auto</code></td>
+<td><code>overflow-y</code> on the includes list.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parts" tabindex="-1">Parts <a class="header-anchor" href="#parts" href="#parts" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Element</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>container</code></td>
+<td><code>#container</code> — main content wrapper inside the dialog.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="external-dependencies" tabindex="-1">External dependencies <a class="header-anchor" href="#external-dependencies" href="#external-dependencies" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Status in M@S repo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merch-subscription-panel</code></td>
+<td>Referenced in <code>plans-modal.js</code> and styled in <code>plans-modal.css.js</code>. <strong>Not defined</strong> in <code>web-components/src/</code>. Provided by the host page.</td>
+</tr>
+<tr>
+<td><code>offer</code></td>
+<td>Queried as a child element. <strong>Not defined</strong> in <code>web-components/src/</code>.</td>
+</tr>
+<tr>
+<td><code>Overlay</code> (<code>@spectrum-web-components/overlay</code>)</td>
+<td>Required at runtime. <strong>Not imported</strong> in <code>plans-modal.js</code>.</td>
+</tr>
+</tbody>
+</table>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

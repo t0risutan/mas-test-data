@@ -6,6 +6,7 @@ This is a javasript library that enables M@S on any web surface.
 
 mas.js includes the followings custom elements:
 
+- [mas-commerce-service](mas-commerce-service.html)
 - [inline-price](inline-price.html)
 - [checkout-link](checkout-link.html)
 - [checkout-button](checkout-button.html)
@@ -16,6 +17,8 @@ In case of network issues, the requests will be retried up to 3 times with 500ms
 It will also fallback to last successfully loaded offers for the same OSI if available.
 
 ## Enablement `mas-commerce-service`
+
+For a full API reference (events, providers, refresh methods), see [mas-commerce-service](mas-commerce-service.html).
 
 ⚠️ Safari does not support customized built-in elements. Therefore, you need to load the following polyfill before `mas.js` for browser compatibility (not required for in-app usage).
 

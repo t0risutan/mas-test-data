@@ -87,6 +87,14 @@ It extends <code>HTMLAnchorElement</code> and will automatically generate the co
 <td><code>isUptLink</code></td>
 <td>On UPT link elements, it will return <code>true</code>.</td>
 </tr>
+<tr>
+<td><code>onceSettled()</code></td>
+<td>Promise that resolves when the link URL is set, or rejects if the offer cannot be resolved.</td>
+</tr>
+<tr>
+<td><code>href</code></td>
+<td>Resolved promo terms URL on <code>www.adobe.com</code> or <code>www.stage.adobe.com</code> after <code>mas:resolved</code>.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="example-1" tabindex="-1">Example <a class="header-anchor" href="#example-1" href="#example-1" title="Permalink to this heading">#</a></h3>
@@ -98,9 +106,42 @@ It extends <code>HTMLAnchorElement</code> and will automatically generate the co
     &gt;</span>See terms&lt;/a
 &gt;
 </code></pre>
+<h2 id="methods" tabindex="-1">Methods <a class="header-anchor" href="#methods" href="#methods" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>requestUpdate(true | false)</code></td>
+<td>Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip</td>
+</tr>
+</tbody>
+</table>
 <h2 id="events" tabindex="-1">Events <a class="header-anchor" href="#events" href="#events" title="Permalink to this heading">#</a></h2>
-<p>This element dispatches <code>mas:pending</code>, <code>mas:resolved</code>, and <code>mas:failed</code> events.
-It will log an error to the console if <code>data-wcs-osi</code> is missing or if the offer cannot be resolved.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mas:resolved</code></td>
+<td>Fires when the promo terms URL is set on the link</td>
+</tr>
+<tr>
+<td><code>mas:failed</code></td>
+<td>Fires when the offer could not be found or fetched</td>
+</tr>
+</tbody>
+</table>
+<p>There is no <code>mas:pending</code> event in the current implementation. Loading state is reflected with CSS classes: <code>placeholder-pending</code>, <code>placeholder-resolved</code>, <code>placeholder-failed</code>.</p>
+<p>If <code>data-wcs-osi</code> is missing at render time, the element logs an error and does not update <code>href</code>.</p>
 
 </sp-theme>
 </main>

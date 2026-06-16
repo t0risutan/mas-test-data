@@ -24,6 +24,262 @@
     <aside is="mas-sidenav"></aside>
 <main>
 <sp-theme color="light" scale="medium">
+<h2 id="overview" tabindex="-1">Overview <a class="header-anchor" href="#overview" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>Plans cards load from AEM fragments. The fragment <code>variant</code> field selects one of three mappings in <code>web-components/src/variants/plans.js</code>. Gallery examples omit an explicit <code>variant</code> attribute on <code>&lt;merch-card&gt;</code> — hydration sets it from the fragment.</p>
+<p>See <a href="merch-card.html">merch-card</a> for shared attributes and events, and <a href="merch-quantity-select.html">merch-quantity-select</a> for quantity UI referenced by the <code>quantitySelect</code> field.</p>
+<h2 id="variants" tabindex="-1">Variants <a class="header-anchor" href="#variants" href="#variants" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Mapping constant</th>
+<th>Gallery section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plans</code></td>
+<td><code>PLANS_AEM_FRAGMENT_MAPPING</code></td>
+<td>Individual and business cards</td>
+</tr>
+<tr>
+<td><code>plans-education</code></td>
+<td><code>PLANS_EDUCATION_AEM_FRAGMENT_MAPPING</code></td>
+<td>Education cards</td>
+</tr>
+<tr>
+<td><code>plans-students</code></td>
+<td><code>PLANS_STUDENTS_AEM_FRAGMENT_MAPPING</code></td>
+<td>Student pricing (not shown in this gallery)</td>
+</tr>
+<tr>
+<td><code>plans-v2</code></td>
+<td><code>PLANS_V2_AEM_FRAGMENT_MAPPING</code></td>
+<td><a href="plans-v2.html">Plans v2 Gallery</a> (Commerce examples)</td>
+</tr>
+</tbody>
+</table>
+<p>Education omits <code>whatsIncluded</code>, <code>size</code>, and <code>secureLabel</code> from the base mapping and places the title in <code>heading-s</code> instead of <code>heading-xs</code>. Students omits <code>subtitle</code>, <code>whatsIncluded</code>, <code>size</code>, and <code>quantitySelect</code>.</p>
+<h2 id="aem-fields" tabindex="-1">AEM fragment fields <a class="header-anchor" href="#aem-fields" href="#aem-fields" title="Permalink to this heading">#</a></h2>
+<p>During hydration (<code>hydrate.js</code>), each field below is mapped through <code>PLANS_*_AEM_FRAGMENT_MAPPING</code>:</p>
+<table>
+<thead>
+<tr>
+<th>AEM field</th>
+<th>Slot / target</th>
+<th>Tag</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variant</code></td>
+<td><code>merch-card.variant</code></td>
+<td>—</td>
+<td>Required.</td>
+</tr>
+<tr>
+<td><code>cardName</code></td>
+<td><code>name</code> attribute</td>
+<td>—</td>
+<td>Card identifier for analytics and collections.</td>
+</tr>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>heading-xs</code> (<code>heading-s</code> for education)</td>
+<td><code>h3</code></td>
+<td>Plan title.</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td><code>subtitle</code></td>
+<td><code>p</code></td>
+<td>Not used by education or students variants.</td>
+</tr>
+<tr>
+<td><code>prices</code></td>
+<td><code>heading-m</code></td>
+<td><code>p</code></td>
+<td>HTML with <code>inline-price</code> elements.</td>
+</tr>
+<tr>
+<td><code>promoText</code></td>
+<td><code>promo-text</code></td>
+<td><code>p</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>body-xs</code></td>
+<td><code>div</code></td>
+<td>Checkout links in description HTML are converted to buttons.</td>
+</tr>
+<tr>
+<td><code>callout</code></td>
+<td><code>callout-content</code></td>
+<td><code>div</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>whatsIncluded</code></td>
+<td><code>whats-included</code></td>
+<td><code>div</code></td>
+<td><code>merch-whats-included</code> markup. Not used by education or students.</td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td><code>quantity-select</code></td>
+<td><code>div</code></td>
+<td>Serialized <code>merch-quantity-select</code> HTML. Not used by students.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td><code>addon</code></td>
+<td>—</td>
+<td>Creates <code>merch-addon</code> from field HTML or <code>settings.addon</code>.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td><code>badge</code></td>
+<td><code>div</code></td>
+<td>Plain text is wrapped in <code>merch-badge</code>; HTML passthrough when already tagged. Default background <code>spectrum-yellow-300-plans</code>.</td>
+</tr>
+<tr>
+<td><code>borderColor</code></td>
+<td><code>border-color</code> attribute / CSS variable</td>
+<td>—</td>
+<td>Allowed values listed in <code>allowedBorderColors</code>.</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code> attribute</td>
+<td>—</td>
+<td><code>wide</code> or <code>super-wide</code>. Not used by education or students.</td>
+</tr>
+<tr>
+<td><code>mnemonicIcon</code>, <code>mnemonicAlt</code>, <code>mnemonicLink</code></td>
+<td><code>icons</code></td>
+<td><code>merch-icon</code></td>
+<td>Parallel arrays; icon size <code>l</code>.</td>
+</tr>
+<tr>
+<td><code>ctas</code></td>
+<td><code>footer</code></td>
+<td><code>div</code></td>
+<td>Footer links hydrated as Consonant buttons (<code>style: 'consonant'</code> sets the <code>consonant</code> attribute).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fragment-settings" tabindex="-1">Fragment settings <a class="header-anchor" href="#fragment-settings" href="#fragment-settings" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secureLabel</code></td>
+<td>Sets <code>secure-label</code> when the variant mapping includes <code>secureLabel: true</code> (not education).</td>
+</tr>
+<tr>
+<td><code>displayPlanType</code></td>
+<td>Controls plan-type text in legal price clones.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td>Fallback HTML for <code>merch-addon</code> when <code>fields.addon</code> is absent.</td>
+</tr>
+<tr>
+<td><code>quantitySelect</code></td>
+<td>Fallback markup when <code>fields.quantitySelect</code> is absent.</td>
+</tr>
+<tr>
+<td><code>hideTrialCTAs</code></td>
+<td>Removes trial CTAs from the footer during hydration.</td>
+</tr>
+</tbody>
+</table>
+<p>Stock checkbox UI (<code>checkbox-label</code>, <code>stock-offer-osis</code>) is rendered by the plans layout when those attributes are present on <code>merch-card</code>; they are not set in <code>hydrate.js</code> from fragment fields.</p>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<p>Layout from <code>Plans.renderLayout()</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Region</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>icons</code></td>
+<td>Body</td>
+<td>Product mnemonics.</td>
+</tr>
+<tr>
+<td><code>heading-xs</code> / <code>heading-s</code></td>
+<td>Body</td>
+<td>Title (<code>heading-s</code> for education).</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>heading-m</code></td>
+<td>Body</td>
+<td>Main price.</td>
+</tr>
+<tr>
+<td><code>promo-text</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>body-xs</code></td>
+<td>Body</td>
+<td>Description.</td>
+</tr>
+<tr>
+<td><code>whats-included</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>callout-content</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>quantity-select</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td>—</td>
+<td>Body</td>
+<td>Stock checkbox when <code>checkbox-label</code> is set.</td>
+</tr>
+<tr>
+<td><code>addon</code></td>
+<td>Body or footer</td>
+<td>Moves to footer on <code>super-wide</code> at desktop widths.</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>Body</td>
+<td></td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Footer</td>
+<td>CTAs and secure-transaction label.</td>
+</tr>
+</tbody>
+</table>
 <div class="plans-gallery-content">
   <h1 id="plans-gallery">Plans Gallery</h1>
   <a class="plans-link" target="_blank" href="https://main--milo--adobecom.aem.page/drafts/nala/features/commerce/plans">Nala Test Plans collection page ↗</a>

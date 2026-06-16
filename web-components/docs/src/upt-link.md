@@ -31,9 +31,11 @@ See [MAS](mas.html#terminology) to learn more.
 
 ## Properties {#properties}
 
-| Property    | Description                                  |
-| ----------- | -------------------------------------------- |
-| `isUptLink` | On UPT link elements, it will return `true`. |
+| Property        | Description                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| `isUptLink`     | On UPT link elements, it will return `true`.                                                 |
+| `onceSettled()` | Promise that resolves when the link URL is set, or rejects if the offer cannot be resolved.  |
+| `href`          | Resolved promo terms URL on `www.adobe.com` or `www.stage.adobe.com` after `mas:resolved`.   |
 
 ### Example
 
@@ -47,7 +49,19 @@ See [MAS](mas.html#terminology) to learn more.
 >
 ```
 
+## Methods {#methods}
+
+| Method                         | Description                                                                                                    |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `requestUpdate(true \| false)` | Causes a re-render using the actual options, force = false by default, meaning if no change is found will skip |
+
 ## Events {#events}
 
-This element dispatches `mas:pending`, `mas:resolved`, and `mas:failed` events.
-It will log an error to the console if `data-wcs-osi` is missing or if the offer cannot be resolved.
+| Event          | Description                                        |
+| -------------- | -------------------------------------------------- |
+| `mas:resolved` | Fires when the promo terms URL is set on the link  |
+| `mas:failed`   | Fires when the offer could not be found or fetched |
+
+There is no `mas:pending` event in the current implementation. Loading state is reflected with CSS classes: `placeholder-pending`, `placeholder-resolved`, `placeholder-failed`.
+
+If `data-wcs-osi` is missing at render time, the element logs an error and does not update `href`.

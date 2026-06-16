@@ -1,0 +1,338 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="../dist/mas.js"></script>
+<h1 id="mas-mnemonic" tabindex="-1">mas-mnemonic <a class="header-anchor" href="#mas-mnemonic" href="#mas-mnemonic" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>mas-mnemonic</code> is an inline info icon with a tooltip. It wraps a trigger (default slot text, a slotted <code>merch-icon</code>, or an icon from the <code>src</code> attribute) and shows explanatory copy on hover, focus, or tap.</p>
+<p>Primary placements:</p>
+<ol>
+<li><strong>Inline in card copy</strong> — inside <code>body-xs</code>, <code>body-s</code>, <code>heading-xs</code>, or <code>price</code> slots on <a href="express.html">Express</a> and <a href="fries.html">Fries</a> cards. AEM fragment HTML may include <code>&lt;mas-mnemonic&gt;</code> elements; <code>processMnemonicElements()</code> in <code>hydrate.js</code> lazy-loads the component when such markup is present.</li>
+<li><strong>Child of <a href="merch-icon.html">merch-icon</a></strong> — when Spectrum Web Components are absent, <code>merch-icon</code> converts legacy <code>sp-tooltip</code> / <code>overlay-trigger</code> light-DOM markup into a <code>mas-mnemonic</code> wrapper on connect.</li>
+<li><strong>Price footnotes</strong> — asterisk or info icons beside <a href="inline-price.html">inline-price</a> in Express price slots.</li>
+</ol>
+<p>The host uses <code>display: contents</code>, so the element does not create its own layout box.</p>
+<p>Registered when <a href="mas.js.html">mas.js</a> loads. Also lazy-imported by <code>hydrate.js</code> and <code>merch-icon.js</code> when mnemonics appear in fragment HTML or tooltip fallback runs.</p>
+<p>See also: <a href="merch-icon.html">merch-icon</a>, <a href="express.html">Express Gallery</a>, <a href="fries.html">Fries Gallery</a>, <a href="merch-whats-included.html">merch-whats-included</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Text trigger with a CSS fallback tooltip. Hover or focus the trigger to show the tooltip; on touch devices, tap toggles visibility.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+  100GB cloud storage
+  <span class="hljs-tag">&lt;<span class="hljs-name">mas-mnemonic</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;Sync across all your devices&quot;</span> <span class="hljs-attr">placement</span>=<span class="hljs-string">&quot;top&quot;</span>&gt;</span>ⓘ<span class="hljs-tag">&lt;/<span class="hljs-name">mas-mnemonic</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</code></pre>
+<p>Icon trigger using a slotted <code>merch-icon</code>. Tooltip copy comes from the <code>content</code> attribute.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+  Get 20+ creative apps
+  <span class="hljs-tag">&lt;<span class="hljs-name">mas-mnemonic</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;Including Photoshop, Illustrator, and more&quot;</span> <span class="hljs-attr">placement</span>=<span class="hljs-string">&quot;right&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">merch-icon</span>
+      <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+      <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;xs&quot;</span>
+    &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-icon</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mas-mnemonic</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</code></pre>
+<p>Icon-only trigger via <code>src</code> and <code>tooltip-text</code> (Studio-compatible attribute names). No default-slot content is required.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>
+  Express for Business
+  <span class="hljs-tag">&lt;<span class="hljs-name">mas-mnemonic</span>
+    <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://www.adobe.com/content/dam/shared/images/product-icons/svg/photoshop.svg&quot;</span>
+    <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;s&quot;</span>
+    <span class="hljs-attr">tooltip-text</span>=<span class="hljs-string">&quot;Perfect for teams and enterprises&quot;</span>
+    <span class="hljs-attr">tooltip-placement</span>=<span class="hljs-string">&quot;bottom&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mas-mnemonic</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+</code></pre>
+<h2 id="tooltip-modes" tabindex="-1">Tooltip modes <a class="header-anchor" href="#tooltip-modes" href="#tooltip-modes" title="Permalink to this heading">#</a></h2>
+<p>At render time, <code>hasSpectrumTooltip()</code> checks whether <strong>all</strong> of the following are true:</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sp-tooltip</code> registered</td>
+<td><code>customElements.get('sp-tooltip')</code></td>
+</tr>
+<tr>
+<td><code>overlay-trigger</code> registered</td>
+<td><code>customElements.get('overlay-trigger')</code></td>
+</tr>
+<tr>
+<td><code>sp-theme</code> on page</td>
+<td><code>document.querySelector('sp-theme')</code></td>
+</tr>
+</tbody>
+</table>
+<p>When all three pass, the component renders Spectrum <code>overlay-trigger</code> + <code>sp-tooltip</code> with <code>unsafeHTML</code> content and the <code>variant</code> attribute (default <code>info</code>).</p>
+<p>Otherwise it renders a CSS fallback tooltip (<code>.css-tooltip</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mouse / pen</td>
+<td><code>pointerenter</code> shows tooltip; <code>pointerleave</code> hides it</td>
+</tr>
+<tr>
+<td>Touch</td>
+<td><code>pointerenter</code> does not open; <code>click</code> toggles via <code>handleTap()</code></td>
+</tr>
+<tr>
+<td>Keyboard</td>
+<td><code>:focus-visible</code> shows tooltip</td>
+</tr>
+<tr>
+<td>Outside click</td>
+<td><code>mousedown</code> on <code>window</code> hides the active tooltip</td>
+</tr>
+</tbody>
+</table>
+<p>Only one tooltip is open at a time. <code>MasMnemonic.activeTooltip</code> tracks the current instance; showing a new tooltip dismisses the previous one.</p>
+<h2 id="smart-placement" tabindex="-1">Smart placement <a class="header-anchor" href="#smart-placement" href="#smart-placement" title="Permalink to this heading">#</a></h2>
+<p>Set <code>smart-placement</code> to enable viewport-aware JS positioning. The tooltip body uses <code>position: fixed</code> with a computed <code>top</code> / <code>left</code> and an inner <code>.css-tooltip-tip</code> arrow span instead of the CSS-only <code>::after</code> arrow.</p>
+<p><code>connectedCallback()</code> auto-enables <code>smartPlacement</code> when the element is inside <code>merch-card[variant=&quot;fries&quot;]</code> and <code>smart-placement</code> was not set explicitly. This keeps tooltips on screen in the compact fries card layout.</p>
+<p>Placement fallbacks flip the tooltip when the preferred side would overflow the viewport (<code>top</code> ↔ <code>bottom</code>, <code>left</code> ↔ <code>right</code>).</p>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<h3 id="express-variants" tabindex="-1">Express variants <a class="header-anchor" href="#express-variants" href="#express-variants" title="Permalink to this heading">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Typical slots</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>simplified-pricing-express</code></td>
+<td><code>body-xs</code>, <code>heading-xs</code>, <code>price</code></td>
+<td>Paragraphs with <code>mas-mnemonic</code> are styled as an icon row at the bottom of the description area. Card expansion ignores clicks on <code>mas-mnemonic</code>.</td>
+</tr>
+<tr>
+<td><code>full-pricing-express</code></td>
+<td><code>heading-xs</code>, <code>body-s</code></td>
+<td>Inline mnemonics in the title; <code>--mas-mnemonic-tooltip-padding: 4px 8px</code> on the host.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fries-variant" tabindex="-1">Fries variant <a class="header-anchor" href="#fries-variant" href="#fries-variant" title="Permalink to this heading">#</a></h3>
+<p>Description HTML in <code>body-s</code> may include inline <code>mas-mnemonic</code> elements alongside <code>merch-icon</code> app icons. <code>smartPlacement</code> is enabled automatically. See <a href="fries.html#description-mnemonics">Fries Gallery</a>.</p>
+<h2 id="content-and-placement" tabindex="-1">Content and placement attributes <a class="header-anchor" href="#content-and-placement" href="#content-and-placement" title="Permalink to this heading">#</a></h2>
+<p>Tooltip copy and placement each resolve through a precedence chain:</p>
+<table>
+<thead>
+<tr>
+<th>Resolved value</th>
+<th>Priority (first match wins)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tooltip text</td>
+<td><code>tooltip-text</code> → <code>mnemonic-text</code> → <code>content</code> → <code>''</code></td>
+</tr>
+<tr>
+<td>Placement</td>
+<td><code>tooltip-placement</code> → <code>mnemonic-placement</code> → <code>placement</code> → <code>top</code></td>
+</tr>
+</tbody>
+</table>
+<p>When no tooltip text resolves, the component renders an icon-only span (<code>.icon-only</code>) with no tooltip wrapper.</p>
+<p>Tooltip HTML is rendered with <code>unsafeHTML</code>. Plain text is also used for <code>aria-label</code> on the CSS fallback trigger (HTML tags stripped).</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>content</code></td>
+<td><code>content</code></td>
+<td>Tooltip HTML or plain text.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>tooltip-text</code></td>
+<td><code>tooltipText</code></td>
+<td>Studio alias for tooltip copy. Takes precedence over <code>content</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>mnemonic-text</code></td>
+<td><code>mnemonicText</code></td>
+<td>Studio alias for tooltip copy. Used when <code>tooltip-text</code> is absent.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>placement</code></td>
+<td><code>placement</code></td>
+<td>Preferred tooltip side: <code>top</code>, <code>bottom</code>, <code>left</code>, or <code>right</code>.</td>
+<td><code>top</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>tooltip-placement</code></td>
+<td><code>tooltipPlacement</code></td>
+<td>Studio alias for placement. Takes precedence over <code>placement</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>mnemonic-placement</code></td>
+<td><code>mnemonicPlacement</code></td>
+<td>Studio alias for placement. Used when <code>tooltip-placement</code> is absent.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>variant</code></td>
+<td><code>variant</code></td>
+<td>Spectrum <code>sp-tooltip</code> variant (for example <code>info</code>). Ignored in CSS fallback mode.</td>
+<td><code>info</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>src</code></td>
+<td><code>src</code></td>
+<td>Image URL for an icon-only trigger. Renders a child <code>merch-icon</code> instead of the default slot.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>size</code></td>
+<td><code>merch-icon</code> size when <code>src</code> is set.</td>
+<td><code>xs</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>smart-placement</code></td>
+<td><code>smartPlacement</code></td>
+<td>Opt in to viewport-aware fixed positioning. Auto-enabled inside fries cards.</td>
+<td><code>false</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots" tabindex="-1">Slots <a class="header-anchor" href="#slots" href="#slots" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default</td>
+<td>Trigger content (text character, <code>merch-icon</code>, or other inline markup). Ignored when <code>src</code> is set.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="css-custom-properties" tabindex="-1">CSS custom properties <a class="header-anchor" href="#css-custom-properties" href="#css-custom-properties" title="Permalink to this heading">#</a></h2>
+<p>Variant styles may override tooltip padding on the host:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Typical override</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--mas-mnemonic-tooltip-padding</code></td>
+<td><code>4px 8px</code> on Express and fries cards</td>
+<td>Inner padding of <code>.css-tooltip-body</code> in fallback mode</td>
+</tr>
+</tbody>
+</table>
+<h2 id="aem-hydration" tabindex="-1">AEM hydration <a class="header-anchor" href="#aem-hydration" href="#aem-hydration" title="Permalink to this heading">#</a></h2>
+<p><code>processMnemonicElements()</code> in <code>hydrate.js</code> scans fragment HTML strings for <code>&lt;mas-mnemonic</code> and dynamically imports <code>mas-mnemonic.js</code>. The function does not rewrite mnemonic markup — the web component initializes when the HTML is inserted into the DOM.</p>
+<p>Fields that commonly carry inline mnemonics:</p>
+<table>
+<thead>
+<tr>
+<th>Fragment field</th>
+<th>Variant</th>
+<th>Slot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cardTitle</code></td>
+<td><code>simplified-pricing-express</code>, <code>full-pricing-express</code></td>
+<td><code>heading-xs</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>simplified-pricing-express</code>, <code>full-pricing-express</code>, <code>fries</code></td>
+<td><code>body-xs</code> / <code>body-s</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pre-authored <code>&lt;mas-mnemonic&gt;</code> markup in fragment HTML is passed through unchanged.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p>Import via <a href="mas.js.html">mas.js</a>. <code>mas-mnemonic</code> is also built as a standalone Lit bundle entry (<code>build.mjs</code> → <code>dist/mas-mnemonic.js</code>) and lazy-loaded by <code>hydrate.js</code> and <code>merch-icon.js</code> when needed.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

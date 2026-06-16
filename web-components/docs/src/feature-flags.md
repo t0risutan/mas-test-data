@@ -1,17 +1,17 @@
-# Feature Flags
+# Feature Flags {#feature-flags}
 
-Feature flags can be set via a meta tag.
+Feature flags can be set via a meta tag or on [mas-commerce-service](mas-commerce-service.html) (for flags the service reads).
 
 e.g `<meta name="mas-ff-defaults" content="on">`
 
-| Flag Name | Description | Default Value | Valid Values |
-|-----------|-------------|---------------|--------------|
-| `mas-ff-defaults` | Enables good defaults for each locale and segment so that authors don't have to set them manually. This includes automatic tax display settings based on country and customer segment. | `off` | `on`, `off`, `true`, `false` |
-| `mas-ff-3in1` | Controls the 3-in-1 modal checkout experience. When enabled, TWP (Trial With Purchase), D2P (Direct to Purchase), and CRM (Content Rich Modals) modals will use the unified 3-in-1 checkout flow. | `on` | `on`, `off` |
-| `mas-ff-annual-price` | Enables the display of annual pricing alongside monthly prices. When enabled and `annual` parameter is not set to `false`, prices will show the calculated annual cost. | `off` | `on`, `off`, `true`, `false` |
-| `mas-ff-copy-cta` | Adds a copy-to-clipboard button next to checkout CTAs. Useful for authors who need to copy CTA links for use in other contexts. | `off` | `on`, `off` |
-| `mas-ff-mas-deps` | Controls whether MAS components are loaded from an external URL (when masLibs is present) or from local dependencies. When enabled, components load from external sources. | `off` | `on`, `off`, `true`, `false` |
-| `mas-geo-detection` | Enables geographic locale detection using Akamai geolocation. When enabled, the user's actual geographic location is used to determine locale settings instead of the URL prefix. | `off` | `on`, `off`, `true`, `false` |
+| Flag Name | Implemented in `web-components/src` | Description | Default | Valid Values |
+|-----------|-------------------------------------|-------------|---------|--------------|
+| `mas-ff-defaults` | Yes (`mas-commerce-service`, `inline-price`, `merch-card`) | Locale/segment-aware defaults for tax and per-unit display | `off` | `on`, `off`, `true`, `false` |
+| `mas-ff-3in1` | Yes (`checkout.js`, `checkout-mixin.js` via `meta[name=mas-ff-3in1]`) | 3-in-1 modal checkout for `data-modal` values `twp`, `d2p`, `crm` | on (enabled unless meta is `off`) | `on`, `off` |
+| `mas-ff-annual-price` | Yes (`mas-commerce-service`, `inline-price`) | Annual price display for ABM offers | `off` | `on`, `off`, `true`, `false` |
+| `mas-ff-copy-cta` | Not found in this package | Documented authoring helper; may live in consumer surfaces | `off` | `on`, `off` |
+| `mas-ff-mas-deps` | Not found in this package | Documented dependency loading switch; may live in Milo/mas.js loader | `off` | `on`, `off`, `true`, `false` |
+| `mas-geo-detection` | Not found in this package | Documented Akamai geo locale; may live in Milo/mas.js loader | `off` | `on`, `off`, `true`, `false` |
 
 ## Detailed Flag Descriptions
 
@@ -162,11 +162,15 @@ Or on the commerce service element:
 <meta name="mas-ff-annual-price" content="on">
 ```
 
-When enabled, individual price elements can opt out using the `annual=false` parameter in the merch link.
+When enabled, individual price elements can opt out using `data-display-annual="false"` on the `inline-price` element.
 
 ---
 
 ### mas-ff-copy-cta
+
+::: warning
+This flag is not referenced in `web-components/src/`. Behavior below is not verified against this repository.
+:::
 
 **Purpose:** Adds a copy-to-clipboard utility button next to checkout CTA buttons, enabling content authors to easily copy CTA links for documentation or reuse in other contexts.
 
@@ -188,6 +192,10 @@ When enabled, individual price elements can opt out using the `annual=false` par
 ---
 
 ### mas-ff-mas-deps
+
+::: warning
+This flag is not referenced in `web-components/src/`. Behavior below is not verified against this repository.
+:::
 
 **Purpose:** Controls the source location for loading MAS (Merch at Scale) component dependencies, allowing teams to use either the centralized MAS repository or local Milo dependencies.
 
@@ -216,6 +224,10 @@ When enabled, individual price elements can opt out using the `annual=false` par
 ---
 
 ### mas-geo-detection
+
+::: warning
+This flag is not referenced in `web-components/src/`. Behavior below is not verified against this repository.
+:::
 
 **Purpose:** Enables automatic geographic locale detection using Akamai EdgeScape geolocation data, ensuring users see prices and checkout flows appropriate for their actual location rather than the URL-inferred locale.
 

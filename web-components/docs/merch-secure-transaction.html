@@ -1,0 +1,203 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>M@S Web Components</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="spectrum.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://p.typekit.net/p.css?s=1&amp;k=hah7vzn&amp;ht=tk&amp;f=7180.7181.7182.7183.22474.22749.22750.22751.22753&amp;a=8634977&amp;app=typekit&amp;e=css">
+    <link rel="stylesheet" href="https://use.typekit.net/hah7vzn.css">
+    <link rel="stylesheet" href="/studio/con-button.css">
+  
+  <!-- Include your custom element script as an ES6 module -->
+  <script type="module">
+    import { init } from './common.js';
+    init();
+  </script>
+  <!-- Include Highlight.js stylesheet for syntax highlighting -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script type="module" src="./mas-sidenav.js"></script>
+</head>
+<body class="spectrum spectrum--medium spectrum--light">
+    <aside is="mas-sidenav"></aside>
+<main>
+<sp-theme color="light" scale="medium">
+<script type="module" src="https://www.adobe.com/libs/features/spectrum-web-components/dist/theme.js"></script>
+<script type="module" src="https://www.adobe.com/libs/features/spectrum-web-components/dist/tooltip.js"></script>
+<script type="module" src="https://www.adobe.com/libs/features/spectrum-web-components/dist/overlay.js"></script>
+<script type="module" src="../dist/merch-secure-transaction.js"></script>
+<h1 id="merch-secure-transaction" tabindex="-1">merch-secure-transaction <a class="header-anchor" href="#merch-secure-transaction" href="#merch-secure-transaction" title="Permalink to this heading">#</a></h1>
+<h2 id="introduction" tabindex="-1">Introduction <a class="header-anchor" href="#introduction" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p><code>merch-secure-transaction</code> is a small Spectrum label for checkout reassurance copy (for example “Secure transaction”). It optionally prefixes a lock glyph and wraps the label in an <code>overlay-trigger</code> + <code>sp-tooltip</code> when <code>tooltip</code> is set.</p>
+<p>The source file notes that this element <strong>must not</strong> be used inside spectrum-free components such as <a href="merch-card.html">merch-card</a>. Plan, product, and compare cards instead render secure copy from the <code>secure-label</code> attribute as a <code>.secure-transaction-label</code> span inside variant layouts — see <a href="merch-card.html#secure-label">Secure transaction label on merch-card</a>.</p>
+<p><code>merch-secure-transaction</code> is built and exported as a standalone bundle. It is <strong>not</strong> registered by <a href="mas.js.html">mas.js</a> and is not referenced elsewhere in the M@S codebase today. Use it on Spectrum-enabled pages when you need a reusable secure-transaction label with an optional tooltip outside <code>merch-card</code> layouts.</p>
+<p>See also: <a href="merch-card.html#secure-label">merch-card — <code>secure-label</code></a>, <a href="plans.html">Plans Gallery</a>, <a href="product.html">Product Gallery</a>.</p>
+<h2 id="example" tabindex="-1">Example <a class="header-anchor" href="#example" href="#example" title="Permalink to this heading">#</a></h2>
+<p>Label with lock icon. Set <code>--secure-icon</code> on an ancestor (or load M@S global styles) so the <code>#label.icon::before</code> glyph resolves. The default token matches <code>global.css.js</code>.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>
+  <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;--secure-icon: url(<span class="hljs-symbol">&amp;quot;</span>data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; fill=&#x27;%23757575&#x27; viewBox=&#x27;0 0 12 15&#x27;%3E%3Cpath d=&#x27;M11.5 6H11V5A5 5 0 1 0 1 5v1H.5a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5ZM3 5a3 3 0 1 1 6 0v1H3Zm4 6.111V12.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1.389a1.5 1.5 0 1 1 2 0Z&#x27;/%3E%3C/svg%3E<span class="hljs-symbol">&amp;quot;</span>);&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-secure-transaction</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Secure transaction&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-secure-transaction</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>Label with tooltip. Requires Spectrum <code>overlay-trigger</code> and <code>sp-tooltip</code> on the page (see script imports above). Hover or focus the label to open the tooltip (<code>placement=&quot;top-start&quot;</code>, <code>offset=&quot;4&quot;</code>, <code>delayed</code> on <code>sp-tooltip</code>).</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>
+  <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;--secure-icon: url(<span class="hljs-symbol">&amp;quot;</span>data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; fill=&#x27;%23757575&#x27; viewBox=&#x27;0 0 12 15&#x27;%3E%3Cpath d=&#x27;M11.5 6H11V5A5 5 0 1 0 1 5v1H.5a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5ZM3 5a3 3 0 1 1 6 0v1H3Zm4 6.111V12.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1.389a1.5 1.5 0 1 1 2 0Z&#x27;/%3E%3C/svg%3E<span class="hljs-symbol">&amp;quot;</span>);&quot;</span>
+&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">merch-secure-transaction</span>
+    <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Secure transaction&quot;</span>
+    <span class="hljs-attr">tooltip</span>=<span class="hljs-string">&quot;Your payment information is encrypted.&quot;</span>
+  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-secure-transaction</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>Text only (no lock icon). Set <code>icon=&quot;false&quot;</code>.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-secure-transaction</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;Secure checkout&quot;</span> <span class="hljs-attr">icon</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">merch-secure-transaction</span>&gt;</span>
+</code></pre>
+<h2 id="on-merch-card" tabindex="-1">On merch-card <a class="header-anchor" href="#on-merch-card" href="#on-merch-card" title="Permalink to this heading">#</a></h2>
+<p><code>merch-card</code> does <strong>not</strong> use <code>merch-secure-transaction</code>. When <code>secure-label</code> is set, <code>VariantLayout.secureLabel</code> renders a plain <code>&lt;span class=&quot;secure-transaction-label&quot;&gt;</code> above footer CTAs (or in the <code>secure-transaction-label</code> slot on mini-compare variants). The lock glyph comes from <code>.secure-transaction-label::before</code> in <code>merch-card.css.js</code>, not from this element.</p>
+<p>During hydration, <code>processSecureLabel()</code> sets <code>secure-label</code> when <strong>both</strong> the variant mapping includes <code>secureLabel: true</code> and the fragment <code>settings.secureLabel</code> string is present.</p>
+<pre><code class="hljs demo light language-html"><span class="hljs-tag">&lt;<span class="hljs-name">merch-card</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;plans&quot;</span> <span class="hljs-attr">secure-label</span>=<span class="hljs-string">&quot;Secure transaction&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h4</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;heading-xs&quot;</span>&gt;</span>Acrobat Pro<span class="hljs-tag">&lt;/<span class="hljs-name">h4</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;body-xs&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Access advanced PDF tools.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;footer&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;con-button blue&quot;</span>&gt;</span>Buy now<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">merch-card</span>&gt;</span>
+</code></pre>
+<p>Use <code>merch-secure-transaction</code> for standalone Spectrum pages. Use <code>secure-label</code> on <code>merch-card</code> for standard commerce card layouts.</p>
+<h2 id="attributes" tabindex="-1">Attributes <a class="header-anchor" href="#attributes" href="#attributes" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Property</th>
+<th>Description</th>
+<th>Default</th>
+<th>Reflects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>label</code></td>
+<td><code>labelText</code></td>
+<td>Visible label text rendered inside <code>#label</code>.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td><code>showIcon</code></td>
+<td>Boolean. When true, <code>#label</code> gets class <code>icon</code> and shows the lock glyph via <code>--secure-icon</code>.</td>
+<td><code>true</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>tooltip</code></td>
+<td><code>tooltipText</code></td>
+<td>When non-empty, wraps <code>#label</code> in <code>overlay-trigger</code> with an <code>sp-tooltip</code> in the <code>hover-content</code> slot. When empty, renders <code>#label</code> only.</td>
+<td><code>''</code></td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="render-behavior" tabindex="-1">Render behavior <a class="header-anchor" href="#render-behavior" href="#render-behavior" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tooltip</code> empty</td>
+<td><code>#label</code> div only (inline-flex, 12px / 15px type).</td>
+</tr>
+<tr>
+<td><code>tooltip</code> set</td>
+<td><code>overlay-trigger</code> → <code>#label</code> (<code>slot=&quot;trigger&quot;</code>) + <code>sp-tooltip</code> (<code>slot=&quot;hover-content&quot;</code>, <code>delayed</code>).</td>
+</tr>
+<tr>
+<td><code>icon</code> true (default)</td>
+<td><code>#label</code> has class <code>icon</code>; <code>::before</code> uses <code>var(--secure-icon)</code>.</td>
+</tr>
+<tr>
+<td><code>icon</code> false</td>
+<td><code>#label</code> has no <code>icon</code> class; no lock glyph.</td>
+</tr>
+</tbody>
+</table>
+<p>The component does not define slots, events, or public methods.</p>
+<h2 id="css-custom-properties" tabindex="-1">CSS custom properties <a class="header-anchor" href="#css-custom-properties" href="#css-custom-properties" title="Permalink to this heading">#</a></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Used by</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--secure-icon</code></td>
+<td><code>#label.icon::before</code></td>
+<td>Background image for the lock glyph. Defined in <code>global.css.js</code> for M@S pages; set on an ancestor when using the standalone bundle.</td>
+</tr>
+<tr>
+<td><code>--consonant-merch-spacing-xxxs</code></td>
+<td><code>#label</code> gap</td>
+<td>Spacing between lock icon and label text.</td>
+</tr>
+</tbody>
+</table>
+<p>Label typography is fixed at <code>font-size: 12px</code> and <code>line-height: 15px</code> in the component stylesheet.</p>
+<h2 id="spectrum-dependencies" tabindex="-1">Spectrum dependencies <a class="header-anchor" href="#spectrum-dependencies" href="#spectrum-dependencies" title="Permalink to this heading">#</a></h2>
+<p>When <code>tooltip</code> is set, the render tree expects these custom elements to be registered on the page:</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>overlay-trigger</code></td>
+<td>Positions the hover/focus overlay (<code>placement=&quot;top-start&quot;</code>, <code>offset=&quot;4&quot;</code>).</td>
+</tr>
+<tr>
+<td><code>sp-tooltip</code></td>
+<td>Tooltip content (<code>slot=&quot;hover-content&quot;</code>, <code>delayed</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>Import Spectrum Web Components overlay and tooltip modules before loading <code>merch-secure-transaction.js</code>, as in the script block at the top of this page.</p>
+<h2 id="bundle" tabindex="-1">Bundle <a class="header-anchor" href="#bundle" href="#bundle" title="Permalink to this heading">#</a></h2>
+<p><code>merch-secure-transaction</code> is <strong>not</strong> registered by <a href="mas.js.html">mas.js</a>. Load the standalone bundle:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;module&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;../dist/merch-secure-transaction.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>Also import Spectrum <code>overlay-trigger</code> and <code>sp-tooltip</code> when using the <code>tooltip</code> attribute.</p>
+
+</sp-theme>
+</main>
+<script type="module">
+  document.querySelectorAll('code.demo').forEach(el => {
+      const targetContainer = document.createElement('div');
+      targetContainer.classList.toggle('light', el.classList.contains('light'));
+      targetContainer.innerHTML = `<h4>Demo: </h4><div class="demo-container">${el.textContent}</div>`;
+      el.parentElement.after(targetContainer);
+      // Extract and evaluate <script> tags
+      const scriptTags = targetContainer.getElementsByTagName('script');
+      for (let i = 0; i < scriptTags.length; i++) {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.text = scriptTags[i].text;
+          document.body.appendChild(script); // Appends to the document to execute
+          scriptTags[i].remove(); // Remove the script tag
+      }
+  });
+</script>
+</body>
+</html>

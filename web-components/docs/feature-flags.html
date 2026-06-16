@@ -25,51 +25,58 @@
 <main>
 <sp-theme color="light" scale="medium">
 <h1 id="feature-flags" tabindex="-1">Feature Flags <a class="header-anchor" href="#feature-flags" href="#feature-flags" title="Permalink to this heading">#</a></h1>
-<p>Feature flags can be set via a meta tag.</p>
+<p>Feature flags can be set via a meta tag or on <a href="mas-commerce-service.html">mas-commerce-service</a> (for flags the service reads).</p>
 <p>e.g <code>&lt;meta name=&quot;mas-ff-defaults&quot; content=&quot;on&quot;&gt;</code></p>
 <table>
 <thead>
 <tr>
 <th>Flag Name</th>
+<th>Implemented in <code>web-components/src</code></th>
 <th>Description</th>
-<th>Default Value</th>
+<th>Default</th>
 <th>Valid Values</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>mas-ff-defaults</code></td>
-<td>Enables good defaults for each locale and segment so that authors don’t have to set them manually. This includes automatic tax display settings based on country and customer segment.</td>
+<td>Yes (<code>mas-commerce-service</code>, <code>inline-price</code>, <code>merch-card</code>)</td>
+<td>Locale/segment-aware defaults for tax and per-unit display</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-3in1</code></td>
-<td>Controls the 3-in-1 modal checkout experience. When enabled, TWP (Trial With Purchase), D2P (Direct to Purchase), and CRM (Content Rich Modals) modals will use the unified 3-in-1 checkout flow.</td>
-<td><code>on</code></td>
+<td>Yes (<code>checkout.js</code>, <code>checkout-mixin.js</code> via <code>meta[name=mas-ff-3in1]</code>)</td>
+<td>3-in-1 modal checkout for <code>data-modal</code> values <code>twp</code>, <code>d2p</code>, <code>crm</code></td>
+<td>on (enabled unless meta is <code>off</code>)</td>
 <td><code>on</code>, <code>off</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-annual-price</code></td>
-<td>Enables the display of annual pricing alongside monthly prices. When enabled and <code>annual</code> parameter is not set to <code>false</code>, prices will show the calculated annual cost.</td>
+<td>Yes (<code>mas-commerce-service</code>, <code>inline-price</code>)</td>
+<td>Annual price display for ABM offers</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-copy-cta</code></td>
-<td>Adds a copy-to-clipboard button next to checkout CTAs. Useful for authors who need to copy CTA links for use in other contexts.</td>
+<td>Not found in this package</td>
+<td>Documented authoring helper; may live in consumer surfaces</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code></td>
 </tr>
 <tr>
 <td><code>mas-ff-mas-deps</code></td>
-<td>Controls whether MAS components are loaded from an external URL (when masLibs is present) or from local dependencies. When enabled, components load from external sources.</td>
+<td>Not found in this package</td>
+<td>Documented dependency loading switch; may live in Milo/mas.js loader</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td><code>mas-geo-detection</code></td>
-<td>Enables geographic locale detection using Akamai geolocation. When enabled, the user’s actual geographic location is used to determine locale settings instead of the URL prefix.</td>
+<td>Not found in this package</td>
+<td>Documented Akamai geo locale; may live in Milo/mas.js loader</td>
 <td><code>off</code></td>
 <td><code>on</code>, <code>off</code>, <code>true</code>, <code>false</code></td>
 </tr>
@@ -491,9 +498,12 @@
 <p><strong>Usage:</strong></p>
 <pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;mas-ff-annual-price&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;on&quot;</span>&gt;</span>
 </code></pre>
-<p>When enabled, individual price elements can opt out using the <code>annual=false</code> parameter in the merch link.</p>
+<p>When enabled, individual price elements can opt out using <code>data-display-annual=&quot;false&quot;</code> on the <code>inline-price</code> element.</p>
 <hr>
 <h3 id="mas-ff-copy-cta" tabindex="-1">mas-ff-copy-cta <a class="header-anchor" href="#mas-ff-copy-cta" href="#mas-ff-copy-cta" title="Permalink to this heading">#</a></h3>
+<div class="warning">
+<p>This flag is not referenced in <code>web-components/src/</code>. Behavior below is not verified against this repository.</p>
+</div>
 <p><strong>Purpose:</strong> Adds a copy-to-clipboard utility button next to checkout CTA buttons, enabling content authors to easily copy CTA links for documentation or reuse in other contexts.</p>
 <p><strong>What it controls:</strong></p>
 <ul>
@@ -508,6 +518,9 @@
 </code></pre>
 <hr>
 <h3 id="mas-ff-mas-deps" tabindex="-1">mas-ff-mas-deps <a class="header-anchor" href="#mas-ff-mas-deps" href="#mas-ff-mas-deps" title="Permalink to this heading">#</a></h3>
+<div class="warning">
+<p>This flag is not referenced in <code>web-components/src/</code>. Behavior below is not verified against this repository.</p>
+</div>
 <p><strong>Purpose:</strong> Controls the source location for loading MAS (Merch at Scale) component dependencies, allowing teams to use either the centralized MAS repository or local Milo dependencies.</p>
 <p><strong>What it controls:</strong></p>
 <ul>
@@ -534,6 +547,9 @@
 </code></pre>
 <hr>
 <h3 id="mas-geo-detection" tabindex="-1">mas-geo-detection <a class="header-anchor" href="#mas-geo-detection" href="#mas-geo-detection" title="Permalink to this heading">#</a></h3>
+<div class="warning">
+<p>This flag is not referenced in <code>web-components/src/</code>. Behavior below is not verified against this repository.</p>
+</div>
 <p><strong>Purpose:</strong> Enables automatic geographic locale detection using Akamai EdgeScape geolocation data, ensuring users see prices and checkout flows appropriate for their actual location rather than the URL-inferred locale.</p>
 <p><strong>What it controls:</strong></p>
 <ul>
